@@ -1,5 +1,3 @@
-// Icons
 export * from "./icons";
-
-// UI Components
-export * from "./ui/CustomLink";
+export * from "./ui";
+export * from "./layout";

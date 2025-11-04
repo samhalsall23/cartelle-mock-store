@@ -25,7 +25,7 @@ export function Navbar() {
 
   return (
     <div className="relative">
-      <nav className="px-10 py-6 flex justify-between items-center relative bg-white z-20">
+      <nav className="p-5 md:px-12 md:py-6 flex justify-between items-center relative bg-white z-20">
         <>
           <button
             aria-label="Go Back"

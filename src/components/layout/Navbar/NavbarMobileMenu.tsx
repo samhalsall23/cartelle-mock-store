@@ -78,7 +78,7 @@ export function NavbarMobileMenu({
           ease: "easeInOut",
         }}
       >
-        <div ref={contentRef} className="flex flex-col py-4 px-10">
+        <div ref={contentRef} className="flex flex-col pb-4 px-5">
           {/* ROOT MENU NO LAYERS DOWN */}
           {!isSubMenuActive && showMobileMenu && (
             <>
