@@ -1,6 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { useState } from "react";
+
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { NavbarSubMenu } from "./NavbarSubMenu";
+import { navbarMockSubItems } from "./data";
 
 const meta = {
   title: "Base/Navbar/NavbarSubMenu",
@@ -14,6 +16,18 @@ const meta = {
       },
     },
   },
+  argTypes: {
+    show: {
+      control: "boolean",
+    },
+    subItems: {
+      control: "object",
+    },
+  },
+  args: {
+    show: true,
+    subItems: navbarMockSubItems,
+  },
   tags: ["autodocs"],
 } satisfies Meta<typeof NavbarSubMenu>;
 
@@ -23,8 +37,7 @@ type Story = StoryObj<typeof meta>;
 export const Show: Story = {
   args: {
     show: true,
-    categories: ["All", "New Arrivals"],
-    collections: ["Skincare Products", "Furniture", "Technology", "Clothing"],
+    subItems: navbarMockSubItems,
   },
   parameters: {
     docs: {
@@ -38,8 +51,7 @@ export const Show: Story = {
 export const ButtonToShow: Story = {
   args: {
     show: false,
-    categories: ["All", "New Arrivals"],
-    collections: ["Skincare Products", "Furniture", "Technology", "Clothing"],
+    subItems: navbarMockSubItems,
   },
   render: () => {
     const [show, setShow] = useState(false);
@@ -52,16 +64,7 @@ export const ButtonToShow: Story = {
         >
           {show ? "Hide" : "Show"} Submenu
         </button>
-        <NavbarSubMenu
-          show={show}
-          categories={["All", "New Arrivals"]}
-          collections={[
-            "Skincare Products",
-            "Furniture",
-            "Technology",
-            "Clothing",
-          ]}
-        />
+        <NavbarSubMenu show={show} subItems={navbarMockSubItems} />
       </div>
     );
   },

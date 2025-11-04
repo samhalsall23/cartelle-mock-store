@@ -2,7 +2,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
 
 :root {
-  --background: #fafafa;
+  --background: #;
   --foreground: #000000;
 }
 
@@ -108,6 +108,14 @@ body {
   color: var(--color-neutral-12);
 }
 
+.text-navbar-light {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-tight);
+  font-weight: 400; /* Regular */
+  color: var(--color-neutral-10);
+}
+
 /* Color Modifiers */
 .text-light {
   --text-color: var(--color-neutral-10);
@@ -172,5 +180,9 @@ h6 {
 
 /* Custom Shadow */
 .shadow-custom {
+  box-shadow: 10px 20px 40px 0px rgba(0, 0, 0, 0.25);
+}
+
+.shadow-mobile-menu {
   box-shadow: 10px 20px 40px 0px rgba(0, 0, 0, 0.25);
 }

@@ -1,15 +1,16 @@
-import { CustomLink } from "@/components/ui/Link/CustomLink";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
+
+import { CustomLink } from "@/components";
+import { cn } from "@/lib";
+import { NavItemSubItemType } from "./types";
 
 type NavbarSubMenuProps = {
   show: boolean;
-  categories: string[];
-  collections: string[];
+  subItems: NavItemSubItemType[];
 };
 
 export function NavbarSubMenu(props: NavbarSubMenuProps) {
-  const { show, categories, collections } = props;
+  const { show, subItems } = props;
 
   const containerClass = cn(
     "rounded-sm shadow-custom p-6 w-fit transition-all duration-300 ease-in-out",
@@ -29,30 +30,16 @@ export function NavbarSubMenu(props: NavbarSubMenuProps) {
             fill
           />
         </div>
-        <div className="flex flex-col pb-10 w-[150px]">
-          <p className="text-body-medium text-light pb-6">Shop</p>
-          <div className="flex flex-col gap-4">
-            {categories.map((category) => (
-              <CustomLink
-                key={category}
-                text={category}
-                href={`/shop/${category}`}
-              />
-            ))}
+        {subItems?.map((subItem) => (
+          <div key={subItem.id} className="flex flex-col pb-10 w-[150px]">
+            <p className="text-body-medium text-light pb-6">{subItem.text}</p>
+            <div className="flex flex-col gap-4">
+              {subItem.items.map((item) => (
+                <CustomLink key={item.id} text={item.text} href={item.href} />
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-col pb-10 w-[150px]">
-          <p className="text-body-medium text-light pb-6">Collections</p>
-          <div className="flex flex-col gap-4">
-            {collections.map((collection) => (
-              <CustomLink
-                key={collection}
-                text={collection}
-                href={`/shop/${collection}`}
-              />
-            ))}
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

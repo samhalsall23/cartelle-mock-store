@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/utils/utils";
 import Link from "next/link";
 
 type LinkType = {
@@ -17,8 +17,6 @@ export function CustomLink(props: LinkType) {
     "relative inline-block transition-colors duration-200 w-fit",
     "before:absolute before:bottom-[-2px] before:left-0 before:h-[1px] before:w-0 before:bg-current",
     "hover:before:w-full hover:before:transition-all hover:before:duration-300 hover:before:ease-in-out",
-    "after:absolute after:bottom-[-2px] after:left-0 after:h-[1px] after:w-0 after:bg-current",
-    "hover:after:w-full hover:after:transition-all hover:after:duration-200 hover:after:ease-in-out hover:after:delay-300",
     variant === "default" && "text-navbar",
   );
 

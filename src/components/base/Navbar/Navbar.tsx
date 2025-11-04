@@ -1,48 +1,127 @@
-import { SearchIcon } from "@/components/icons/SearchIcon";
+"use client";
+
 import { useState } from "react";
-import { CustomLink } from "../../ui/Link/CustomLink";
+
+import { cn } from "@/lib";
+
+import { NavbarMobileMenu } from "./NavbarMobileMenu";
 import { NavbarSubMenu } from "./NavbarSubMenu";
+import { navItems } from "./lib";
+
+import {
+  CheckoutIcon,
+  CheveronLeftIcon,
+  MenuBarIcon,
+  CloseIcon,
+  CustomLink,
+  SearchIcon,
+} from "@/components";
 
 export function Navbar() {
+  // === State ===
   const [showSubMenu, setShowSubMenu] = useState(false);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null);
 
   return (
-    <nav className="px-10 py-6 flex justify-between items-center">
-      <h4>Cartelle</h4>
-      <div className="flex gap-3 items-center">
-        <CustomLink href="/" text="Home" />
-        <div
-          className="relative inline-block"
-          onMouseLeave={() => setShowSubMenu(false)}
-        >
-          <CustomLink
-            onMouseEnter={() => setShowSubMenu(true)}
-            href="/shop"
-            text="Shop"
-          />
-          <div
-            className="absolute top-full left-1/2 transform -translate-x-1/2 z-50 pt-3"
-            onMouseLeave={() => setShowSubMenu(false)}
+    <div className="relative">
+      <nav className="px-10 py-6 flex justify-between items-center relative bg-white z-20">
+        <>
+          <button
+            aria-label="Go Back"
+            className={cn(
+              showMobileMenu && activeSubMenu !== null
+                ? "opacity-100"
+                : "opacity-0 hidden pointer-events-none",
+              "p-3 -m-3.5 transition-opacity duration-300 ease-in-out cursor-pointer",
+            )}
+            onClick={() => setActiveSubMenu(null)}
           >
-            <NavbarSubMenu
-              show={showSubMenu}
-              categories={["All", "New Arrivals"]}
-              collections={[
-                "Skincare Products",
-                "Furniture",
-                "Technology",
-                "Clothing",
-              ]}
-            />
-          </div>
+            <CheveronLeftIcon />
+          </button>
+          <h4
+            className={cn(
+              showMobileMenu && "opacity-0",
+              "transition-opacity duration-300 ease-in-out",
+            )}
+          >
+            Cartelle
+          </h4>
+        </>
+
+        <div className="gap-3 items-center hidden md:flex">
+          {navItems.map((item) => {
+            if (item.subItems) {
+              return (
+                <div
+                  key={item.id}
+                  className="relative flex items-center"
+                  onMouseLeave={() => setShowSubMenu(false)}
+                >
+                  <CustomLink
+                    onMouseEnter={() => setShowSubMenu(true)}
+                    href={item.href}
+                    text={item.text}
+                  />
+                  <div
+                    className="absolute top-full left-1/2 transform -translate-x-1/2 pt-3"
+                    onMouseLeave={() => setShowSubMenu(false)}
+                  >
+                    <NavbarSubMenu
+                      show={showSubMenu}
+                      subItems={item.subItems}
+                    />
+                  </div>
+                </div>
+              );
+            } else {
+              return (
+                <CustomLink key={item.id} href={item.href} text={item.text} />
+              );
+            }
+          })}
         </div>
-        <CustomLink href="/about" text="About" />
-        <CustomLink href="/support" text="Support" />
-        <CustomLink href="/blog" text="Blog" />
-      </div>
-      <button aria-label="Search" className="text-neutral-12 p-2 cursor-pointer">
-        <SearchIcon />
-      </button>
-    </nav>
+
+        <div className="flex items-center text-neutral-12">
+          <button
+            aria-label="Search"
+            className={cn(
+              "p-3 cursor-pointer transition-opacity duration-300 ease-in-out",
+              showMobileMenu ? "opacity-0 pointer-events-none" : "opacity-100",
+            )}
+          >
+            <SearchIcon />
+          </button>
+          <button
+            aria-label="Checkout"
+            className={cn(
+              "p-3 cursor-pointer transition-opacity duration-300 ease-in-out",
+              showMobileMenu ? "opacity-0 pointer-events-none" : "opacity-100",
+            )}
+          >
+            <CheckoutIcon />
+          </button>
+          <button
+            aria-label="Menu"
+            onClick={() => {
+              setShowMobileMenu(!showMobileMenu);
+              setActiveSubMenu(null);
+            }}
+            className={cn("p-3 cursor-pointer relative", "md:hidden")}
+          >
+            <MenuBarIcon className={`${showMobileMenu ? "hidden" : "block"}`} />
+            <CloseIcon className={`${showMobileMenu ? "block" : "hidden"}`} />
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Dropdown */}
+      <NavbarMobileMenu
+        activeSubMenu={activeSubMenu}
+        setActiveSubMenu={setActiveSubMenu}
+        showMobileMenu={showMobileMenu}
+        setShowMobileMenu={setShowMobileMenu}
+      />
+    </div>
   );
 }
