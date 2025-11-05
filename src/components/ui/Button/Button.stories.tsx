@@ -61,9 +61,6 @@ export const Light: Story = {
     text: "Light Button",
     variant: "light",
   },
-  parameters: {
-    backgrounds: { default: "dark" },
-  },
 };
 
 export const Disabled: Story = {

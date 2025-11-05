@@ -52,9 +52,11 @@ export const OnDark: Story = {
     text: "About Us",
     variant: "on-dark",
   },
-  parameters: {
-    backgrounds: { default: "dark" },
-  },
+  render: (args) => (
+    <div className="bg-black p-10">
+      <CustomLink {...args} />
+    </div>
+  ),
 };
 
 export const OnDarkSecondary: Story = {
@@ -63,7 +65,9 @@ export const OnDarkSecondary: Story = {
     text: "Contact",
     variant: "on-dark-secondary",
   },
-  parameters: {
-    backgrounds: { default: "dark" },
-  },
+  render: (args) => (
+    <div className="bg-black p-10">
+      <CustomLink {...args} />
+    </div>
+  ),
 };
