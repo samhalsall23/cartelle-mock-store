@@ -34,6 +34,7 @@ export function Navbar() {
                 ? "opacity-100"
                 : "opacity-0 hidden pointer-events-none",
               "p-3 -m-3.5 transition-opacity duration-300 ease-in-out cursor-pointer",
+              showMobileMenu ? "will-change-opacity" : "will-change-auto",
             )}
             onClick={() => setActiveSubMenu(null)}
           >
@@ -43,6 +44,7 @@ export function Navbar() {
             className={cn(
               showMobileMenu && "opacity-0",
               "transition-opacity duration-300 ease-in-out",
+              showMobileMenu ? "will-change-opacity" : "will-change-auto",
             )}
           >
             Cartelle
@@ -88,6 +90,7 @@ export function Navbar() {
             className={cn(
               "p-3 cursor-pointer transition-opacity duration-300 ease-in-out",
               showMobileMenu ? "opacity-0 pointer-events-none" : "opacity-100",
+              showMobileMenu ? "will-change-opacity" : "will-change-auto",
             )}
           >
             <SearchIcon />
@@ -97,6 +100,7 @@ export function Navbar() {
             className={cn(
               "p-3 cursor-pointer transition-opacity duration-300 ease-in-out",
               showMobileMenu ? "opacity-0 pointer-events-none" : "opacity-100",
+              showMobileMenu ? "will-change-opacity" : "will-change-auto",
             )}
           >
             <CheckoutIcon />

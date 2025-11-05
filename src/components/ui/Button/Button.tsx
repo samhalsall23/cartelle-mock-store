@@ -1,0 +1,39 @@
+import * as React from "react";
+import { cn } from "@/lib/utils/utils";
+
+type ButtonProps = React.ComponentProps<"button"> & {
+  text: string;
+  variant?: "dark" | "light" | "dark-alternative";
+};
+
+export function Button(props: ButtonProps) {
+  // --- PROPS ---
+  const { text, variant = "dark", className, ...buttonProps } = props;
+
+  // --- CLASSES ---
+  const buttonClass = cn(
+    // Layout & Positioning
+    "px-6 py-3 inline-flex items-center justify-center whitespace-nowrap",
+    // Appearance
+    "rounded-4xl font-medium text-base",
+    // Transitions & Animations
+    "transition-all",
+    // Disabled States
+    "disabled:pointer-events-none disabled:opacity-50",
+    // Focus & Accessibility
+    "cursor-pointer outline-none",
+    // Variant Classes
+    variant === "dark" && "bg-neutral-11 text-white hover:text-white/80",
+    variant === "light" && "bg-white text-black button-light-gradient-border",
+    variant === "dark-alternative" &&
+      "bg-black text-white button-dark-gradient-border",
+
+    className,
+  );
+
+  return (
+    <button className={buttonClass} {...buttonProps}>
+      {text}
+    </button>
+  );
+}

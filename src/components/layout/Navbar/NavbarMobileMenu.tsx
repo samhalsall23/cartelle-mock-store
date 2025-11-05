@@ -67,7 +67,10 @@ export function NavbarMobileMenu({
   return (
     <>
       <motion.div
-        className="bg-white absolute top-full left-0 right-0 md:hidden shadow-mobile-menu rounded-b-sm overflow-hidden z-10"
+        className={cn(
+          "bg-white absolute top-full left-0 right-0 md:hidden shadow-mobile-menu rounded-b-sm overflow-hidden z-10",
+          showMobileMenu ? "will-change-height-opacity" : "will-change-auto",
+        )}
         initial={{ height: 0, opacity: 0 }}
         animate={{
           height: showMobileMenu ? contentHeight : 0,
