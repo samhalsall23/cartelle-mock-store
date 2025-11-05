@@ -51,9 +51,11 @@ export const DarkAlternative: Story = {
     text: "Dark Alternative Button",
     variant: "dark-alternative",
   },
-  parameters: {
-    backgrounds: { default: "dark" },
-  },
+  render: (args) => (
+    <div className="bg-black p-10">
+      <Button {...args} />
+    </div>
+  ),
 };
 
 export const Light: Story = {
