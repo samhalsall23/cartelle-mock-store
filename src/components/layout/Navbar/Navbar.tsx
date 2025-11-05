@@ -1,8 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 
-import { cn } from "@/lib";
+import { cn, routes } from "@/lib";
 
 import { NavbarMobileMenu } from "./NavbarMobileMenu";
 import { NavbarSubMenu } from "./NavbarSubMenu";
@@ -40,15 +41,17 @@ export function Navbar() {
           >
             <CheveronLeftIcon />
           </button>
-          <h4
-            className={cn(
-              showMobileMenu && "opacity-0",
-              "transition-opacity duration-300 ease-in-out",
-              showMobileMenu ? "will-change-opacity" : "will-change-auto",
-            )}
-          >
-            Cartelle
-          </h4>
+          <Link className="p-3 -ms-3" href={routes.home}>
+            <h4
+              className={cn(
+                showMobileMenu && "opacity-0",
+                "transition-opacity duration-300 ease-in-out",
+                showMobileMenu ? "will-change-opacity" : "will-change-auto",
+              )}
+            >
+              Cartelle
+            </h4>
+          </Link>
         </>
 
         <div className="gap-3 items-center hidden md:flex">
