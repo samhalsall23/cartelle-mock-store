@@ -1,0 +1,36 @@
+import * as React from "react";
+
+import { cn } from "@/lib/utils/utils";
+
+type InputProps = React.ComponentProps<"input"> & {
+  text: string;
+  variant?: "dark" | "light";
+  isError?: boolean;
+};
+
+export function Input(props: InputProps) {
+  // --- PROPS ---
+  const { text, variant = "dark", className, isError, ...inputProps } = props;
+
+  // --- CLASSES ---
+  const inputClass = cn(
+    // Layout & Positioning
+    "px-6 py-3 inline-flex items-center text-start",
+    // Appearance
+    "rounded-4xl text-body-medium-light",
+    // Focus States
+    "focus:outline-none focus:border focus:border-blue-400 focus:border-1",
+    // Error States
+    isError && "border border-red-500 border-1 focus:border-red-400",
+
+    // Variant Classes
+    variant === "dark" &&
+      "bg-neutral-11 text-white placeholder:text-neutral-08",
+    variant === "light" &&
+      "bg-neutral-01 placeholder:text-neutral-08 text-black",
+
+    className,
+  );
+
+  return <input className={inputClass} {...inputProps} />;
+}

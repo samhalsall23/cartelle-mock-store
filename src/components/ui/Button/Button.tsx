@@ -21,7 +21,7 @@ export function Button(props: ButtonProps) {
     // Disabled States
     "disabled:pointer-events-none disabled:opacity-50",
     // Focus & Accessibility
-    "cursor-pointer outline-none",
+    "cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500",
     // Variant Classes
     variant === "dark" && "bg-neutral-11 text-white hover:text-white/80",
     variant === "light" && "bg-white text-black button-light-gradient-border",
