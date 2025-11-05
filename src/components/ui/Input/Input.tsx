@@ -3,14 +3,13 @@ import * as React from "react";
 import { cn } from "@/lib/utils/utils";
 
 type InputProps = React.ComponentProps<"input"> & {
-  text: string;
   variant?: "dark" | "light";
   isError?: boolean;
 };
 
 export function Input(props: InputProps) {
   // --- PROPS ---
-  const { text, variant = "dark", className, isError, ...inputProps } = props;
+  const { variant = "dark", className, isError, ...inputProps } = props;
 
   // --- CLASSES ---
   const inputClass = cn(

@@ -15,10 +15,6 @@ const meta = {
   },
   tags: ["autodocs"],
   argTypes: {
-    text: {
-      control: { type: "text" },
-      description: "Input text content",
-    },
     variant: {
       control: { type: "select" },
       options: ["dark", "light"],
@@ -39,7 +35,6 @@ const meta = {
     },
   },
   args: {
-    text: "",
     variant: "dark",
     disabled: false,
     placeholder: "Enter text...",
@@ -52,7 +47,6 @@ type Story = StoryObj<typeof meta>;
 
 export const Dark: Story = {
   args: {
-    text: "",
     variant: "dark",
     placeholder: "Dark input placeholder",
   },
@@ -60,7 +54,6 @@ export const Dark: Story = {
 
 export const Light: Story = {
   args: {
-    text: "",
     variant: "light",
     placeholder: "Light input placeholder",
   },
@@ -71,7 +64,6 @@ export const Light: Story = {
 
 export const WithValue: Story = {
   args: {
-    text: "Pre-filled value",
     variant: "dark",
     placeholder: "Enter text...",
   },
@@ -79,7 +71,6 @@ export const WithValue: Story = {
 
 export const Email: Story = {
   args: {
-    text: "",
     variant: "dark",
     placeholder: "Enter your email",
     type: "email",
@@ -88,7 +79,6 @@ export const Email: Story = {
 
 export const Password: Story = {
   args: {
-    text: "",
     variant: "dark",
     placeholder: "Enter password",
     type: "password",
@@ -97,7 +87,6 @@ export const Password: Story = {
 
 export const Error: Story = {
   args: {
-    text: "",
     placeholder: "Error input",
     isError: true,
   },
