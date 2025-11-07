@@ -4,7 +4,8 @@ export function FooterGradientBrandName() {
   return (
     <span
       className={cn(
-        "block w-full text-transparent footer-text-gradient leading-none",
+        "leading-none!",
+        "block w-full text-transparent footer-text-gradient",
         "text-[clamp(1.5rem,26vw,26rem)]",
         "sm:text-[clamp(1.5rem,28vw,20rem)]",
         "md:text-[clamp(1.5rem,26vw,20rem)]",

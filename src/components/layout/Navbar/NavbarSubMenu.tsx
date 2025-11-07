@@ -15,7 +15,7 @@ export function NavbarSubMenu(props: NavbarSubMenuProps) {
   const { show, subItems } = props;
 
   const containerClass = cn(
-    "rounded-sm shadow-custom p-6 w-fit transition-all duration-300 ease-in-out",
+    "bg-white rounded-sm shadow-custom p-6 w-fit transition-all duration-300 ease-in-out",
     show
       ? "opacity-100 translate-y-0 visible will-change-opacity-transform"
       : "opacity-0 -translate-y-4 invisible will-change-auto",

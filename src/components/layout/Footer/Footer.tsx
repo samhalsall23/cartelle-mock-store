@@ -24,7 +24,7 @@ export function Footer() {
         </div>
 
         <div className="flex">
-          <div className="flex flex-col gap-1 w-[100px]">
+          <div className="flex flex-col gap-1 w-[150px]">
             <CustomLink variant="on-dark" href={routes.home} text="Home" />
             <CustomLink variant="on-dark" href={routes.about} text="About" />
             <CustomLink
@@ -34,7 +34,7 @@ export function Footer() {
             />
             <CustomLink variant="on-dark" href={routes.blog} text="Blog" />
           </div>
-          <div className="flex flex-col gap-1 w-[100px]">
+          <div className="flex flex-col gap-1 w-[150px]">
             <CustomLink variant="on-dark" href={routes.shop} text="Shop" />
             <CustomLink
               variant="on-dark"
