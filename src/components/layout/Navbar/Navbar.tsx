@@ -26,7 +26,7 @@ export function Navbar() {
 
   return (
     <div className="sticky top-0 left-0 w-full z-20">
-      <nav className="px-5 py-2 md:px-10 xl:px-12 md:py-3 flex justify-between items-center relative bg-white z-20">
+      <nav className="mx-auto px-5 py-2 md:px-10 xl:px-12 md:py-3 flex justify-between items-center relative bg-white z-20">
         <>
           <button
             aria-label="Go Back"

@@ -79,6 +79,13 @@ body {
   font-variant-ligatures: common-ligatures;
 }
 
+/* max width for content */
+section,
+nav,
+footer {
+  max-width: 1750px;
+}
+
 /* Typography Base Classes */
 .text-body-large {
   font-size: var(--font-size-lg);
