@@ -8,7 +8,7 @@ export function HeroSection() {
   return (
     <BaseSection
       id="hero-image"
-      className="min-h-[calc(100vh-140px)] flex flex-col"
+      className="min-h-[calc(100vh-74px)] md:min-h-[calc(100vh-82px)] flex flex-col pb-5 md:pb-12"
     >
       <div className="h-[75vh] w-full relative mt-auto">
         <Image

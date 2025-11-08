@@ -40,8 +40,6 @@ export function AnimateFadeIn(props: AnimateFadeInProps) {
   };
   const durationValue = durationMap[duration] || durationMap["normal"];
 
-  console.log("isInView:", id, isInView);
-
   return (
     <motion.div
       ref={ref}

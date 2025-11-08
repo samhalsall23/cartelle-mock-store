@@ -17,7 +17,7 @@ export function AnimatedHeadingText({
   className = "",
 }: AnimatedHeadingTextProps) {
   // === REF ===
-  const ref = useRef<HTMLSpanElement>(null);
+  const ref = useRef<HTMLHeadingElement | null>(null);
 
   // === HOOKS ===
   const isInView = useInView(ref, SCROLL_ANIMATION_IN_VIEW_CONFIG);
@@ -59,8 +59,8 @@ export function AnimatedHeadingText({
 
   return (
     <>
-      <span className="sr-only">{text}</span>
-      <motion.span
+      <h3 className="sr-only">{text}</h3>
+      <motion.h2
         ref={ref}
         className={className}
         variants={container}
@@ -72,12 +72,15 @@ export function AnimatedHeadingText({
           <motion.span
             key={index}
             variants={letter}
-            style={{ display: "inline-block", willChange: "transform" }}
+            style={{
+              display: "inline-block",
+              willChange: "transform, opacity, filter",
+            }}
           >
             {char === " " ? "\u00A0" : char}
           </motion.span>
         ))}
-      </motion.span>
+      </motion.h2>
     </>
   );
 }
