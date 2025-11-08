@@ -38,10 +38,6 @@ const meta = {
       control: "text",
       description: "Additional CSS classes to apply to the wrapper",
     },
-    id: {
-      control: "text",
-      description: "ID for debugging purposes (shows in console logs)",
-    },
   },
 } satisfies Meta<typeof AnimateFadeIn>;
 

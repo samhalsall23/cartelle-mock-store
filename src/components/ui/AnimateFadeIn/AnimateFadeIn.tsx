@@ -6,7 +6,6 @@ import { useRef } from "react";
 import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/components/lib";
 
 type AnimateFadeInProps = {
-  id?: string;
   children: React.ReactNode;
   className?: string;
   delay?: number;
@@ -17,7 +16,6 @@ type AnimateFadeInProps = {
 export function AnimateFadeIn(props: AnimateFadeInProps) {
   // === PROPS ===
   const {
-    id,
     children,
     className = "",
     delay = 0.1,
