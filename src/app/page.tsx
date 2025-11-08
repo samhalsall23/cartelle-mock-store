@@ -4,18 +4,26 @@ import {
   AnimateFadeIn,
   HeroSection,
   ProductTile,
+  Button,
 } from "@/components";
 
 export default function Home() {
   return (
     <main>
       <HeroSection />
-      <BaseSection id="hero-image">
-        <div className="py-16 xl:py-20 flex flex-col gap-8">
-          <SectionHeading
-            heading="New Arrivals"
-            subheading="Fresh Selections"
-          />
+      <BaseSection className="py-16 xl:py-20 " id="hero-image">
+        <div className="flex flex-col gap-8">
+          <div className="flex items-end">
+            <SectionHeading
+              heading="New Arrivals"
+              subheading="Fresh Selections"
+            />
+            <Button
+              className="ms-auto h-fit hidden md:inline-block"
+              variant="light"
+              text={"View all products"}
+            />
+          </div>
           <AnimateFadeIn className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             <ProductTile
               id={"1"}
@@ -42,6 +50,11 @@ export default function Home() {
               loading="eager"
             />
           </AnimateFadeIn>
+          <Button
+            className="w-full md:hidden"
+            variant="light"
+            text={"View all products"}
+          />
         </div>
       </BaseSection>
     </main>

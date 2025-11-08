@@ -24,7 +24,10 @@ export function ProductTile(props: ProductTileProps) {
   } = props;
 
   return (
-    <Link href={`/product/${id}`} className="group flex flex-col gap-3 w-full">
+    <Link
+      href={`/product/${id}`}
+      className="group relative flex flex-col gap-3 w-full"
+    >
       <div className="relative aspect-square overflow-hidden rounded-md">
         {/* Primary Image */}
         <Image
@@ -46,13 +49,18 @@ export function ProductTile(props: ProductTileProps) {
           loading="lazy"
           className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100"
         />
+
+        {/* View Button Overlay */}
+        <div className="absolute inset-0 flex items-end justify-end p-5 opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out">
+          <button className="bg-black h-12 w-12 text-sm text-white p-2 rounded-full transform translate-y-2 group-hover:translate-y-0 transition-transform duration-700 ease-in-out">
+            View
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-1">
-        <p className="text-xl text-neutral-12 line-clamp-2">{name}</p>
-        <p className="text-base text-neutral-10 font-semibold">
-          ${price.toFixed(2)}
-        </p>
+        <p className="text-lg text-neutral-12 line-clamp-2">{name}</p>
+        <p className="text-base text-neutral-10 ">${price.toFixed(2)}</p>
       </div>
     </Link>
   );
