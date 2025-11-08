@@ -30,6 +30,7 @@ export function NavbarSubMenu(props: NavbarSubMenuProps) {
             src={"/assets/chair-image.jpg"}
             alt="chair"
             fill
+            sizes="150px"
           />
         </div>
         {subItems?.map((subItem) => (

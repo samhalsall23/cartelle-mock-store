@@ -1,6 +1,7 @@
 import Image from "next/image";
 
-import { BaseSection, AnimateFadeIn } from "@/components";
+import { BaseSection } from "@/components/layout";
+import { AnimateFadeIn } from "@/components/ui";
 import { cn } from "@/lib";
 import { HeroSectionButton } from "./HeroSectionButton";
 
