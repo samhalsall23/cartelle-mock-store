@@ -3,4 +3,5 @@ export * from "./Button";
 export * from "./Input";
 export * from "./AnimatedHeadingText";
 export * from "./AnimateFadeIn";
+export * from "./AnimateStagger";
 export * from "./SectionHeading";

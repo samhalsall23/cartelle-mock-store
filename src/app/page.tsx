@@ -2,16 +2,19 @@ import {
   SectionHeading,
   BaseSection,
   AnimateFadeIn,
+  AnimateStagger,
   HeroSection,
   ProductTile,
   Button,
+  FeatureCard,
 } from "@/components";
 
 export default function Home() {
   return (
     <main>
       <HeroSection />
-      <BaseSection className="py-16 xl:py-20 " id="hero-image">
+
+      <BaseSection className="py-16 xl:py-20" id="hero-image">
         <div className="flex flex-col gap-8">
           <div className="flex items-end">
             <SectionHeading
@@ -56,6 +59,34 @@ export default function Home() {
             text={"View all products"}
           />
         </div>
+      </BaseSection>
+
+      <BaseSection
+        id="feature-cards"
+        className="relative border-y border-neutral-03 py-16 xl:py-20 overflow-hidden"
+      >
+        <div className="absolute inset-x-0 bottom-0 h-16 xl:h-20 bg-white z-10"></div>
+        <AnimateStagger
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-16 md:gap-20 xl:gap-6 animate-y-mobile md:animate-y-tablet xl:animate-y-desktop"
+          staggerDelay={0.2}
+          duration="long"
+        >
+          <FeatureCard
+            number="01"
+            title="Deliver with Quality"
+            description="Each product is crafted with attention to detail and quality materials, ensuring durability and comfort."
+          />
+          <FeatureCard
+            number="02"
+            title="Designed to Impress"
+            description="Our products feature sleek designs and modern aesthetics, making them a stylish addition to any wardrobe."
+          />
+          <FeatureCard
+            number="03"
+            title="Curated for You"
+            description="We carefully select each item to meet high standards of style, comfort, and functionality."
+          />
+        </AnimateStagger>
       </BaseSection>
     </main>
   );

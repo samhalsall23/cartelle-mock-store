@@ -86,6 +86,19 @@ footer {
   max-width: 1750px;
 }
 
+/* Responsive animation Y values */
+.animate-y-mobile {
+  --animate-y: 150px;
+}
+
+.animate-y-tablet {
+  --animate-y: 240px;
+}
+
+.animate-y-desktop {
+  --animate-y: 500px;
+}
+
 /* Typography Base Classes */
 .text-body-large {
   font-size: var(--font-size-lg);
@@ -141,46 +154,55 @@ footer {
 }
 
 /* Heading Styles */
-h1 {
+h1:not([class*="text-"]) {
   font-size: var(--font-size-8xl); /* 80px */
-  font-weight: 500; /* Medium */
-  line-height: var(--line-height-tight); /* 125% */
-  letter-spacing: var(--letter-spacing-tighter); /* -0.04em */
 }
 
-h2 {
+h2:not([class*="text-"]) {
   font-size: var(--font-size-7xl); /* 62px */
+}
+
+h3:not([class*="text-"]) {
+  font-size: var(--font-size-4xl); /* 36px */
+}
+
+h1,
+h2 {
   font-weight: 500; /* Medium */
   line-height: var(--line-height-tight); /* 125% */
   letter-spacing: var(--letter-spacing-tighter); /* -0.04em */
 }
 
-h3 {
-  font-size: var(--font-size-4xl); /* 36px */
+h3,
+h4 {
   font-weight: 500; /* Medium */
   line-height: var(--line-height-normal); /* 140% */
   letter-spacing: var(--letter-spacing-tighter); /* -0.04em */
+}
+
+h4:not([class*="text-"]) {
+  font-size: var(--font-size-2xl); /* 24px */
 }
 
 h4 {
-  font-size: var(--font-size-2xl); /* 24px */
   font-weight: 500; /* Medium */
   line-height: var(--line-height-normal); /* 140% */
   letter-spacing: var(--letter-spacing-tighter); /* -0.04em */
 }
 
-h5 {
-  font-size: var(--font-size-xl); /* 20px */
-  font-weight: 500; /* Medium */
-  line-height: var(--line-height-normal); /* 140% */
-  letter-spacing: var(--letter-spacing-tighter); /* -0.04em */
-}
-
+h5,
 h6 {
-  font-size: var(--font-size-lg); /* 18px */
   font-weight: 500; /* Medium */
   line-height: var(--line-height-normal); /* 140% */
   letter-spacing: var(--letter-spacing-tighter); /* -0.04em */
+}
+
+h5:not([class*="text-"]) {
+  font-size: var(--font-size-xl); /* 20px */
+}
+
+h6:not([class*="text-"]) {
+  font-size: var(--font-size-lg); /* 18px */
 }
 
 /*
