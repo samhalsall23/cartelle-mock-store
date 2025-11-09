@@ -5,3 +5,4 @@ export * from "./CloseIcon";
 export * from "./CheveronLeftIcon";
 export * from "./CheveronRightIcon";
 export * from "./ArrowUpRightIcon";
+export * from "./StarIcon";
