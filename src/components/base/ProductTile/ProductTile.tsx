@@ -28,7 +28,7 @@ export function ProductTile(props: ProductTileProps) {
       href={`/product/${id}`}
       className="group relative flex flex-col gap-3 w-full"
     >
-      <div className="relative aspect-square overflow-hidden rounded-md">
+      <div className="relative aspect-square overflow-hidden rounded-sm">
         {/* Primary Image */}
         <Image
           src={primaryImageUrl}

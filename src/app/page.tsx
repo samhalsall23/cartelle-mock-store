@@ -7,6 +7,7 @@ import {
   ProductTile,
   Button,
   FeatureCard,
+  CollectionTile,
 } from "@/components";
 
 export default function Home() {
@@ -87,6 +88,45 @@ export default function Home() {
             description="We carefully select each item to meet high standards of style, comfort, and functionality."
           />
         </AnimateStagger>
+      </BaseSection>
+
+      <BaseSection className="py-16 xl:py-20" id="collections-section">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+          <SectionHeading
+            heading="Collections"
+            subheading="Curated for quality"
+          />
+          <CollectionTile
+            title="Summer Essentials"
+            description="Lightweight and breathable."
+            imageUrl="/assets/clothes-model.jpg"
+            href="/collections/summer-essentials"
+          />
+          <CollectionTile
+            title="Winter Warmth"
+            description="Cozy knits and comfort."
+            imageUrl="/assets/hero-3.jpg"
+            href="/collections/winter-collection"
+          />
+          <CollectionTile
+            title="Professional Edge"
+            description="Sophisticated workplace styles."
+            imageUrl="/assets/clothes-model-hover.jpg"
+            href="/collections/professional"
+          />
+          <CollectionTile
+            title="Weekend Casual"
+            description="Effortless everyday comfort."
+            imageUrl="/assets/cartelle-hero-image.jpg"
+            href="/collections/casual-wear"
+          />
+          <CollectionTile
+            title="Premium Denim"
+            description="Finest quality craftsmanship."
+            imageUrl="/assets/hero-3.jpg"
+            href="/collections/premium-denim"
+          />
+        </div>
       </BaseSection>
     </main>
   );
