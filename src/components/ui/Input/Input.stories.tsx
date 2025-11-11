@@ -57,8 +57,10 @@ export const Light: Story = {
     variant: "light",
     placeholder: "Light input placeholder",
   },
-  parameters: {
-    backgrounds: { default: "dark" },
+  globals: {
+    backgrounds: {
+      value: "dark"
+    }
   },
 };
 

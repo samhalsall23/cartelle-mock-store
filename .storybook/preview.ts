@@ -4,21 +4,22 @@ import "../src/app/globals.css";
 const preview: Preview = {
   parameters: {
     backgrounds: {
-      default: "light",
-      values: [
-        {
+      options: {
+        light: {
           name: "light",
           value: "#ffffff",
         },
-        {
+
+        dark: {
           name: "dark",
           value: "#333333",
         },
-        {
+
+        gray: {
           name: "gray",
           value: "#f5f5f5",
-        },
-      ],
+        }
+      }
     },
     controls: {
       matchers: {
@@ -34,6 +35,12 @@ const preview: Preview = {
       test: "todo",
     },
   },
+
+  initialGlobals: {
+    backgrounds: {
+      value: "light"
+    }
+  }
 };
 
 export default preview;
