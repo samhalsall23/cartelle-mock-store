@@ -310,3 +310,19 @@ Max width utilities
     border-color: var(--color-neutral-00);
   }
 }
+
+/* Continuous scroll animation for reviews */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-left {
+  animation: scroll-left 20s linear infinite;
+  width: fit-content;
+  will-change: transform;
+}

@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { StarIcon } from "@/components/icons";
+import { AnimatedReviewText } from "@/components/ui";
 
 type ReviewCardProps = {
   rating: number;
@@ -8,12 +9,19 @@ type ReviewCardProps = {
   reviewerName: string;
   reviewerTitle: string;
   reviewerImageUrl: string;
+  animationTriggered?: boolean;
 };
 
 export function ReviewCard(props: ReviewCardProps) {
   // === PROPS ===
-  const { rating, reviewText, reviewerName, reviewerTitle, reviewerImageUrl } =
-    props;
+  const {
+    rating,
+    reviewText,
+    reviewerName,
+    reviewerTitle,
+    reviewerImageUrl,
+    animationTriggered = false,
+  } = props;
 
   return (
     <div className="bg-white flex flex-col p-8 w-[280px] h-[420px] md:h-80 md:w-[400px] rounded-sm gap-6">
@@ -24,9 +32,13 @@ export function ReviewCard(props: ReviewCardProps) {
           </span>
         ))}
       </div>
-      <h5 className="text-neutral-10 text-lg xl:text-xl font-normal!">
-        {reviewText}
-      </h5>
+      <AnimatedReviewText
+        text={reviewText}
+        className="text-neutral-10 text-lg xl:text-xl font-normal!"
+        wordStaggerDelay={0.15}
+        disableIsInView={true}
+        animationTriggered={animationTriggered}
+      />
       <div className="mt-auto flex items-center gap-x-4">
         <div className="relative w-12 h-12">
           <Image

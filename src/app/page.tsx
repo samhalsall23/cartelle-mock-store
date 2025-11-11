@@ -8,8 +8,9 @@ import {
   Button,
   FeatureCard,
   CollectionTile,
-  ReviewCard,
+  ReviewCardsSection,
 } from "@/components";
+import { mockReviews } from "@/components/base/ReviewCardsSection/data";
 
 export default function Home() {
   return (
@@ -130,33 +131,7 @@ export default function Home() {
         </div>
       </BaseSection>
 
-      <div className="bg-main-01">
-        <BaseSection className=" py-16 xl:py-20" id="reviews-section">
-          <div className="flex gap-4">
-            <ReviewCard
-              rating={5}
-              reviewText="Absolutely love the quality and fit! The fabric is so soft and comfortable. I've already ordered three more pieces from this collection."
-              reviewerName="Sarah Johnson"
-              reviewerTitle="Verified Customer"
-              reviewerImageUrl="/assets/clothes-model.jpg"
-            />
-            <ReviewCard
-              rating={4}
-              reviewText="Great value for the price. The design is modern and chic, but the fabric could be a bit softer."
-              reviewerName="Michael Smith"
-              reviewerTitle="Fashion Blogger"
-              reviewerImageUrl="/assets/clothes-model.jpg"
-            />
-            <ReviewCard
-              rating={3}
-              reviewText="It's okay, but I've had better. The fit is a bit off and the material isn't as nice as I expected."
-              reviewerName="Emily Davis"
-              reviewerTitle="Frequent Shopper"
-              reviewerImageUrl="/assets/clothes-model.jpg"
-            />
-          </div>
-        </BaseSection>
-      </div>
+      <ReviewCardsSection reviews={mockReviews} />
     </main>
   );
 }

@@ -4,4 +4,5 @@ export * from "./Input";
 export * from "./AnimatedHeadingText";
 export * from "./AnimateFadeIn";
 export * from "./AnimateStagger";
+export * from "./AnimatedReviewText";
 export * from "./SectionHeading";
