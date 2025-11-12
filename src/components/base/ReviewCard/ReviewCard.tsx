@@ -35,7 +35,7 @@ export function ReviewCard(props: ReviewCardProps) {
       <AnimatedReviewText
         text={reviewText}
         className="text-neutral-10 text-lg xl:text-xl font-normal!"
-        wordStaggerDelay={0.15}
+        wordStaggerDelay={0.1}
         disableIsInView={true}
         animationTriggered={animationTriggered}
       />
