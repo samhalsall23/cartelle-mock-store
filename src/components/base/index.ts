@@ -5,3 +5,5 @@ export * from "./CollectionTile";
 export * from "./ReviewCard";
 export * from "./ReviewCardsSection";
 export * from "./HomeVideoSection";
+export * from "./ProfileDetails";
+export * from "./BlogTile";

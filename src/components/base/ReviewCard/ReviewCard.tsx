@@ -1,7 +1,6 @@
-import Image from "next/image";
-
 import { StarIcon } from "@/components/icons";
 import { AnimatedReviewText } from "@/components/ui";
+import { ProfileDetails } from "../ProfileDetails";
 
 type ReviewCardProps = {
   rating: number;
@@ -39,21 +38,12 @@ export function ReviewCard(props: ReviewCardProps) {
         disableIsInView={true}
         animationTriggered={animationTriggered}
       />
-      <div className="mt-auto flex items-center gap-x-4">
-        <div className="relative w-12 h-12">
-          <Image
-            src={reviewerImageUrl}
-            alt={reviewerName}
-            fill
-            className="object-cover rounded-full"
-          />
-        </div>
-
-        <div className="flex flex-col">
-          <p className="text-base">{reviewerName}</p>
-          <p className="text-sm text-neutral-10">{reviewerTitle}</p>
-        </div>
-      </div>
+      <ProfileDetails
+        className="mt-auto"
+        reviewerImageUrl={reviewerImageUrl}
+        reviewerName={reviewerName}
+        reviewerTitle={reviewerTitle}
+      />
     </div>
   );
 }
