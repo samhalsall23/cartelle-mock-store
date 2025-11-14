@@ -69,7 +69,7 @@ export function Navbar() {
                     text={item.text}
                   />
                   <div
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 pt-3"
+                    className={`absolute top-full left-1/2 transform -translate-x-1/2 pt-3 ${showSubMenu ? "pointer-events-auto" : "pointer-events-none"}`}
                     onMouseLeave={() => setShowSubMenu(false)}
                   >
                     <NavbarSubMenu

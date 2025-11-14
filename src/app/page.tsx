@@ -10,6 +10,8 @@ import {
   CollectionTile,
   ReviewCardsSection,
   HomeVideoSection,
+  BlogLargeTile,
+  BlogTile,
 } from "@/components";
 import { HomeVideoSectionWrapper } from "@/components/base/HomeVideoSection/HomeVideoSectionClient";
 import { mockReviews } from "@/components/base/ReviewCardsSection/data";
@@ -71,7 +73,7 @@ export default function Home() {
           id="feature-cards"
           className="relative py-16 xl:py-20 overflow-hidden"
         >
-          <div className="absolute inset-x-0 bottom-0 h-16 xl:h-20 bg-white z-10"></div>
+          <div className="absolute inset-x-0 bottom-0 h-16 xl:h-20 bg-white z-10" />
           <AnimateStagger
             className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-16 md:gap-20 xl:gap-6 animate-y-mobile md:animate-y-tablet xl:animate-y-desktop"
             staggerDelay={0.2}
@@ -142,6 +144,72 @@ export default function Home() {
       <HomeVideoSectionWrapper>
         <HomeVideoSection />
       </HomeVideoSectionWrapper>
+
+      <BaseSection
+        className="py-16 xl:py-20 flex flex-col gap-8"
+        id="home-news-section"
+      >
+        <div className="flex justify-between items-end">
+          <SectionHeading heading="Our News" subheading="Explore The Trends" />
+          <Button
+            className="ms-auto h-fit hidden md:inline-block"
+            variant="light"
+            text="View all posts"
+          />
+        </div>
+        <div className="flex flex-col xl:flex-row gap-12 xl:gap-6">
+          <div className="hidden md:flex flex-1">
+            <BlogLargeTile
+              href="/"
+              title="Caring for Your Clothes"
+              description="Essential Tips to Keep Your Wardrobe Fresh"
+              imageUrl="/assets/cartelle-hero-image.jpg"
+              alt="Caring for Your Clothes"
+              category="Clothing"
+              datePublished={new Date("2024-01-15")}
+              timeToRead={7}
+              profileImageUrl={"/assets/clothes-model.jpg"}
+              authorName={"Olivia Smith"}
+              authorJobTitle={"Fashion Editor"}
+            />
+          </div>
+          <div className="flex-1 gap-12 xl:gap-0 justify-between flex flex-col">
+            <BlogTile
+              className="block md:hidden"
+              href="/"
+              title="Caring for Your Clothes"
+              description="Essential Tips to Keep Your Wardrobe Fresh"
+              imageUrl="/assets/cartelle-hero-image.jpg"
+              alt="Caring for Your Clothes"
+              category="Clothing"
+            />
+            <BlogTile
+              href="/blog/eco-friendly-wardrobe"
+              title="Sustainable Fashion"
+              description="How to Build an Eco-Friendly Wardrobe with Recycled Materials and Mindful Shopping Habits."
+              imageUrl="/assets/hero-3.jpg"
+              alt="Eco-friendly clothing on display"
+              category="Sustainability"
+            />
+            <BlogTile
+              href="/blog/summer-style-tips"
+              title="Summer Style Tips"
+              description="Top 10 Ways to Stay Cool and Stylish This Summer, Featuring Breathable Fabrics and Vibrant Colors."
+              imageUrl="/assets/cartelle-hero-image.jpg"
+              alt="Summer fashion inspiration"
+              category="Fashion"
+            />
+            <BlogTile
+              href="/blog/denim-trends-2024"
+              title="Denim Trends 2024"
+              description="Explore the Latest Denim Styles, From Vintage Cuts to Modern Sustainable Production Techniques."
+              imageUrl="/assets/clothes-model-hover.jpg"
+              alt="Model wearing trendy denim jeans"
+              category="Trends"
+            />
+          </div>
+        </div>
+      </BaseSection>
     </main>
   );
 }

@@ -2,15 +2,9 @@ import Link from "next/link";
 
 import { ProfileDetails } from "../ProfileDetails";
 import { BlogTileImage } from "./BlogTileImage";
+import { BlogTileProps } from "./BlogTile";
 
-export type BlogLargeTileProps = {
-  href: string;
-  title: string;
-  description: string;
-  imageUrl: string;
-  alt: string;
-  category: string;
-
+export type BlogLargeTileProps = BlogTileProps & {
   datePublished: Date;
   timeToRead: number;
   profileImageUrl: string;
@@ -37,7 +31,12 @@ export function BlogLargeTile(props: BlogLargeTileProps) {
   return (
     <Link href={href} className="flex group flex-col w-full h-[648px] gap-6 ">
       <div className="relative w-full flex-1 ">
-        <BlogTileImage imageUrl={imageUrl} alt={alt} category={category} />
+        <BlogTileImage
+          isLargeTile={true}
+          imageUrl={imageUrl}
+          alt={alt}
+          category={category}
+        />
       </div>
       <div className="p-8 rounded-sm h-[300px] bg-main-01 flex flex-col gap-6 ">
         <h3 className="text-3xl xl:text-4xl">{title}</h3>

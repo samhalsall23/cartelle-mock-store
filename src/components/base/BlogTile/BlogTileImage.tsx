@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 type BlogTileImageProps = {
+  isLargeTile?: boolean;
   imageUrl: string;
   alt: string;
   category: string;
@@ -8,7 +9,7 @@ type BlogTileImageProps = {
 
 export function BlogTileImage(props: BlogTileImageProps) {
   // === PROPS ===
-  const { imageUrl, alt, category } = props;
+  const { isLargeTile = false, imageUrl, alt, category } = props;
 
   return (
     <div className="relative w-full h-full overflow-hidden rounded-sm">
@@ -23,13 +24,17 @@ export function BlogTileImage(props: BlogTileImageProps) {
       <div className="absolute inset-0 border-0 border-white/0 group-hover:border-white group-hover:border-10 transition-all duration-500 ease-out w-full h-full z-20" />
 
       {/*Blog Image*/}
-      <Image
-        src={imageUrl}
-        alt={alt}
-        fill
-        loading="lazy"
-        className="absolute w-full h-full object-cover rounded-sm"
-      />
+      <div
+        className={`${!isLargeTile && "relative aspect-video xl:aspect-4/3 overflow-hidden rounded-sm h-full"}`}
+      >
+        <Image
+          src={imageUrl}
+          alt={alt}
+          fill
+          loading="lazy"
+          className="absolute w-full h-full object-cover rounded-sm"
+        />
+      </div>
     </div>
   );
 }
