@@ -15,8 +15,12 @@ import {
 } from "@/components";
 import { HomeVideoSectionWrapper } from "@/components/base/HomeVideoSection/HomeVideoSectionClient";
 import { mockReviews } from "@/components/base/ReviewCardsSection/data";
+import { prisma } from "@/lib/prisma";
 
-export default function Home() {
+export default async function Home() {
+  const products = await prisma.product.findMany();
+  console.log(products);
+
   return (
     <main>
       <HeroSection />
