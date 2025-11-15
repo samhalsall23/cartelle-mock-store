@@ -9,7 +9,8 @@
     "lint": "eslint",
     "prepare": "husky",
     "storybook": "storybook dev -p 6006 --no-open",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@prisma/client": "6.19.0",
