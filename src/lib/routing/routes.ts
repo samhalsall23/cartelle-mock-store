@@ -5,3 +5,10 @@ export const routes = {
   blog: "/blog",
   shop: "/shop",
 };
+
+export const adminRoutes = {
+  home: "/admin",
+  products: "/admin/products",
+  orders: "/admin/orders",
+  blog: "/admin/blogs",
+};
