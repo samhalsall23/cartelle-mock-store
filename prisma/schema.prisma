@@ -14,9 +14,135 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// === PRODUCT MODEL ===
 model Product {
-  id         String   @id @default(cuid())
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  price       Decimal     @db.Decimal(10, 2)
+  isActive    Boolean     @default(true)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  images      String[]
+  sizes       Size[]
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
+  slug        String      @unique
+  orderItems  OrderItem[]
+}
+
+// === SIZE MODEL ===
+enum SizeEnum {
+  XS
+  S
+  M
+  L
+  XL
+}
+
+model Size {
+  id         String      @id @default(cuid())
+  name       SizeEnum?
+  customName String? // For sizes not in enum
+  productId  String
+  product    Product     @relation(fields: [productId], references: [id])
+  stock      Int         @default(0)
+  orderItems OrderItem[]
+}
+
+// === CATEGORY MODEL ===
+model Category {
+  id       String    @id @default(cuid())
+  name     String    @unique
+  slug     String    @unique
+  products Product[]
+}
+
+// === ORDER MODEL ===
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  SHIPPED
+  DELIVERED
+  CANCELLED
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  STRIPE
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     Int           @default(autoincrement())
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  customerName    String
+  customerEmail   String
+  customerAddress String
+  customerPhone   String
+  totalPrice      Decimal       @db.Decimal(10, 2)
+  status          OrderStatus   @default(PENDING)
+  paymentMethod   PaymentMethod
+  paymentStatus   PaymentStatus @default(PENDING)
+  items           OrderItem[]
+
+  @@index([customerEmail])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id])
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  sizeId    String
+  size      Size?   @relation(fields: [sizeId], references: [id])
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+  lineTotal Decimal @db.Decimal(10, 2)
+}
+
+// === BLOG MODEL ===
+enum BlogCategory {
+  TRENDS
+  SUSTAINABILITY
+  STYLE_GUIDES
+  DESIGNERS
+  SHOPPING_TIPS
+}
+
+model BlogPost {
+  id          String       @id @default(cuid())
+  title       String
+  description String
+  category    BlogCategory
+  slug        String       @unique
+  content     String
+  publishedAt DateTime?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  author      Author       @relation(fields: [authorId], references: [id])
+  authorId    String
+  duration    Int // Estimated reading time in minutes
+}
+
+model Author {
+  id         String     @id @default(cuid())
   name       String
-  price      Int
-  createdAt  DateTime @default(now())
+  occupation String
+  avatarUrl  String
+  posts      BlogPost[]
 }
