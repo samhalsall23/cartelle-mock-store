@@ -77,7 +77,6 @@ enum PaymentStatus {
 }
 
 enum PaymentMethod {
-  CREDIT_CARD
   STRIPE
 }
 
