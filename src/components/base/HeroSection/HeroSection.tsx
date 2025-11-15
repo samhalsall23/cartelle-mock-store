@@ -11,12 +11,12 @@ export function HeroSection() {
       id="hero-image"
       className="min-h-[calc(100vh-74px)] md:min-h-[calc(100vh-82px)] flex flex-col pb-5 md:pb-12"
     >
-      <div className="h-[75vh] w-full relative mt-auto">
+      <div className="h-[75dvh] w-full relative mt-auto">
         <Image
           src="/assets/hero-3.jpg"
           alt="Hero Image"
           fill
-          quality={95}
+          quality={80}
           priority
           className="object-cover rounded-sm"
         />
