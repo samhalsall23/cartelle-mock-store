@@ -1,37 +1,37 @@
 import Link from "next/link";
 
-import { prisma } from "@/lib/prisma";
+import { cn } from "@/lib";
 import {
   AdminHeading,
-  AdminDataTable,
   buttonVariants,
+  AdminTableAuthors,
 } from "@/components/admin";
-import { cn } from "@/lib";
+import { getAuthors } from "@/lib/server";
 
 export default async function Page() {
-  const authors = await prisma.author.findMany();
-  console.log(authors);
+  // === FETCH DATA ===
+  const authors = await getAuthors();
+
+  if (!authors.success) {
+    return <div>Error loading authors: {authors.error}</div>;
+  }
+
   return (
     <div>
-      <div className="flex justify-between">
+      <div className="flex justify-between items-end">
         <AdminHeading heading="View Authors" />
-        <Link
-          href="/example"
-          className={cn(
-            buttonVariants({ variant: "default", size: "default" }),
-          )}
-        >
-          Go to Example
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            href="/example"
+            className={cn(
+              buttonVariants({ variant: "default", size: "default" }),
+            )}
+          >
+            Add Author
+          </Link>
+        </div>
       </div>
-      <AdminDataTable
-        data={authors}
-        columns={[
-          { accessorKey: "id", header: "ID" },
-          { accessorKey: "name", header: "Name" },
-          { accessorKey: "occupation", header: "Occupation" },
-        ]}
-      />
+      <AdminTableAuthors authors={authors.data} />
     </div>
   );
 }

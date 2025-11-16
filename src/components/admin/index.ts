@@ -1,4 +1,3 @@
-export * from "./AdminNavbar";
-export * from "./AdminHeading";
-export * from "./AdminDataTable";
-export * from "./AdminButton";
+export * from "./layout";
+export * from "./ui";
+export * from "./tables";

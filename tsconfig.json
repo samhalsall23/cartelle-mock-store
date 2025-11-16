@@ -25,7 +25,9 @@
       "@/lib": ["lib/index"],
       "@/lib/*": ["lib/*"],
       "@/hooks/*": ["hooks/*"],
-      "@/app/*": ["app/*"]
+      "@/app/*": ["app/*"],
+      "@/types": ["types"],
+      "@/types/*": ["types/*"]
     }
   },
   "include": [
