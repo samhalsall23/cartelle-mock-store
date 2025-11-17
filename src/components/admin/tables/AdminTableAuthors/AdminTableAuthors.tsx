@@ -164,7 +164,9 @@ export function AdminTableAuthors({
               disabled={!!deletingId}
               onClick={() => {
                 setDeletingId(pendingDeleteId);
-                pendingDeleteId && deleteAuthor(pendingDeleteId);
+                if (pendingDeleteId) {
+                  deleteAuthor(pendingDeleteId);
+                }
               }}
             >
               {deletingId ? "Deleting..." : "Delete"}

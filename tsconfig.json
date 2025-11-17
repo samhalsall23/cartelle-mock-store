@@ -24,10 +24,11 @@
       "@/components/*": ["components/*"],
       "@/lib": ["lib/index"],
       "@/lib/*": ["lib/*"],
-      "@/hooks/*": ["hooks/*"],
       "@/app/*": ["app/*"],
       "@/types": ["types"],
-      "@/types/*": ["types/*"]
+      "@/types/*": ["types/*"],
+      "@/hooks": ["hooks"],
+      "@/hooks/*": ["hooks/*"]
     }
   },
   "include": [

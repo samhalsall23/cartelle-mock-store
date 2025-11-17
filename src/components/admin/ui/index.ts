@@ -4,3 +4,6 @@ export * from "./AdminDropdownMenu";
 export * from "./AdminTooltip";
 export * from "./AdminToaster";
 export * from "./AdminInput";
+export * from "./AdminLabel";
+export * from "./AdminField";
+export * from "./AdminSeparator";

@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { cn } from "@/lib";
+import { adminRoutes, cn } from "@/lib";
 import {
   AdminHeading,
   buttonVariants,
@@ -22,7 +22,7 @@ export default async function Page() {
         <AdminHeading heading="View Authors" />
         <div className="flex gap-3">
           <Link
-            href="/example"
+            href={adminRoutes.authorsCreate}
             className={cn(
               buttonVariants({ variant: "default", size: "default" }),
             )}

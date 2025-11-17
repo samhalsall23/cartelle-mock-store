@@ -11,6 +11,7 @@ export const adminRoutes = {
   products: "/admin/products",
   orders: "/admin/orders",
   blog: "/admin/blogs",
+
   authors: "/admin/authors",
-  authorsAdd: "/admin/authors/add",
+  authorsCreate: "/admin/authors/create",
 };
