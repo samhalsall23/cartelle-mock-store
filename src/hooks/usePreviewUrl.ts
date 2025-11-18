@@ -1,23 +1,16 @@
-import { useEffect, useState } from "react";
-
-// Hook to generate and manage a preview URL for a given File object
+import { useEffect, useMemo } from "react";
 
 export function usePreviewUrl(file?: File | null) {
-  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const previewUrl = useMemo(() => {
+    if (!file) return null;
+    return URL.createObjectURL(file);
+  }, [file]);
 
   useEffect(() => {
-    if (!file) {
-      setPreviewUrl(null);
-      return;
-    }
-
-    const objectUrl = URL.createObjectURL(file);
-    setPreviewUrl(objectUrl);
-
     return () => {
-      URL.revokeObjectURL(objectUrl);
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
-  }, [file]);
+  }, [previewUrl]);
 
   return previewUrl;
 }
