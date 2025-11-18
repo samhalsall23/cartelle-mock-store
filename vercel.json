@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cleanup-unused-author-images",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}
