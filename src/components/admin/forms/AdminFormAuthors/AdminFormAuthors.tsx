@@ -1,11 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { Author } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import imageCompression from "browser-image-compression";
 
 import {
   AdminButton,
@@ -22,7 +24,15 @@ import { AdminFormAuthorsData, adminFormAuthorsSchema } from "./schema";
 import { createAuthor } from "@/lib/server";
 import { usePreviewUrl } from "@/hooks";
 
-export function AdminFormAuthors() {
+type AdminFormAuthorsProps = {
+  isEditMode?: boolean;
+  authorData?: Author;
+};
+
+export function AdminFormAuthors(props: AdminFormAuthorsProps) {
+  // === PROPS ===
+  const { isEditMode = false, authorData } = props;
+
   // === ROUTES ===
   const router = useRouter();
 
@@ -41,9 +51,11 @@ export function AdminFormAuthors() {
     formState: { errors, isSubmitting },
   } = useForm<AdminFormAuthorsData>({
     resolver: zodResolver(adminFormAuthorsSchema),
+    defaultValues: {
+      name: authorData?.name,
+      occupation: authorData?.occupation,
+    },
   });
-
-  //
 
   // === FUNCTIONS ===
   const clearFileInput = () => {
@@ -52,24 +64,34 @@ export function AdminFormAuthors() {
     }
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0] || null;
 
-    if (selectedFile) {
-      if (selectedFile.size > 1 * 1024 * 1024) {
-        toast.error("File size exceeds 1MB");
-        clearFileInput();
-        return;
-      }
-      if (!["image/jpeg", "image/png"].includes(selectedFile.type)) {
-        toast.error("Only JPEG and PNG formats are accepted");
-        clearFileInput();
-        return;
-      }
-
-      setValue("image", selectedFile, { shouldValidate: true });
-      setFile(selectedFile);
+    if (!selectedFile) {
+      toast.error("No file selected");
+      return;
     }
+
+    const compressedFile = await imageCompression(selectedFile, {
+      maxSizeMB: 0.25, // ~250kb
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    });
+
+    if (compressedFile.size > 1 * 1024 * 1024) {
+      toast.error("Error compressing image. Please choose a smaller file.");
+      clearFileInput();
+      return;
+    }
+
+    if (!["image/jpeg", "image/png"].includes(compressedFile.type)) {
+      toast.error("Only JPEG and PNG formats are accepted");
+      clearFileInput();
+      return;
+    }
+
+    setValue("image", compressedFile, { shouldValidate: true });
+    setFile(compressedFile);
   };
 
   const onSubmit = async (data: AdminFormAuthorsData) => {
@@ -90,7 +112,9 @@ export function AdminFormAuthors() {
         <AdminFieldGroup>
           <AdminFieldSet>
             <AdminFieldDescription>
-              Fill in details for the new author below.
+              {isEditMode
+                ? "Edit the author details below."
+                : "Fill in details for the new author below."}
             </AdminFieldDescription>
 
             <AdminFieldGroup>
@@ -120,14 +144,17 @@ export function AdminFormAuthors() {
                 />
                 <AdminFieldError errors={[errors.image]} />
 
-                {preview && (
-                  <Image
-                    src={preview}
-                    alt="Preview"
-                    width={96}
-                    height={96}
-                    className="rounded mt-2 object-cover"
-                  />
+                {(preview || authorData?.avatarUrl) && (
+                  <div className="relative w-60! h-60 mt-2">
+                    <Image
+                      src={preview || authorData?.avatarUrl || ""}
+                      alt="Preview"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 240px"
+                      loading="eager"
+                      className="rounded object-cover"
+                    />
+                  </div>
                 )}
               </AdminField>
             </AdminFieldGroup>

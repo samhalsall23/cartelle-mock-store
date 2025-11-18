@@ -1,5 +1,6 @@
 "use server";
 
+import { Author } from "@prisma/client";
 import { put } from "@vercel/blob";
 
 import { prisma } from "@/lib/prisma";
@@ -10,6 +11,7 @@ import {
 } from "@/types";
 import { handleServerAction } from "./helpers";
 import { AdminFormAuthorsData } from "@/components/admin/forms/AdminFormAuthors/schema";
+import { BLOB_STORAGE_PREFIXES } from "../constants";
 
 // === FETCHES ===
 export async function getAuthors(): Promise<
@@ -18,6 +20,16 @@ export async function getAuthors(): Promise<
   return handleServerAction(() =>
     prisma.author.findMany({
       include: { _count: { select: { posts: true } } },
+    }),
+  );
+}
+
+export async function getAuthorById(
+  id: string,
+): Promise<ServerActionResponse<Author | null>> {
+  return handleServerAction(() =>
+    prisma.author.findUnique({
+      where: { id },
     }),
   );
 }
@@ -36,9 +48,10 @@ export async function createAuthor(
   data: AdminFormAuthorsData,
 ): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
   return handleServerAction(async () => {
-    // upload image to blob storage
     const imageFile = data.image;
-    const blob = await put(imageFile.name, imageFile, {
+    const imageFileName = BLOB_STORAGE_PREFIXES.AUTHORS + "/" + data.name;
+
+    const blob = await put(imageFileName, imageFile, {
       access: "public",
       addRandomSuffix: true,
     });
@@ -50,6 +63,22 @@ export async function createAuthor(
         avatarUrl: blob.url,
       },
     });
+
     return { id: created.id };
   });
 }
+
+// export async function updateAuthorById(
+//   id: string,
+//   data: AdminFormAuthorsData,
+// ): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
+//   return handleServerAction(async () => {
+//     prisma.author.update({
+//       where: { id },
+//       data: {
+//         name: data.name,
+//         occupation: data.occupation,
+//       },
+//     });
+//   });
+// }

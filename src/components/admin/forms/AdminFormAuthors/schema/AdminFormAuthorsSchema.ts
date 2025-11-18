@@ -5,7 +5,7 @@ export const adminFormAuthorsSchema = z.object({
   name: z.string().min(1, "Name is required"),
   occupation: z.string().min(1, "Occupation is required"),
   image: z
-    .instanceof(File, { message: "Image is required" })
+    .instanceof(Blob, { message: "Image is required" })
     .refine((file) => file?.size > 0, "Image is required")
     .refine((file) => file.size <= 1 * 1024 * 1024, "Max file size is 1MB")
     .refine(

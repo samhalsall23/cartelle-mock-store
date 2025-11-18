@@ -28,6 +28,8 @@ import {
 } from "@/components/admin";
 import { deleteAuthorById } from "@/lib/server";
 import { AdminTableAuthorQuery } from "@/types";
+import Link from "next/link";
+import { adminRoutes } from "@/lib";
 
 export function AdminTableAuthors({
   authors,
@@ -96,7 +98,9 @@ export function AdminTableAuthors({
                   </AdminDropdownMenuTrigger>
 
                   <AdminDropdownMenuContent align="end">
-                    <AdminDropdownMenuItem>Edit</AdminDropdownMenuItem>
+                    <Link href={`${adminRoutes.authors}/${author.id}`}>
+                      <AdminDropdownMenuItem>Edit</AdminDropdownMenuItem>
+                    </Link>
                     <AdminDropdownMenuSeparator />
 
                     <AdminDropdownMenuItem
