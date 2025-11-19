@@ -20,8 +20,12 @@ import {
   AdminInput,
   AdminToaster,
 } from "@/components/admin";
-import { AdminFormAuthorsData, adminFormAuthorsSchema } from "./schema";
-import { createAuthor } from "@/lib/server";
+import {
+  AdminFormAuthorsData,
+  adminFormAuthorsSchema,
+  AdminFormEditAuthorsData,
+} from "./schema";
+import { createAuthor, deleteAuthorById, updateAuthorById } from "@/lib/server";
 import { usePreviewUrl } from "@/hooks";
 
 type AdminFormAuthorsProps = {
@@ -41,6 +45,7 @@ export function AdminFormAuthors(props: AdminFormAuthorsProps) {
 
   // === STATE ===
   const [file, setFile] = useState<File | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // === HOOKS ===
   const preview = usePreviewUrl(file);
@@ -50,7 +55,7 @@ export function AdminFormAuthors(props: AdminFormAuthorsProps) {
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<AdminFormAuthorsData>({
-    resolver: zodResolver(adminFormAuthorsSchema),
+    resolver: zodResolver(adminFormAuthorsSchema(isEditMode)),
     defaultValues: {
       name: authorData?.name,
       occupation: authorData?.occupation,
@@ -94,10 +99,20 @@ export function AdminFormAuthors(props: AdminFormAuthorsProps) {
     setFile(compressedFile);
   };
 
-  const onSubmit = async (data: AdminFormAuthorsData) => {
-    const res = await createAuthor(data);
+  const onAddSubmit = async (data: AdminFormAuthorsData) => {
+    if (!data.image) {
+      toast.error("Image is required");
+      return;
+    }
 
-    if (!res.success) {
+    const payload = {
+      ...data,
+      image: data.image,
+    };
+
+    const addRes = await createAuthor(payload);
+
+    if (!addRes.success) {
       toast.error("Error creating author");
       return;
     }
@@ -106,9 +121,45 @@ export function AdminFormAuthors(props: AdminFormAuthorsProps) {
     router.back();
   };
 
+  const onEditSubmit = async (data: AdminFormEditAuthorsData) => {
+    // debugger;
+    console.log(authorData?.id, data);
+    const editRes = await updateAuthorById(authorData?.id || "", data);
+
+    if (!editRes.success) {
+      toast.error("Error updating author");
+      return;
+    }
+
+    toast.success("Author updated successfully!");
+    router.back();
+  };
+
+  const onDelete = async () => {
+    if (!authorData?.id) return;
+
+    setIsDeleting(true);
+
+    const res = await deleteAuthorById(authorData?.id);
+
+    if (!res.success) {
+      setIsDeleting(false);
+      toast.error("Error deleting author");
+      return;
+    }
+
+    toast.success("Author deleted successfully!");
+    router.back();
+  };
+
   return (
     <div className="w-full max-w-md">
-      <form onSubmit={handleSubmit(onSubmit)} className="pt-3">
+      <form
+        onSubmit={
+          isEditMode ? handleSubmit(onEditSubmit) : handleSubmit(onAddSubmit)
+        }
+        className="pt-3"
+      >
         <AdminFieldGroup>
           <AdminFieldSet>
             <AdminFieldDescription>
@@ -160,9 +211,32 @@ export function AdminFormAuthors(props: AdminFormAuthorsProps) {
             </AdminFieldGroup>
 
             {/* SUBMIT */}
-            <AdminButton type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Saving..." : "Create Author"}
-            </AdminButton>
+            <div className="flex flex-col gap-3">
+              <AdminButton
+                className="flex-1"
+                type="submit"
+                disabled={isSubmitting || isDeleting}
+              >
+                {isSubmitting
+                  ? "Saving..."
+                  : isEditMode
+                    ? "Save Changes"
+                    : "Create Author"}
+              </AdminButton>
+
+              {/* Delete Button */}
+              {isEditMode && (
+                <AdminButton
+                  type="button" // Prevents form submission
+                  onClick={onDelete}
+                  disabled={isSubmitting || isDeleting}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  {isDeleting ? "Deleting..." : "Delete Author"}
+                </AdminButton>
+              )}
+            </div>
           </AdminFieldSet>
         </AdminFieldGroup>
       </form>
