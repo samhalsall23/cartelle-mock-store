@@ -2,6 +2,7 @@
 
 import { Author } from "@prisma/client";
 import { put } from "@vercel/blob";
+import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 import {
@@ -15,6 +16,7 @@ import {
   AdminFormEditAuthorsData,
 } from "@/components/admin/forms/AdminFormAuthors/schema";
 import { BLOB_STORAGE_PREFIXES } from "../constants";
+import { adminRoutes } from "../routing";
 
 // === FETCHES ===
 export async function getAuthors(): Promise<
@@ -43,6 +45,9 @@ export async function deleteAuthorById(
 ): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
   return handleServerAction(async () => {
     const deleted = await prisma.author.delete({ where: { id } });
+
+    revalidatePath(adminRoutes.authors);
+
     return { id: deleted.id };
   });
 }
@@ -67,6 +72,8 @@ export async function createAuthor(
       },
     });
 
+    revalidatePath(adminRoutes.authors);
+
     return { id: created.id };
   });
 }
@@ -76,6 +83,9 @@ export async function updateAuthorById(
   data: AdminFormEditAuthorsData,
 ): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
   return handleServerAction(async () => {
+        
+    revalidatePath(adminRoutes.authors);
+
     // If there's a new image, upload it and update the avatarUrl
     if (data.image) {
       const imageFile = data.image;
