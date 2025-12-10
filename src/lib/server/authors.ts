@@ -14,7 +14,7 @@ import { handleServerAction } from "./helpers";
 import {
   AdminFormAddAuthorsData,
   AdminFormEditAuthorsData,
-} from "@/components/admin/forms/AdminFormAuthors/schema";
+} from "@/components/admin/forms/AdminAuthorsForm/schema";
 import { BLOB_STORAGE_PREFIXES } from "../constants";
 import { adminRoutes } from "../routing";
 
@@ -83,7 +83,6 @@ export async function updateAuthorById(
   data: AdminFormEditAuthorsData,
 ): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
   return handleServerAction(async () => {
-        
     revalidatePath(adminRoutes.authors);
 
     // If there's a new image, upload it and update the avatarUrl

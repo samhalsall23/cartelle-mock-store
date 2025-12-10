@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // === SCHEMA ===
-export const adminFormAuthorsSchema = (isEditMode: boolean) =>
+export const AdminAuthorsFormSchema = (isEditMode: boolean) =>
   z.object({
     name: z.string().min(1, "Name is required"),
     occupation: z.string().min(1, "Occupation is required"),
@@ -21,13 +21,13 @@ export const adminFormAuthorsSchema = (isEditMode: boolean) =>
   });
 
 // === TYPES ===
-export type AdminFormSchema = ReturnType<typeof adminFormAuthorsSchema>;
-export type AdminFormAuthorsData = z.infer<AdminFormSchema>;
+export type AdminFormSchema = ReturnType<typeof AdminAuthorsFormSchema>;
+export type AdminAuthorsFormData = z.infer<AdminFormSchema>;
 
 export type AdminFormEditAuthorsData = z.infer<
-  ReturnType<typeof adminFormAuthorsSchema>
+  ReturnType<typeof AdminAuthorsFormSchema>
 >;
 
-export type AdminFormAddAuthorsData = Omit<AdminFormAuthorsData, "image"> & {
+export type AdminFormAddAuthorsData = Omit<AdminAuthorsFormData, "image"> & {
   image: Blob;
 };

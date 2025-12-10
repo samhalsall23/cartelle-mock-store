@@ -14,7 +14,7 @@ import { formatDate, handleServerAction } from "./helpers";
 import {
   AdminFormAddAuthorsData,
   AdminFormEditAuthorsData,
-} from "@/components/admin/forms/AdminFormAuthors/schema";
+} from "@/components/admin/forms/AdminAuthorsForm/schema";
 import { BLOB_STORAGE_PREFIXES } from "../constants";
 import { adminRoutes } from "../routing";
 

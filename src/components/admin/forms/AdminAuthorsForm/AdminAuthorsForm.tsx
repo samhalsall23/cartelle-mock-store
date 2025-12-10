@@ -21,19 +21,19 @@ import {
   AdminToaster,
 } from "@/components/admin";
 import {
-  AdminFormAuthorsData,
-  adminFormAuthorsSchema,
+  AdminAuthorsFormData,
+  AdminAuthorsFormSchema,
   AdminFormEditAuthorsData,
 } from "./schema";
 import { createAuthor, deleteAuthorById, updateAuthorById } from "@/lib/server";
 import { usePreviewUrl } from "@/hooks";
 
-type AdminFormAuthorsProps = {
+type AdminAuthorsFormProps = {
   isEditMode?: boolean;
   authorData?: Author;
 };
 
-export function AdminFormAuthors(props: AdminFormAuthorsProps) {
+export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
   // === PROPS ===
   const { isEditMode = false, authorData } = props;
 
@@ -54,8 +54,8 @@ export function AdminFormAuthors(props: AdminFormAuthorsProps) {
     handleSubmit,
     setValue,
     formState: { errors, isSubmitting },
-  } = useForm<AdminFormAuthorsData>({
-    resolver: zodResolver(adminFormAuthorsSchema(isEditMode)),
+  } = useForm<AdminAuthorsFormData>({
+    resolver: zodResolver(AdminAuthorsFormSchema(isEditMode)),
     defaultValues: {
       name: authorData?.name,
       occupation: authorData?.occupation,
@@ -99,7 +99,7 @@ export function AdminFormAuthors(props: AdminFormAuthorsProps) {
     setFile(compressedFile);
   };
 
-  const onAddSubmit = async (data: AdminFormAuthorsData) => {
+  const onAddSubmit = async (data: AdminAuthorsFormData) => {
     if (!data.image) {
       toast.error("Image is required");
       return;

@@ -1,3 +1,3 @@
 export * from "./AdminBaseTable";
-export * from "./AdminTableAuthors";
-export * from "./AdminTableBlogs";
+export * from "./AdminAuthorsTable";
+export * from "./AdminBlogsTable";

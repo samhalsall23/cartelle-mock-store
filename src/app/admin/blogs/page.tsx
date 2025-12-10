@@ -1,4 +1,4 @@
-import { AdminHeading, AdminTableBlogs } from "@/components/admin";
+import { AdminHeading, AdminBlogsTable } from "@/components/admin";
 import { getBlogs } from "@/lib/server/blogs";
 
 export default async function Page() {
@@ -13,7 +13,7 @@ export default async function Page() {
     <div>
       <AdminHeading heading="View Blogs" />
 
-      <AdminTableBlogs authors={blogs.data} />
+      <AdminBlogsTable authors={blogs.data} />
     </div>
   );
 }

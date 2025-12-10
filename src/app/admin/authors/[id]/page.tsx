@@ -1,5 +1,5 @@
 import { getAuthorById } from "@/lib/server";
-import { AdminFormAuthors, AdminHeading } from "@/components/admin";
+import { AdminAuthorsForm, AdminHeading } from "@/components/admin";
 
 export default async function Page({ params }: { params: { id: string } }) {
   // === PARAMS ===
@@ -15,7 +15,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   return (
     <section>
       <AdminHeading heading="Edit Author" />
-      <AdminFormAuthors isEditMode={true} authorData={authorData.data} />
+      <AdminAuthorsForm isEditMode={true} authorData={authorData.data} />
     </section>
   );
 }

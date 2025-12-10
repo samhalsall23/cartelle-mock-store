@@ -4,7 +4,7 @@ import { adminRoutes, cn } from "@/lib";
 import {
   AdminHeading,
   buttonVariants,
-  AdminTableAuthors,
+  AdminAuthorsTable,
 } from "@/components/admin";
 import { getAuthors } from "@/lib/server";
 
@@ -31,7 +31,7 @@ export default async function Page() {
           </Link>
         </div>
       </div>
-      <AdminTableAuthors authors={authors.data} />
+      <AdminAuthorsTable authors={authors.data} />
     </div>
   );
 }
