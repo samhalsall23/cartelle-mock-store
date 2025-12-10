@@ -10,7 +10,9 @@ export const adminRoutes = {
   home: "/admin",
   products: "/admin/products",
   orders: "/admin/orders",
-  blog: "/admin/blogs",
+
+  blogs: "/admin/blogs",
+  blogsCreate: "/admin/blogs/create",
 
   authors: "/admin/authors",
   authorsCreate: "/admin/authors/create",

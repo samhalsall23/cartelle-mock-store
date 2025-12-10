@@ -39,8 +39,8 @@ export function AdminNavbar() {
             text="Orders"
           />
           <AdminNavbarItem
-            isActive={isActive(adminRoutes.blog)}
-            href={adminRoutes.blog}
+            isActive={isActive(adminRoutes.blogs)}
+            href={adminRoutes.blogs}
             text="Blog"
           />
           <AdminNavbarItem

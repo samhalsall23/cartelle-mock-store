@@ -1,14 +1,19 @@
-import { prisma } from "@/lib/prisma";
-import { AdminHeading, AdminDataTable } from "@/components/admin";
+import { AdminHeading, AdminTableBlogs } from "@/components/admin";
+import { getBlogs } from "@/lib/server/blogs";
 
 export default async function Page() {
-  const blogs = await prisma.blogPost.findMany();
-  console.log(blogs);
+  // === FETCH DATA ===
+  const blogs = await getBlogs();
+
+  if (!blogs.success) {
+    return <div>Error loading blogs: {blogs.error}</div>;
+  }
+
   return (
     <div>
       <AdminHeading heading="View Blogs" />
 
-      <AdminDataTable data={blogs} columns={[]} />
+      <AdminTableBlogs authors={blogs.data} />
     </div>
   );
 }

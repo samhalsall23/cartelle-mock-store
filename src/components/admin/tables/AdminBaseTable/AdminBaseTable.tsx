@@ -21,7 +21,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
 }
 
-export function AdminDataTable<TData, TValue>({
+export function AdminBaseTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {

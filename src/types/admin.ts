@@ -6,3 +6,5 @@ export type AdminTableAuthorQuery = Prisma.AuthorGetPayload<{
 }>;
 
 export type AdminTableAuthorMutation = { id: string };
+
+// === BLOGS ===
