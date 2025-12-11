@@ -18,19 +18,21 @@ import {
   AdminFieldLabel,
   AdminFieldSet,
   AdminInput,
+  AdminTextarea,
   AdminToaster,
 } from "@/components/admin";
 
 import { createAuthor, deleteAuthorById, updateAuthorById } from "@/lib/server";
 import { usePreviewUrl } from "@/hooks";
 import { AdminBlogsFormData, AdminBlogsFormSchema } from "./schema";
+import { convertStringToBlog } from "./helpers";
 
-type AdminAuthorsFormProps = {
+type AdminBlogsFormProps = {
   isEditMode?: boolean;
   authorData?: Author;
 };
 
-export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
+export function AdminBlogsForm(props: AdminBlogsFormProps) {
   // === PROPS ===
   const { isEditMode = false, authorData } = props;
 
@@ -41,6 +43,7 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // === STATE ===
+  const [previewBlog, setPreviewBlog] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -50,6 +53,7 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<AdminBlogsFormData>({
     resolver: zodResolver(AdminBlogsFormSchema(isEditMode)),
@@ -57,6 +61,8 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
       // enter default values here
     },
   });
+
+  const contentValue = watch("content");
 
   // === FUNCTIONS ===
   //   const clearFileInput = () => {
@@ -95,7 +101,7 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
   //     setFile(compressedFile);
   //   };
 
-  //   const onAddSubmit = async (data: AdminAuthorsFormData) => {
+  //   const onAddSubmit = async (data: AdminBlogsFormData) => {
   //     if (!data.image) {
   //       toast.error("Image is required");
   //       return;
@@ -147,9 +153,8 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
   //     toast.success("Author deleted successfully!");
   //     router.back();
   //   };
-
   return (
-    <div className="w-full max-w-md">
+    <div className="w-full">
       <form
         // onSubmit={
         //   isEditMode ? handleSubmit(onEditSubmit) : handleSubmit(onAddSubmit)
@@ -164,47 +169,99 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
                 : "Fill in details for the new blog below."}
             </AdminFieldDescription>
 
-            <AdminFieldGroup>
-              {/* TITLE */}
-              <AdminField>
-                <AdminFieldLabel>Title</AdminFieldLabel>
-                <AdminInput {...register("title")} />
-                <AdminFieldError errors={[errors.title]} />
-              </AdminField>
+            <div className="gap-7 flex-col flex lg:flex-row lg:gap-16">
+              <AdminFieldGroup className="lg:max-w-md">
+                {/* TITLE */}
+                <AdminField>
+                  <AdminFieldLabel>Title</AdminFieldLabel>
+                  <AdminInput {...register("title")} />
+                  <AdminFieldError errors={[errors.title]} />
+                </AdminField>
 
-              {/* OCCUPATION */}
-              <AdminField>
-                <AdminFieldLabel>Occupation</AdminFieldLabel>
-                <AdminInput {...register("occupation")} />
-                <AdminFieldError errors={[errors.occupation]} />
-              </AdminField>
+                {/* OCCUPATION */}
+                <AdminField>
+                  <AdminFieldLabel>Description</AdminFieldLabel>
+                  <AdminFieldDescription>
+                    One sentence summary of the blog
+                  </AdminFieldDescription>
+                  <AdminTextarea {...register("description")} />
+                  <AdminFieldError errors={[errors.description]} />
+                </AdminField>
 
-              {/* IMAGE */}
-              <AdminField>
-                <AdminFieldLabel>Profile Image</AdminFieldLabel>
+                {/* CATEGORY */}
+                <AdminField>
+                  <AdminFieldLabel>Category</AdminFieldLabel>
+                  <AdminInput {...register("category")} />
+                  <AdminFieldError errors={[errors.category]} />
+                </AdminField>
 
-                <AdminInput
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-                <AdminFieldError errors={[errors.image]} />
+                {/* SLUG */}
+                <AdminField>
+                  <AdminFieldLabel>Slug</AdminFieldLabel>
+                  <AdminFieldDescription>
+                    Readable unique identifier for URL (e.g. "my-blog-post")
+                  </AdminFieldDescription>
+                  <AdminInput {...register("slug")} />
+                  <AdminFieldError errors={[errors.slug]} />
+                </AdminField>
 
-                {(preview || authorData?.avatarUrl) && (
-                  <div className="relative w-60! h-60 mt-2">
-                    <Image
-                      src={preview || authorData?.avatarUrl || ""}
-                      alt="Preview"
-                      fill
-                      sizes="(max-width: 768px) 100vw, 240px"
-                      loading="eager"
-                      className="rounded object-cover"
-                    />
-                  </div>
-                )}
-              </AdminField>
-            </AdminFieldGroup>
+                {/* AUTHOR ID */}
+                <AdminField>
+                  <AdminFieldLabel>Author ID</AdminFieldLabel>
+                  <AdminInput {...register("authorId")} />
+                  <AdminFieldError errors={[errors.authorId]} />
+                </AdminField>
+
+                {/* IMAGE */}
+                <AdminField>
+                  <AdminFieldLabel>Blog Image</AdminFieldLabel>
+
+                  <AdminInput
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    // onChange={handleFileChange}
+                  />
+                  <AdminFieldError errors={[errors.image]} />
+
+                  {(preview || authorData?.avatarUrl) && (
+                    <div className="relative w-60! h-60 mt-2">
+                      <Image
+                        src={preview || authorData?.avatarUrl || ""}
+                        alt="Preview"
+                        fill
+                        sizes="(max-width: 768px) 100vw, 240px"
+                        loading="eager"
+                        className="rounded object-cover"
+                      />
+                    </div>
+                  )}
+                </AdminField>
+              </AdminFieldGroup>
+
+              {/* CONTENT */}
+              <AdminFieldGroup>
+                <AdminField>
+                  <AdminFieldLabel>Content</AdminFieldLabel>
+                  <AdminFieldDescription>For title use #</AdminFieldDescription>
+                  <AdminFieldDescription>
+                    For new line use /n
+                  </AdminFieldDescription>
+                  <AdminTextarea rows={10} {...register("content")} />
+                  {/* <AdminTextarea
+                    rows={10}
+                    onChange={(e) => console.log(e.target.value)}
+                  /> */}
+                  <AdminFieldError errors={[errors.content]} />
+                </AdminField>
+
+                {/* PREVIEW */}
+                <AdminFieldDescription>Preview:</AdminFieldDescription>
+                <div className="border min-h-20 rounded-lg px-3 py-2 h-full overflow-auto">
+                  {convertStringToBlog(contentValue)}
+                </div>
+              </AdminFieldGroup>
+            </div>
 
             {/* SUBMIT */}
             <div className="flex flex-col gap-3">
@@ -224,7 +281,7 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
               {isEditMode && (
                 <AdminButton
                   type="button" // Prevents form submission
-                  onClick={onDelete}
+                  // onClick={onDelete}
                   disabled={isSubmitting || isDeleting}
                   variant="outline"
                   className="flex-1"
