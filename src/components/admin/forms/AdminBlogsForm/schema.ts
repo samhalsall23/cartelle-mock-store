@@ -7,9 +7,15 @@ export const AdminBlogsFormSchema = (isEditMode: boolean) =>
   z.object({
     title: z.string().min(1, "Title is required"),
     description: z.string().min(1, "Description is required"),
-    category: z.enum(Object.values(BlogCategory), {
-      message: "Category is required",
-    }),
+    category: z
+      .string()
+      .min(1, "Category is required")
+      .refine(
+        (val) => Object.values(BlogCategory).includes(val as BlogCategory),
+        {
+          message: "Invalid category",
+        },
+      ),
     slug: z.string().min(1, "Slug is required"),
     content: z.string().min(1, "Content is required"),
     authorId: z.string().min(1, "Author is required"),

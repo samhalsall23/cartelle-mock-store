@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-import { toast } from "sonner";
+// import { toast } from "sonner";
 
 import {
   AdminBaseTable,
@@ -15,7 +15,7 @@ import {
   AdminDropdownMenuSeparator,
   AdminTooltip,
   AdminTooltipTrigger,
-  AdminTooltipContent,
+  // AdminTooltipContent,
   AdminAlertDialog,
   AdminAlertDialogContent,
   AdminAlertDialogTitle,
@@ -33,7 +33,7 @@ import {
 import { adminRoutes, cn } from "@/lib";
 import { BlogPost } from "@prisma/client";
 import { blogColumns, defaultVisibleBlogColumnIds } from "./columns";
-import { set } from "zod";
+// import { set } from "zod";
 
 export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
   // === STATE ===

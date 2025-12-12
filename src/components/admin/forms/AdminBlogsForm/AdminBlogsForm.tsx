@@ -18,23 +18,32 @@ import {
   AdminFieldLabel,
   AdminFieldSet,
   AdminInput,
+  AdminSelect,
+  AdminSelectContent,
+  AdminSelectGroup,
+  AdminSelectItem,
+  AdminSelectTrigger,
+  AdminSelectValue,
   AdminTextarea,
   AdminToaster,
 } from "@/components/admin";
 
-import { createAuthor, deleteAuthorById, updateAuthorById } from "@/lib/server";
+// import { BlogCategory } from "@prisma/client";
 import { usePreviewUrl } from "@/hooks";
 import { AdminBlogsFormData, AdminBlogsFormSchema } from "./schema";
 import { convertStringToBlog } from "./helpers";
+import { createBlog } from "@/lib/server/blogs";
+import { BLOG_CATEGORY_OPTIONS } from "./constants";
 
 type AdminBlogsFormProps = {
+  authorList: Author[];
   isEditMode?: boolean;
   authorData?: Author;
 };
 
 export function AdminBlogsForm(props: AdminBlogsFormProps) {
   // === PROPS ===
-  const { isEditMode = false, authorData } = props;
+  const { isEditMode = false, authorData, authorList } = props;
 
   // === ROUTES ===
   const router = useRouter();
@@ -43,9 +52,8 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // === STATE ===
-  const [previewBlog, setPreviewBlog] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
-  const [isDeleting, setIsDeleting] = useState(false);
+  // const [isDeleting, setIsDeleting] = useState(false);
 
   // === HOOKS ===
   const preview = usePreviewUrl(file);
@@ -58,70 +66,74 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
   } = useForm<AdminBlogsFormData>({
     resolver: zodResolver(AdminBlogsFormSchema(isEditMode)),
     defaultValues: {
-      // enter default values here
+      authorId: "",
+      category: "",
     },
   });
 
+  // === WATCHERS ===
   const contentValue = watch("content");
+  const authorIdValue = watch("authorId");
+  const categoryValue = watch("category");
 
   // === FUNCTIONS ===
-  //   const clearFileInput = () => {
-  //     if (fileInputRef.current) {
-  //       fileInputRef.current.value = "";
-  //     }
-  //   };
+  const clearFileInput = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+  };
 
-  //   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     const selectedFile = e.target.files?.[0] || null;
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] || null;
 
-  //     if (!selectedFile) {
-  //       toast.error("No file selected");
-  //       return;
-  //     }
+    if (!selectedFile) {
+      toast.error("No file selected");
+      return;
+    }
 
-  //     const compressedFile = await imageCompression(selectedFile, {
-  //       maxSizeMB: 0.25, // ~250kb
-  //       maxWidthOrHeight: 800,
-  //       useWebWorker: true,
-  //     });
+    const compressedFile = await imageCompression(selectedFile, {
+      maxSizeMB: 0.25, // ~250kb
+      maxWidthOrHeight: 800,
+      useWebWorker: true,
+    });
 
-  //     if (compressedFile.size > 1 * 1024 * 1024) {
-  //       toast.error("Error compressing image. Please choose a smaller file.");
-  //       clearFileInput();
-  //       return;
-  //     }
+    if (compressedFile.size > 1 * 1024 * 1024) {
+      toast.error("Error compressing image. Please choose a smaller file.");
+      clearFileInput();
+      return;
+    }
 
-  //     if (!["image/jpeg", "image/png"].includes(compressedFile.type)) {
-  //       toast.error("Only JPEG and PNG formats are accepted");
-  //       clearFileInput();
-  //       return;
-  //     }
+    if (!["image/jpeg", "image/png"].includes(compressedFile.type)) {
+      toast.error("Only JPEG and PNG formats are accepted");
+      clearFileInput();
+      return;
+    }
 
-  //     setValue("image", compressedFile, { shouldValidate: true });
-  //     setFile(compressedFile);
-  //   };
+    setValue("image", compressedFile, { shouldValidate: true });
+    setFile(compressedFile);
+  };
 
-  //   const onAddSubmit = async (data: AdminBlogsFormData) => {
-  //     if (!data.image) {
-  //       toast.error("Image is required");
-  //       return;
-  //     }
+  const onAddSubmit = async (data: AdminBlogsFormData) => {
+    if (!data.image) {
+      toast.error("Image is required");
+      return;
+    }
 
-  //     const payload = {
-  //       ...data,
-  //       image: data.image,
-  //     };
+    const payload = {
+      ...data,
+      image: data.image,
+    };
 
-  //     const addRes = await createAuthor(payload);
+    const addRes = await createBlog(payload);
 
-  //     if (!addRes.success) {
-  //       toast.error("Error creating author");
-  //       return;
-  //     }
+    if (!addRes.success) {
+      toast.error("Error creating blog");
+      return;
+    }
 
-  //     toast.success("Author created successfully!");
-  //     router.back();
-  //   };
+    toast.success("Blog created successfully!");
+    router.back();
+  };
 
   //   const onEditSubmit = async (data: AdminFormEditAuthorsData) => {
   //     // debugger;
@@ -156,9 +168,10 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
   return (
     <div className="w-full">
       <form
-        // onSubmit={
-        //   isEditMode ? handleSubmit(onEditSubmit) : handleSubmit(onAddSubmit)
-        // }
+        onSubmit={
+          // isEditMode ? handleSubmit(onEditSubmit) : handleSubmit(onAddSubmit)
+          handleSubmit(onAddSubmit)
+        }
         className="pt-3"
       >
         <AdminFieldGroup>
@@ -191,24 +204,63 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
                 {/* CATEGORY */}
                 <AdminField>
                   <AdminFieldLabel>Category</AdminFieldLabel>
-                  <AdminInput {...register("category")} />
-                  <AdminFieldError errors={[errors.category]} />
+                  <AdminSelect
+                    value={categoryValue}
+                    onValueChange={(val) =>
+                      setValue("category", val, { shouldValidate: true })
+                    }
+                  >
+                    <AdminSelectTrigger className="w-[180px]">
+                      <AdminSelectValue />
+                    </AdminSelectTrigger>
+                    <AdminSelectContent>
+                      <AdminSelectGroup>
+                        {BLOG_CATEGORY_OPTIONS.map((category) => (
+                          <AdminSelectItem
+                            key={category.value}
+                            value={category.value}
+                          >
+                            {category.label}
+                          </AdminSelectItem>
+                        ))}
+                      </AdminSelectGroup>
+                    </AdminSelectContent>
+                  </AdminSelect>
+                  <AdminFieldError errors={[errors.authorId]} />
                 </AdminField>
 
                 {/* SLUG */}
                 <AdminField>
                   <AdminFieldLabel>Slug</AdminFieldLabel>
                   <AdminFieldDescription>
-                    Readable unique identifier for URL (e.g. "my-blog-post")
+                    {'Readable unique identifier for URL (e.g. "my-blog-post")'}
                   </AdminFieldDescription>
                   <AdminInput {...register("slug")} />
                   <AdminFieldError errors={[errors.slug]} />
                 </AdminField>
 
-                {/* AUTHOR ID */}
+                {/* AUTHOR */}
                 <AdminField>
-                  <AdminFieldLabel>Author ID</AdminFieldLabel>
-                  <AdminInput {...register("authorId")} />
+                  <AdminFieldLabel>Author</AdminFieldLabel>
+                  <AdminSelect
+                    value={authorIdValue}
+                    onValueChange={(val) =>
+                      setValue("authorId", val, { shouldValidate: true })
+                    }
+                  >
+                    <AdminSelectTrigger className="w-[180px]">
+                      <AdminSelectValue />
+                    </AdminSelectTrigger>
+                    <AdminSelectContent>
+                      <AdminSelectGroup>
+                        {authorList.map((author) => (
+                          <AdminSelectItem key={author.id} value={author.id}>
+                            {author.name}
+                          </AdminSelectItem>
+                        ))}
+                      </AdminSelectGroup>
+                    </AdminSelectContent>
+                  </AdminSelect>
                   <AdminFieldError errors={[errors.authorId]} />
                 </AdminField>
 
@@ -220,12 +272,12 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
-                    // onChange={handleFileChange}
+                    onChange={handleFileChange}
                   />
                   <AdminFieldError errors={[errors.image]} />
 
                   {(preview || authorData?.avatarUrl) && (
-                    <div className="relative w-60! h-60 mt-2">
+                    <div className="relative w-60! h-45 mt-2">
                       <Image
                         src={preview || authorData?.avatarUrl || ""}
                         alt="Preview"
@@ -248,10 +300,6 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
                     For new line use /n
                   </AdminFieldDescription>
                   <AdminTextarea rows={10} {...register("content")} />
-                  {/* <AdminTextarea
-                    rows={10}
-                    onChange={(e) => console.log(e.target.value)}
-                  /> */}
                   <AdminFieldError errors={[errors.content]} />
                 </AdminField>
 
@@ -268,13 +316,14 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
               <AdminButton
                 className="flex-1"
                 type="submit"
-                disabled={isSubmitting || isDeleting}
+                disabled={isSubmitting}
+                // disabled={isSubmitting || isDeleting}
               >
                 {isSubmitting
                   ? "Saving..."
                   : isEditMode
                     ? "Save Changes"
-                    : "Create Author"}
+                    : "Create Blog"}
               </AdminButton>
 
               {/* Delete Button */}
@@ -282,11 +331,12 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
                 <AdminButton
                   type="button" // Prevents form submission
                   // onClick={onDelete}
-                  disabled={isSubmitting || isDeleting}
+                  disabled={isSubmitting}
+                  // disabled={isSubmitting || isDeleting}
                   variant="outline"
                   className="flex-1"
                 >
-                  {isDeleting ? "Deleting..." : "Delete Author"}
+                  {/* {isDeleting ? "Deleting..." : "Delete Blog"} */}
                 </AdminButton>
               )}
             </div>
