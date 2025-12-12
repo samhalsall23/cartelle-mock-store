@@ -142,7 +142,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
             id: "actions",
             enableHiding: false,
             cell: (cell) => {
-              const author = cell.row.original;
+              const blog = cell.row.original;
 
               return (
                 <AdminDropdownMenu>
@@ -154,7 +154,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
                   </AdminDropdownMenuTrigger>
 
                   <AdminDropdownMenuContent align="end">
-                    <Link href={`${adminRoutes.authors}/${author.id}`}>
+                    <Link href={`${adminRoutes.blogs}/${blog.id}`}>
                       <AdminDropdownMenuItem>Edit</AdminDropdownMenuItem>
                     </Link>
                     <AdminDropdownMenuSeparator />
@@ -162,7 +162,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
                     <AdminDropdownMenuItem
                       variant="destructive"
                       onSelect={() => {
-                        setPendingDeleteId(author.id);
+                        setPendingDeleteId(blog.id);
                       }}
                     >
                       <AdminTooltip>

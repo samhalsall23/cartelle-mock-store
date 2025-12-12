@@ -122,8 +122,6 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
   };
 
   const onEditSubmit = async (data: AdminFormEditAuthorsData) => {
-    // debugger;
-    console.log(authorData?.id, data);
     const editRes = await updateAuthorById(authorData?.id || "", data);
 
     if (!editRes.success) {

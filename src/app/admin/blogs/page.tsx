@@ -2,7 +2,7 @@ import { AdminHeading, AdminBlogsTable } from "@/components/admin";
 import { getBlogs } from "@/lib/server/blogs";
 
 export default async function Page() {
-  // === FETCH DATA ===
+  // === QUERIES ===
   const blogs = await getBlogs();
 
   if (!blogs.success) {

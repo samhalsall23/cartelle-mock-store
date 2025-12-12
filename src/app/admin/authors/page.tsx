@@ -9,7 +9,7 @@ import {
 import { getAuthors } from "@/lib/server";
 
 export default async function Page() {
-  // === FETCH DATA ===
+  // === QUERIES ===
   const authors = await getAuthors();
 
   if (!authors.success) {

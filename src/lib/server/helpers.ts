@@ -22,3 +22,9 @@ export function formatDate(dateString: string): string {
     minute: "2-digit",
   });
 }
+
+export function getReadingMinutes(text: string, wordsPerMinute = 200): number {
+  const words = text.trim().split(/\s+/).length;
+  const minutes = words / wordsPerMinute;
+  return Math.ceil(minutes);
+}

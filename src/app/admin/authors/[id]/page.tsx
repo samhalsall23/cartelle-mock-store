@@ -5,7 +5,7 @@ export default async function Page({ params }: { params: { id: string } }) {
   // === PARAMS ===
   const { id } = await params;
 
-  // === DATA FETCHING ===
+  // === QUERIES ===
   const authorData = await getAuthorById(id);
 
   if (!authorData.success || !authorData.data) {

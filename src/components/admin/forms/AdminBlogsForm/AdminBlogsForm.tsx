@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Author } from "@prisma/client";
+import { Author, BlogPost } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -28,22 +28,21 @@ import {
   AdminToaster,
 } from "@/components/admin";
 
-// import { BlogCategory } from "@prisma/client";
 import { usePreviewUrl } from "@/hooks";
 import { AdminBlogsFormData, AdminBlogsFormSchema } from "./schema";
 import { convertStringToBlog } from "./helpers";
-import { createBlog } from "@/lib/server/blogs";
+import { createBlog, deleteBlogById, updateBlogById } from "@/lib/server/blogs";
 import { BLOG_CATEGORY_OPTIONS } from "./constants";
 
 type AdminBlogsFormProps = {
   authorList: Author[];
   isEditMode?: boolean;
-  authorData?: Author;
+  blogData?: BlogPost;
 };
 
 export function AdminBlogsForm(props: AdminBlogsFormProps) {
   // === PROPS ===
-  const { isEditMode = false, authorData, authorList } = props;
+  const { isEditMode = false, blogData, authorList } = props;
 
   // === ROUTES ===
   const router = useRouter();
@@ -53,7 +52,7 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
 
   // === STATE ===
   const [file, setFile] = useState<File | null>(null);
-  // const [isDeleting, setIsDeleting] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // === HOOKS ===
   const preview = usePreviewUrl(file);
@@ -66,8 +65,12 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
   } = useForm<AdminBlogsFormData>({
     resolver: zodResolver(AdminBlogsFormSchema(isEditMode)),
     defaultValues: {
-      authorId: "",
-      category: "",
+      authorId: blogData?.authorId || "",
+      category: blogData?.category || "",
+      title: blogData?.title || "",
+      description: blogData?.description || "",
+      slug: blogData?.slug || "",
+      content: blogData?.content || "",
     },
   });
 
@@ -135,42 +138,40 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
     router.back();
   };
 
-  //   const onEditSubmit = async (data: AdminFormEditAuthorsData) => {
-  //     // debugger;
-  //     console.log(authorData?.id, data);
-  //     const editRes = await updateAuthorById(authorData?.id || "", data);
+  const onEditSubmit = async (data: AdminBlogsFormData) => {
+    const editRes = await updateBlogById(blogData?.id || "", data);
 
-  //     if (!editRes.success) {
-  //       toast.error("Error updating author");
-  //       return;
-  //     }
+    if (!editRes.success) {
+      toast.error("Error updating blog");
+      return;
+    }
 
-  //     toast.success("Author updated successfully!");
-  //     router.back();
-  //   };
+    toast.success("Blog updated successfully!");
+    router.back();
+  };
 
-  //   const onDelete = async () => {
-  //     if (!authorData?.id) return;
+  const onDelete = async () => {
+    if (!blogData?.id) return;
 
-  //     setIsDeleting(true);
+    setIsDeleting(true);
 
-  //     const res = await deleteAuthorById(authorData?.id);
+    const res = await deleteBlogById(blogData?.id);
 
-  //     if (!res.success) {
-  //       setIsDeleting(false);
-  //       toast.error("Error deleting author");
-  //       return;
-  //     }
+    if (!res.success) {
+      setIsDeleting(false);
+      toast.error("Error deleting blog");
+      return;
+    }
 
-  //     toast.success("Author deleted successfully!");
-  //     router.back();
-  //   };
+    toast.success("Blog deleted successfully!");
+    router.back();
+  };
+
   return (
     <div className="w-full">
       <form
         onSubmit={
-          // isEditMode ? handleSubmit(onEditSubmit) : handleSubmit(onAddSubmit)
-          handleSubmit(onAddSubmit)
+          isEditMode ? handleSubmit(onEditSubmit) : handleSubmit(onAddSubmit)
         }
         className="pt-3"
       >
@@ -276,10 +277,10 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
                   />
                   <AdminFieldError errors={[errors.image]} />
 
-                  {(preview || authorData?.avatarUrl) && (
+                  {(preview || blogData?.blogImageUrl) && (
                     <div className="relative w-60! h-45 mt-2">
                       <Image
-                        src={preview || authorData?.avatarUrl || ""}
+                        src={preview || blogData?.blogImageUrl || ""}
                         alt="Preview"
                         fill
                         sizes="(max-width: 768px) 100vw, 240px"
@@ -316,8 +317,7 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
               <AdminButton
                 className="flex-1"
                 type="submit"
-                disabled={isSubmitting}
-                // disabled={isSubmitting || isDeleting}
+                disabled={isSubmitting || isDeleting}
               >
                 {isSubmitting
                   ? "Saving..."
@@ -329,14 +329,13 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
               {/* Delete Button */}
               {isEditMode && (
                 <AdminButton
-                  type="button" // Prevents form submission
-                  // onClick={onDelete}
-                  disabled={isSubmitting}
-                  // disabled={isSubmitting || isDeleting}
+                  type="button"
+                  onClick={onDelete}
+                  disabled={isSubmitting || isDeleting}
                   variant="outline"
                   className="flex-1"
                 >
-                  {/* {isDeleting ? "Deleting..." : "Delete Blog"} */}
+                  {isDeleting ? "Deleting..." : "Delete Blog"}
                 </AdminButton>
               )}
             </div>
