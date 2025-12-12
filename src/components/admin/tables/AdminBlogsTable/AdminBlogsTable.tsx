@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { MoreHorizontal } from "lucide-react";
 import Link from "next/link";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 
 import {
   AdminBaseTable,
@@ -15,7 +15,6 @@ import {
   AdminDropdownMenuSeparator,
   AdminTooltip,
   AdminTooltipTrigger,
-  // AdminTooltipContent,
   AdminAlertDialog,
   AdminAlertDialogContent,
   AdminAlertDialogTitle,
@@ -30,10 +29,10 @@ import {
   AdminDropdownMenuCheckboxItem,
   buttonVariants,
 } from "@/components/admin";
-import { adminRoutes, cn } from "@/lib";
+import { adminRoutes, cn, screamingSnakeToTitle } from "@/lib";
 import { BlogPost } from "@prisma/client";
 import { blogColumns, defaultVisibleBlogColumnIds } from "./columns";
-// import { set } from "zod";
+import { deleteBlogById } from "@/lib/server/blogs";
 
 export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
   // === STATE ===
@@ -46,24 +45,24 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
   const [searchTerm, setSearchTerm] = useState("");
 
   // === FUNCTIONS ===
+  const deleteAuthor = async (id: string) => {
+    const deleted = await deleteBlogById(id);
 
-  //   const deleteAuthor = async (id: string) => {
-  //     const deleted = await deleteAuthorById(id);
+    if (!deleted.success) {
+      console.error("Error deleting blog:", deleted.error);
+      toast.error("Failed to delete blog. Please try again.");
+      return;
+    }
 
-  //     if (!deleted.success) {
-  //       console.error("Error deleting author:", deleted.error);
-  //       toast.error("Failed to delete author. Please try again.");
-  //       return;
-  //     }
-
-  //     setPendingDeleteId(null);
-  //     setAuthorsState((prev) => prev.filter((author) => author.id !== id));
-  //     toast.success("Author deleted successfully.");
-  //   };
+    setPendingDeleteId(null);
+    setBlogsState((prev) => prev.filter((blog) => blog.id !== id));
+    toast.success("Blog deleted successfully.");
+  };
 
   const formatBlogs = (blogs: BlogPost[]) => {
     return blogs.map((blog) => ({
       ...blog,
+      category: screamingSnakeToTitle(blog.category),
       publishedAt: blog.publishedAt
         ? new Date(blog.publishedAt).toISOString().split("T")[0]
         : null,
@@ -162,7 +161,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
 
                     <AdminDropdownMenuItem
                       variant="destructive"
-                      onSelect={(e) => {
+                      onSelect={() => {
                         setPendingDeleteId(author.id);
                       }}
                     >
@@ -193,7 +192,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
         <AdminAlertDialogContent>
           <AdminAlertDialogHeader>
             <AdminAlertDialogTitle>
-              Are you sure you want to delete this author?
+              Are you sure you want to delete this blog?
             </AdminAlertDialogTitle>
             <AdminAlertDialogDescription>
               This action cannot be undone.
@@ -209,9 +208,9 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
               disabled={!!deletingId}
               onClick={() => {
                 setDeletingId(pendingDeleteId);
-                // if (pendingDeleteId) {
-                //   deleteAuthor(pendingDeleteId);
-                // }
+                if (pendingDeleteId) {
+                  deleteAuthor(pendingDeleteId);
+                }
               }}
             >
               {deletingId ? "Deleting..." : "Delete"}

@@ -62,3 +62,14 @@ export async function createBlog(
     return { id: created.id };
   });
 }
+
+export async function deleteBlogById(
+  id: string,
+): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
+  return handleServerAction(async () => {
+    const deleted = await prisma.blogPost.delete({ where: { id } });
+    revalidatePath(adminRoutes.blogs);
+
+    return { id: deleted.id };
+  });
+}
