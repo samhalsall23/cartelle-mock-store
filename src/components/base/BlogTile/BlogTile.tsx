@@ -10,6 +10,7 @@ export type BlogTileProps = {
   imageUrl: string;
   alt: string;
   category: string;
+  isBlogPage?: boolean;
 };
 
 export function BlogTile(props: BlogTileProps) {
@@ -22,19 +23,33 @@ export function BlogTile(props: BlogTileProps) {
     imageUrl,
     alt,
     category,
+    isBlogPage = false,
   } = props;
 
   return (
     <Link
       href={href}
-      className={`flex flex-col md:flex-row group gap-6 md:h-[200px] ${className}`}
+      className={`${isBlogPage ? "flex flex-col group gap-6 pb-10" : "flex flex-col md:flex-row group gap-6 md:h-[200px]"} ${className}`}
     >
-      <div className="h-full">
-        <BlogTileImage imageUrl={imageUrl} alt={alt} category={category} />
+      <div className={isBlogPage ? "w-full" : "h-full"}>
+        <BlogTileImage
+          sizes={
+            isBlogPage
+              ? "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+              : "(max-width: 1200px) 50vw, 25vw"
+          }
+          imageUrl={imageUrl}
+          alt={alt}
+          category={category}
+        />
       </div>
-      <div className="flex flex-col gap-3 md:gap-6">
+      <div
+        className={
+          isBlogPage ? "flex flex-col gap-3" : "flex flex-col gap-3 md:gap-6"
+        }
+      >
         <h5 className="text-lg xl:text-xl">{title}</h5>
-        <p className="text-neutral-10">{description}</p>
+        <p className="text-neutral-10 text-base">{description}</p>
       </div>
     </Link>
   );

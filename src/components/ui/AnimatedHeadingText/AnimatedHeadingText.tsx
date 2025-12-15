@@ -3,18 +3,20 @@
 import { motion, Variants, useInView } from "framer-motion";
 import { useRef } from "react";
 
-import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/components/lib";
+import { cn, SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/components/lib";
 
 type AnimatedHeadingTextProps = {
+  className?: string;
   text: string;
   variant?: "home-screen" | "page-title";
-  className?: string;
+  disableIsInView?: boolean;
 };
 
 export function AnimatedHeadingText({
   text,
   variant = "page-title",
   className = "",
+  disableIsInView = false,
 }: AnimatedHeadingTextProps) {
   // === REF ===
   const ref = useRef<HTMLHeadingElement | null>(null);
@@ -62,10 +64,13 @@ export function AnimatedHeadingText({
       <h3 className="sr-only">{text}</h3>
       <motion.h2
         ref={ref}
-        className={className}
+        className={cn(
+          className,
+          variant === "page-title" && "xl:text-7xl lg:text-6xl text-5xl ",
+        )}
         variants={container}
         initial="hidden"
-        animate={isInView ? "visible" : "hidden"}
+        animate={disableIsInView ? "visible" : isInView ? "visible" : "hidden"}
         aria-hidden="true"
       >
         {letters.map((char, index) => (

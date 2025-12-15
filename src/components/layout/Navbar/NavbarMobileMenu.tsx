@@ -13,14 +13,16 @@ import { useMeasureHeight } from "./hooks";
 type NavbarMobileLineItemLinkProps = {
   href: string;
   text: string;
+  onClick: () => void;
 };
 
 function NavbarMobileLineItemLink({
   href,
   text,
+  onClick,
 }: NavbarMobileLineItemLinkProps) {
   return (
-    <Link href={href} className="text-navbar w-full py-3">
+    <Link href={href} onClick={onClick} className="text-navbar w-full py-3">
       {text}
     </Link>
   );
@@ -106,6 +108,7 @@ export function NavbarMobileMenu({
                   <NavbarMobileLineItemLink
                     key={item.id}
                     href={item.href}
+                    onClick={() => setShowMobileMenu(false)}
                     text={item.text}
                   />
                 );
@@ -136,6 +139,7 @@ export function NavbarMobileMenu({
                         <NavbarMobileLineItemLink
                           key={item.id}
                           href={item.href}
+                          onClick={() => setShowMobileMenu(false)}
                           text={item.text}
                         />
                       ))}

@@ -3,7 +3,7 @@ import React from "react";
 export function BaseSection({
   children,
   id,
-  className,
+  className = "",
 }: {
   children: React.ReactNode;
   id: string;

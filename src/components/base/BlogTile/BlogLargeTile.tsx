@@ -32,6 +32,7 @@ export function BlogLargeTile(props: BlogLargeTileProps) {
     <Link href={href} className="flex group flex-col w-full h-[648px] gap-6 ">
       <div className="relative w-full flex-1 ">
         <BlogTileImage
+          sizes="(max-width: 1280px) 100vw, 50vw"
           isLargeTile={true}
           imageUrl={imageUrl}
           alt={alt}

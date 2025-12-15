@@ -40,13 +40,18 @@ const meta: Meta<typeof BlogTile> = {
       control: "text",
       description: "The blog post category",
     },
+    isBlogPage: {
+      control: "boolean",
+      description:
+        "If true, styles the tile for use on the blog page (vertical stack layout) always",
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
+export const HomePage: Story = {
   args: {
     href: "/",
     title: "Latest Fashion Trends for 2024",
@@ -55,5 +60,18 @@ export const Default: Story = {
     imageUrl: "/assets/cartelle-hero-image.jpg",
     alt: "Fashion model showcasing 2024 trends",
     category: "Fashion",
+  },
+};
+
+export const BlogPage: Story = {
+  args: {
+    href: "/",
+    title: "Latest Fashion Trends for 2024",
+    description:
+      "Discover the hottest fashion trends that are defining style this year, from sustainable fabrics to bold color palettes.",
+    imageUrl: "/assets/cartelle-hero-image.jpg",
+    alt: "Fashion model showcasing 2024 trends",
+    category: "Fashion",
+    isBlogPage: true,
   },
 };

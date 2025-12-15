@@ -95,8 +95,8 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
     }
 
     const compressedFile = await imageCompression(selectedFile, {
-      maxSizeMB: 0.25, // ~250kb
-      maxWidthOrHeight: 800,
+      maxSizeMB: 0.5,
+      maxWidthOrHeight: 1920,
       useWebWorker: true,
     });
 

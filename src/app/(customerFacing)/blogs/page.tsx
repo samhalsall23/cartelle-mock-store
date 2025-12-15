@@ -1,0 +1,54 @@
+import {
+  AnimatedHeadingText,
+  AnimateFadeIn,
+  BaseSection,
+  BlogTile,
+} from "@/components";
+import { screamingSnakeToTitle } from "@/lib";
+import { getBlogs } from "@/lib/server";
+
+export default async function BlogPage() {
+  // === QUERIES ===
+  const blogs = await getBlogs();
+
+  return (
+    <main>
+      <BaseSection id="blog-page" className="pb-16">
+        <div className="pt-6 md:pt-10 pb-6">
+          <AnimatedHeadingText
+            className="pb-1"
+            variant="page-title"
+            disableIsInView={true}
+            text="Our News"
+          />
+          <p className="text-neutral-10 text-base">
+            Stories, updates and inspirations from our shop to you.
+          </p>
+        </div>
+        {!blogs.success ||
+          (blogs.data.length === 0 && (
+            <p className="text-neutral-10 text-base font-bold">
+              No blog posts available.
+            </p>
+          ))}
+        {blogs.success && blogs.data.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {blogs.data.map((blog) => (
+              <AnimateFadeIn key={blog.id}>
+                <BlogTile
+                  isBlogPage={true}
+                  href={blog.slug}
+                  title={blog.title}
+                  description={blog.description}
+                  imageUrl={blog.blogImageUrl}
+                  alt={blog.title}
+                  category={screamingSnakeToTitle(blog.category)}
+                />
+              </AnimateFadeIn>
+            ))}
+          </div>
+        )}
+      </BaseSection>
+    </main>
+  );
+}

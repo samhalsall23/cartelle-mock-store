@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 type BlogTileImageProps = {
+  sizes?: string;
   isLargeTile?: boolean;
   imageUrl: string;
   alt: string;
@@ -9,7 +10,7 @@ type BlogTileImageProps = {
 
 export function BlogTileImage(props: BlogTileImageProps) {
   // === PROPS ===
-  const { isLargeTile = false, imageUrl, alt, category } = props;
+  const { sizes, isLargeTile = false, imageUrl, alt, category } = props;
 
   return (
     <div className="relative w-full h-full overflow-hidden rounded-sm">
@@ -31,6 +32,7 @@ export function BlogTileImage(props: BlogTileImageProps) {
           src={imageUrl}
           alt={alt}
           fill
+          sizes={sizes}
           loading="lazy"
           className="absolute w-full h-full object-cover rounded-sm"
         />

@@ -12,7 +12,7 @@ import {
 } from "@/types";
 import { getReadingMinutes, handleServerAction } from "./helpers";
 import { BLOB_STORAGE_PREFIXES } from "../constants";
-import { adminRoutes } from "../routing";
+import { adminRoutes, routes } from "../routing";
 import {
   AdminFormAddBlogsData,
   AdminFormEditBlogsData,
@@ -85,6 +85,7 @@ export async function createBlog(
     });
 
     revalidatePath(adminRoutes.blogs);
+    revalidatePath(routes.blogs);
 
     return { id: created.id };
   });
@@ -96,6 +97,7 @@ export async function updateBlogById(
 ): Promise<ServerActionResponse<AdminTableBlogMutation>> {
   return handleServerAction(async () => {
     revalidatePath(adminRoutes.blogs);
+    revalidatePath(routes.blogs);
 
     if (data.image) {
       const imageFile = data.image;

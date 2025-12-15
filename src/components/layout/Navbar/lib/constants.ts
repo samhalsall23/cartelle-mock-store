@@ -70,6 +70,6 @@ export const navItems: NavItemType[] = [
   {
     id: "blog",
     text: "Blog",
-    href: routes.blog,
+    href: routes.blogs,
   },
 ] as const;
