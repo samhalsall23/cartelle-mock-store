@@ -8,7 +8,7 @@ import { cn, SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/components/lib";
 type AnimatedHeadingTextProps = {
   className?: string;
   text: string;
-  variant?: "home-screen" | "page-title";
+  variant?: "home-screen" | "page-title" | "sub-page-title";
   disableIsInView?: boolean;
 };
 
@@ -29,6 +29,7 @@ export function AnimatedHeadingText({
 
   const staggerValueMap: { [key: string]: number } = {
     "home-screen": 0.03,
+    "sub-page-title": 0.03,
     "page-title": 0.01,
   };
 
@@ -67,6 +68,8 @@ export function AnimatedHeadingText({
         className={cn(
           className,
           variant === "page-title" && "xl:text-7xl lg:text-6xl text-5xl ",
+          variant === "home-screen" && "text-4xl! md:text-5xl! xl:text-6xl",
+          variant === "sub-page-title" && "text-2xl md:text-3xl lg:text-4xl",
         )}
         variants={container}
         initial="hidden"

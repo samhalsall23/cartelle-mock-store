@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ProfileDetails } from "../ProfileDetails";
 import { BlogTileImage } from "./BlogTileImage";
 import { BlogTileProps } from "./BlogTile";
+import { formatBlogDate } from "@/lib";
 
 export type BlogLargeTileProps = BlogTileProps & {
   datePublished: Date;
@@ -39,7 +40,7 @@ export function BlogLargeTile(props: BlogLargeTileProps) {
           category={category}
         />
       </div>
-      <div className="p-8 rounded-sm h-[300px] bg-main-01 flex flex-col gap-6 ">
+      <div className="p-8 rounded-sm h-75 bg-main-01 flex flex-col gap-6 ">
         <h3 className="text-3xl xl:text-4xl">{title}</h3>
         <p className="text-neutral-10">{description}</p>
 
@@ -51,13 +52,7 @@ export function BlogLargeTile(props: BlogLargeTileProps) {
             reviewerTitle={authorJobTitle}
           />
           <div className="text-sm text-neutral-10">
-            <span>
-              {datePublished.toLocaleDateString(undefined, {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </span>
+            <span>{formatBlogDate(datePublished)}</span>
             {" • "}
             <span>{timeToRead} min read</span>
           </div>

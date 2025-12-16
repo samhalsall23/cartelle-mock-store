@@ -1,7 +1,9 @@
+import { cn } from "@/lib";
 import Image from "next/image";
 
 type ProfileDetailsProps = {
   className?: string;
+  variant?: "compact" | "regular";
   reviewerImageUrl: string;
   reviewerName: string;
   reviewerTitle: string;
@@ -9,11 +11,22 @@ type ProfileDetailsProps = {
 
 export function ProfileDetails(props: ProfileDetailsProps) {
   // === PROPS ===
-  const { className, reviewerImageUrl, reviewerName, reviewerTitle } = props;
+  const {
+    variant = "regular",
+    className,
+    reviewerImageUrl,
+    reviewerName,
+    reviewerTitle,
+  } = props;
 
   return (
     <div className={`flex items-center gap-x-4 ${className}`}>
-      <div className="relative w-12 h-12">
+      <div
+        className={cn(
+          "relative",
+          variant === "compact" ? "w-10 h-10" : "w-12 h-12",
+        )}
+      >
         <Image
           src={reviewerImageUrl}
           alt={reviewerName}

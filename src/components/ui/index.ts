@@ -6,3 +6,4 @@ export * from "./AnimateFadeIn";
 export * from "./AnimateStagger";
 export * from "./AnimatedReviewText";
 export * from "./SectionHeading";
+export * from "./BreadCrumb";

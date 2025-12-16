@@ -8,6 +8,7 @@ import { prisma } from "@/lib/prisma";
 import {
   AdminTableAuthorMutation,
   AdminTableBlogMutation,
+  BlogPostBySlugType,
   ServerActionResponse,
 } from "@/types";
 import { getReadingMinutes, handleServerAction } from "./helpers";
@@ -40,7 +41,7 @@ export async function getBlogById(
   id: string,
 ): Promise<ServerActionResponse<BlogPost | null>> {
   return handleServerAction(async () => {
-    const blogs = await prisma.blogPost.findFirst({
+    const blog = await prisma.blogPost.findFirst({
       where: { id },
       include: {
         author: {
@@ -52,7 +53,29 @@ export async function getBlogById(
       },
     });
 
-    return blogs;
+    return blog;
+  });
+}
+
+export async function getBlogBySlug(
+  slug: string,
+): Promise<ServerActionResponse<BlogPostBySlugType | null>> {
+  return handleServerAction(async () => {
+    const blog = await prisma.blogPost.findFirst({
+      where: { slug },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            avatarUrl: true,
+            occupation: true,
+          },
+        },
+      },
+    });
+
+    return blog;
   });
 }
 
@@ -85,7 +108,7 @@ export async function createBlog(
     });
 
     revalidatePath(adminRoutes.blogs);
-    revalidatePath(routes.blogs);
+    revalidatePath(routes.blog);
 
     return { id: created.id };
   });
@@ -97,7 +120,7 @@ export async function updateBlogById(
 ): Promise<ServerActionResponse<AdminTableBlogMutation>> {
   return handleServerAction(async () => {
     revalidatePath(adminRoutes.blogs);
-    revalidatePath(routes.blogs);
+    revalidatePath(routes.blog);
 
     if (data.image) {
       const imageFile = data.image;
@@ -152,6 +175,7 @@ export async function deleteBlogById(
   return handleServerAction(async () => {
     const deleted = await prisma.blogPost.delete({ where: { id } });
     revalidatePath(adminRoutes.blogs);
+    revalidatePath(routes.blog);
 
     return { id: deleted.id };
   });

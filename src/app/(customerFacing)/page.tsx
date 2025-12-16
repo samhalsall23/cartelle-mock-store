@@ -16,7 +16,7 @@ import {
 import { HomeVideoSectionWrapper } from "@/components/base/HomeVideoSection/HomeVideoSectionClient";
 import { mockReviews } from "@/components/base/ReviewCardsSection/data";
 
-export default function Home() {
+export default function HomePage() {
   return (
     <main>
       <HeroSection />

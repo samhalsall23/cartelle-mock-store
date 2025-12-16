@@ -33,7 +33,7 @@ export function Footer() {
                 href={routes.support}
                 text="Support"
               />
-              <CustomLink variant="on-dark" href={routes.blogs} text="Blog" />
+              <CustomLink variant="on-dark" href={routes.blog} text="Blog" />
             </div>
             <div className="flex flex-col gap-1 w-[150px]">
               <CustomLink variant="on-dark" href={routes.shop} text="Shop" />

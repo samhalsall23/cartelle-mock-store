@@ -3,7 +3,7 @@
 import { useMemo } from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/components/lib/utils";
+import { cn } from "@/components/lib";
 import { AdminLabel, AdminSeparator } from "@/components/admin";
 
 function AdminFieldSet({

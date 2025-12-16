@@ -1,16 +1,22 @@
 import { routes } from "@/lib/routing/routes";
 import { NavItemType } from "../types";
 
+export const HOME_NAVBAR_TEXT = "Home";
+export const SHOP_NAVBAR_TEXT = "Shop";
+export const ABOUT_NAVBAR_TEXT = "About";
+export const SUPPORT_NAVBAR_TEXT = "Support";
+export const BLOG_NAVBAR_TEXT = "Blog";
+
 // Main navigation structure
 export const navItems: NavItemType[] = [
   {
     id: "home",
-    text: "Home",
+    text: HOME_NAVBAR_TEXT,
     href: routes.home,
   },
   {
     id: "shop",
-    text: "Shop",
+    text: SHOP_NAVBAR_TEXT,
     href: routes.shop,
     subItems: [
       {
@@ -59,17 +65,17 @@ export const navItems: NavItemType[] = [
   },
   {
     id: "about",
-    text: "About",
+    text: ABOUT_NAVBAR_TEXT,
     href: routes.about,
   },
   {
     id: "support",
-    text: "Support",
+    text: SUPPORT_NAVBAR_TEXT,
     href: routes.support,
   },
   {
     id: "blog",
-    text: "Blog",
-    href: routes.blogs,
+    text: BLOG_NAVBAR_TEXT,
+    href: routes.blog,
   },
 ] as const;

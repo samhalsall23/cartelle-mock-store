@@ -38,6 +38,7 @@ export function BlogTile(props: BlogTileProps) {
               ? "(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
               : "(max-width: 1200px) 50vw, 25vw"
           }
+          isBlogPage={isBlogPage}
           imageUrl={imageUrl}
           alt={alt}
           category={category}

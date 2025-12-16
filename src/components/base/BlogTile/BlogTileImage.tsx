@@ -1,6 +1,8 @@
+import { cn } from "@/lib";
 import Image from "next/image";
 
 type BlogTileImageProps = {
+  isBlogPage?: boolean;
   sizes?: string;
   isLargeTile?: boolean;
   imageUrl: string;
@@ -10,7 +12,14 @@ type BlogTileImageProps = {
 
 export function BlogTileImage(props: BlogTileImageProps) {
   // === PROPS ===
-  const { sizes, isLargeTile = false, imageUrl, alt, category } = props;
+  const {
+    isBlogPage = false,
+    sizes,
+    isLargeTile = false,
+    imageUrl,
+    alt,
+    category,
+  } = props;
 
   return (
     <div className="relative w-full h-full overflow-hidden rounded-sm">
@@ -26,7 +35,11 @@ export function BlogTileImage(props: BlogTileImageProps) {
 
       {/*Blog Image*/}
       <div
-        className={`${!isLargeTile && "relative aspect-video xl:aspect-4/3 overflow-hidden rounded-sm h-full"}`}
+        className={cn(
+          !isLargeTile && "relative overflow-hidden rounded-sm h-full",
+          !isLargeTile && isBlogPage && "aspect-video",
+          !isLargeTile && !isBlogPage && "aspect-video xl:aspect-4/3",
+        )}
       >
         <Image
           src={imageUrl}

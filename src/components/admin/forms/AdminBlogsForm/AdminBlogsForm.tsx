@@ -30,9 +30,9 @@ import {
 
 import { usePreviewUrl } from "@/hooks";
 import { AdminBlogsFormData, AdminBlogsFormSchema } from "./schema";
-import { convertStringToBlog } from "./helpers";
 import { createBlog, deleteBlogById, updateBlogById } from "@/lib/server/blogs";
 import { BLOG_CATEGORY_OPTIONS } from "./constants";
+import { convertStringToBlog } from "@/components/lib";
 
 type AdminBlogsFormProps = {
   authorList: Author[];
@@ -307,7 +307,7 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
                 {/* PREVIEW */}
                 <AdminFieldDescription>Preview:</AdminFieldDescription>
                 <div className="border min-h-20 rounded-lg px-3 py-2 h-full overflow-auto">
-                  {convertStringToBlog(contentValue)}
+                  {convertStringToBlog(contentValue, true)}
                 </div>
               </AdminFieldGroup>
             </div>
