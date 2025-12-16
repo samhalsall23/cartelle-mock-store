@@ -5,7 +5,7 @@ import { BLOG_NAVBAR_TEXT } from "@/components/layout/Navbar/lib";
 import { routes } from "@/lib";
 import { getBlogBySlug } from "@/lib/server";
 import { formatBlogDate } from "@/lib/utils";
-import { convertStringToBlog } from "@/components/lib";
+import { convertStringToBlog } from "@/lib/parsers";
 
 export default async function BlogIdPage({
   params,

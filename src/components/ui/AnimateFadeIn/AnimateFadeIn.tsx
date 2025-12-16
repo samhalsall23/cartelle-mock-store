@@ -3,7 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/components/lib";
+import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/lib/animations";
 
 type AnimateFadeInProps = {
   children: React.ReactNode;

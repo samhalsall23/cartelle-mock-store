@@ -4,7 +4,7 @@ import * as React from "react";
 import * as AdminDropdownMenuPrimitive from "@radix-ui/react-dropdown-menu";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 
-import { cn } from "@/components/lib";
+import { cn } from "@/lib";
 function AdminDropdownMenu({
   ...props
 }: React.ComponentProps<typeof AdminDropdownMenuPrimitive.Root>) {

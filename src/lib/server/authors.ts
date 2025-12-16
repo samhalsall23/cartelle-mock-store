@@ -6,8 +6,8 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 import {
-  AdminTableAuthorQuery,
-  AdminTableAuthorMutation,
+  AuthorWithPostCount,
+  AuthorMutationInput,
   ServerActionResponse,
 } from "@/types";
 import { handleServerAction } from "./helpers";
@@ -20,7 +20,7 @@ import { adminRoutes } from "../routing";
 
 // === FETCHES ===
 export async function getAuthors(): Promise<
-  ServerActionResponse<AdminTableAuthorQuery[]>
+  ServerActionResponse<AuthorWithPostCount[]>
 > {
   return handleServerAction(() =>
     prisma.author.findMany({
@@ -42,7 +42,7 @@ export async function getAuthorById(
 // === MUTATIONS ===
 export async function deleteAuthorById(
   id: string,
-): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
+): Promise<ServerActionResponse<AuthorMutationInput>> {
   return handleServerAction(async () => {
     const deleted = await prisma.author.delete({ where: { id } });
 
@@ -54,7 +54,7 @@ export async function deleteAuthorById(
 
 export async function createAuthor(
   data: AdminFormAddAuthorsData,
-): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
+): Promise<ServerActionResponse<AuthorMutationInput>> {
   return handleServerAction(async () => {
     const imageFile = data.image;
     const imageFileName = BLOB_STORAGE_PREFIXES.AUTHORS + data.name;
@@ -81,7 +81,7 @@ export async function createAuthor(
 export async function updateAuthorById(
   id: string,
   data: AdminFormEditAuthorsData,
-): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
+): Promise<ServerActionResponse<AuthorMutationInput>> {
   return handleServerAction(async () => {
     revalidatePath(adminRoutes.authors);
 

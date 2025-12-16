@@ -13,8 +13,8 @@ import {
   BlogLargeTile,
   BlogTile,
 } from "@/components";
-import { HomeVideoSectionWrapper } from "@/components/base/HomeVideoSection/HomeVideoSectionClient";
-import { mockReviews } from "@/components/base/ReviewCardsSection/data";
+import { HomeVideoSectionWrapper } from "@/components/common/HomeVideoSection/HomeVideoSectionClient";
+import { mockReviews } from "@/components/common/ReviewCardsSection/data";
 
 export default function HomePage() {
   return (

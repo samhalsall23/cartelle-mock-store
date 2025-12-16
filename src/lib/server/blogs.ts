@@ -6,9 +6,8 @@ import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 import {
-  AdminTableAuthorMutation,
-  AdminTableBlogMutation,
-  BlogPostBySlugType,
+  BlogMutationInput,
+  BlogPostWithAuthor,
   ServerActionResponse,
 } from "@/types";
 import { getReadingMinutes, handleServerAction } from "./helpers";
@@ -59,7 +58,7 @@ export async function getBlogById(
 
 export async function getBlogBySlug(
   slug: string,
-): Promise<ServerActionResponse<BlogPostBySlugType | null>> {
+): Promise<ServerActionResponse<BlogPostWithAuthor | null>> {
   return handleServerAction(async () => {
     const blog = await prisma.blogPost.findFirst({
       where: { slug },
@@ -82,7 +81,7 @@ export async function getBlogBySlug(
 // === MUTATIONS ===
 export async function createBlog(
   data: AdminFormAddBlogsData,
-): Promise<ServerActionResponse<AdminTableBlogMutation>> {
+): Promise<ServerActionResponse<BlogMutationInput>> {
   return handleServerAction(async () => {
     const imageFile = data.image;
     const imageFileName = BLOB_STORAGE_PREFIXES.BLOGS + data.slug;
@@ -117,7 +116,7 @@ export async function createBlog(
 export async function updateBlogById(
   id: string,
   data: AdminFormEditBlogsData,
-): Promise<ServerActionResponse<AdminTableBlogMutation>> {
+): Promise<ServerActionResponse<BlogMutationInput>> {
   return handleServerAction(async () => {
     revalidatePath(adminRoutes.blogs);
     revalidatePath(routes.blog);
@@ -171,7 +170,7 @@ export async function updateBlogById(
 
 export async function deleteBlogById(
   id: string,
-): Promise<ServerActionResponse<AdminTableAuthorMutation>> {
+): Promise<ServerActionResponse<BlogMutationInput>> {
   return handleServerAction(async () => {
     const deleted = await prisma.blogPost.delete({ where: { id } });
     revalidatePath(adminRoutes.blogs);

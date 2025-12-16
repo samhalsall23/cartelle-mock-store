@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { cn } from "@/components/lib";
+import { cn } from "@/lib";
 
 function AdminInput({
   className,

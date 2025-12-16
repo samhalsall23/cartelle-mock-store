@@ -2,7 +2,7 @@
 
 import * as React from "react";
 
-import { cn } from "@/components/lib";
+import { cn } from "@/lib";
 
 function AdminTextarea({
   className,

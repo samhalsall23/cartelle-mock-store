@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { useInView } from "framer-motion";
 
 import { ReviewCard, BaseSection } from "@/components";
-import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/components/lib";
+import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/lib/animations";
 
 type ReviewCardsSectionProps = {
   reviews: {

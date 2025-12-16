@@ -3,7 +3,8 @@
 import { motion, Variants, useInView } from "framer-motion";
 import { useRef } from "react";
 
-import { cn, SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/components/lib";
+import { cn } from "@/lib";
+import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/lib/animations";
 
 type AnimatedHeadingTextProps = {
   className?: string;

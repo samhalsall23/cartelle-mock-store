@@ -27,7 +27,7 @@ import {
   AdminInput,
 } from "@/components/admin";
 import { deleteAuthorById } from "@/lib/server";
-import { AdminTableAuthorQuery } from "@/types";
+import { AuthorWithPostCount } from "@/types";
 import Link from "next/link";
 import { adminRoutes } from "@/lib";
 import { authorColumns } from "./columns";
@@ -35,7 +35,7 @@ import { authorColumns } from "./columns";
 export function AdminAuthorsTable({
   authors,
 }: {
-  authors: AdminTableAuthorQuery[];
+  authors: AuthorWithPostCount[];
 }) {
   // === STATE ===
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -44,7 +44,7 @@ export function AdminAuthorsTable({
   const [searchTerm, setSearchTerm] = useState("");
 
   // === FUNCTIONS ===
-  const hasZeroPosts = (author: AdminTableAuthorQuery) =>
+  const hasZeroPosts = (author: AuthorWithPostCount) =>
     author._count.posts === 0;
 
   const deleteAuthor = async (id: string) => {
