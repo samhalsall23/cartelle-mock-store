@@ -3,6 +3,10 @@
     {
       "path": "/api/cleanup-unused-author-images",
       "schedule": "0 0 * * *"
+    },
+    {
+      "path": "/api/cleanup-unused-blog-images",
+      "schedule": "0 1 * * *"
     }
   ]
 }
