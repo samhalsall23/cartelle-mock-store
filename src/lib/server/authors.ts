@@ -47,6 +47,7 @@ export async function deleteAuthorById(
     const deleted = await prisma.author.delete({ where: { id } });
 
     revalidatePath(adminRoutes.authors);
+    revalidatePath(adminRoutes.blogsCreate);
 
     return { id: deleted.id };
   });
@@ -73,6 +74,7 @@ export async function createAuthor(
     });
 
     revalidatePath(adminRoutes.authors);
+    revalidatePath(adminRoutes.blogsCreate);
 
     return { id: created.id };
   });
@@ -84,6 +86,8 @@ export async function updateAuthorById(
 ): Promise<ServerActionResponse<AuthorMutationInput>> {
   return handleServerAction(async () => {
     revalidatePath(adminRoutes.authors);
+    revalidatePath(adminRoutes.blogs);
+    revalidatePath(adminRoutes.blogsCreate);
 
     // If there's a new image, upload it and update the avatarUrl
     if (data.image) {
