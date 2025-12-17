@@ -12,9 +12,12 @@ import {
   HomeVideoSection,
   BlogLargeTile,
   BlogTile,
+  getButtonStyles,
 } from "@/components";
 import { HomeVideoSectionWrapper } from "@/components/common/HomeVideoSection/HomeVideoSectionClient";
 import { mockReviews } from "@/components/common/ReviewCardsSection/data";
+import { routes } from "@/lib";
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -151,11 +154,15 @@ export default function HomePage() {
       >
         <div className="flex justify-between items-end">
           <SectionHeading heading="Our News" subheading="Explore The Trends" />
-          <Button
-            className="ms-auto h-fit hidden md:inline-block"
-            variant="light"
-            text="View all posts"
-          />
+          <Link
+            className={getButtonStyles(
+              "light",
+              "ms-auto h-fit hidden md:inline-block",
+            )}
+            href={routes.blog}
+          >
+            View all posts
+          </Link>
         </div>
         <div className="flex flex-col xl:flex-row gap-12 xl:gap-6">
           <div className="hidden md:flex flex-1">
