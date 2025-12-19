@@ -33,7 +33,7 @@ export function HeroSection() {
           className="object-cover rounded-sm"
           onLoad={() => setImageReady(true)}
         />
-        <AnimateFadeIn disableIsInView={imageReady} duration="long">
+        <AnimateFadeIn delay={0.15} disableIsInView={imageReady} duration="long">
           <div
             className={cn(
               "absolute inset-0 rounded-sm",
@@ -43,7 +43,7 @@ export function HeroSection() {
             )}
           />
         </AnimateFadeIn>
-        <AnimateFadeIn disableIsInView={imageReady} duration="long">
+        <AnimateFadeIn delay={0.15} disableIsInView={imageReady} duration="long">
           <div className="absolute inset-0 flex flex-col xl:flex-row justify-end items-center xl:items-end px-6 py-10 md:p-10 xl:p-12 text-white">
             <HeroSectionButton className="order-2 xl:order-1 mt-6 xl:mt-0" />
             <div className="flex flex-col xl:text-end gap-4 xl:ms-auto order-1 xl:order-2">
