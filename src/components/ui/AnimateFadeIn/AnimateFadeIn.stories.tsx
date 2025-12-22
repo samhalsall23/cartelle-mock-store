@@ -30,10 +30,6 @@ const meta = {
       control: { type: "range", min: 0, max: 2, step: 0.1 },
       description: "Delay before animation starts (in seconds)",
     },
-    disableIsInView: {
-      control: "boolean",
-      description: "Disable scroll trigger and animate immediately",
-    },
     className: {
       control: "text",
       description: "Additional CSS classes to apply to the wrapper",

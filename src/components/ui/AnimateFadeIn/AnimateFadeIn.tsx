@@ -10,7 +10,7 @@ type AnimateFadeInProps = {
   className?: string;
   delay?: number;
   duration?: "short" | "normal" | "long";
-  disableIsInView?: boolean;
+  hidden?: boolean;
 };
 
 export function AnimateFadeIn(props: AnimateFadeInProps) {
@@ -20,7 +20,7 @@ export function AnimateFadeIn(props: AnimateFadeInProps) {
     className = "",
     delay = 0.1,
     duration = "long",
-    disableIsInView = false,
+    hidden = false,
   } = props;
 
   // === REF ===
@@ -37,13 +37,13 @@ export function AnimateFadeIn(props: AnimateFadeInProps) {
     long: 0.7,
   };
   const durationValue = durationMap[duration] || durationMap["normal"];
-
+  console.log(isInView);
   return (
     <motion.div
       ref={ref}
       className={className}
       initial={{ opacity: 0 }}
-      animate={{ opacity: disableIsInView ? 1 : isInView ? 1 : 0 }}
+      animate={{ opacity: hidden ? 0 : isInView ? 1 : 0 }}
       transition={{ delay, duration: durationValue, ease: "easeInOut" }}
     >
       {children}

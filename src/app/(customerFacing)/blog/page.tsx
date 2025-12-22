@@ -18,7 +18,6 @@ export default async function BlogPage() {
           <AnimatedHeadingText
             className="pb-1"
             variant="page-title"
-            disableIsInView={true}
             text="Our News"
           />
           <p className="text-neutral-10 text-base">

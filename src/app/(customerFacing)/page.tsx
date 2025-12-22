@@ -215,6 +215,12 @@ export default function HomePage() {
               category="Trends"
             />
           </div>
+          <Link
+            className={getButtonStyles("light", "w-full h-fit md:hidden")}
+            href={routes.blog}
+          >
+            View all posts
+          </Link>
         </div>
       </BaseSection>
     </main>

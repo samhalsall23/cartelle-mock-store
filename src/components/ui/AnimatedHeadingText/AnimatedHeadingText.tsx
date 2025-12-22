@@ -10,14 +10,14 @@ type AnimatedHeadingTextProps = {
   className?: string;
   text: string;
   variant?: "home-screen" | "page-title" | "sub-page-title";
-  disableIsInView?: boolean;
+  hideText?: boolean;
 };
 
 export function AnimatedHeadingText({
   text,
   variant = "page-title",
   className = "",
-  disableIsInView = false,
+  hideText = false,
 }: AnimatedHeadingTextProps) {
   // === REF ===
   const ref = useRef<HTMLHeadingElement | null>(null);
@@ -74,7 +74,7 @@ export function AnimatedHeadingText({
         )}
         variants={container}
         initial="hidden"
-        animate={disableIsInView ? "visible" : isInView ? "visible" : "hidden"}
+        animate={hideText ? "hidden" : isInView ? "visible" : "hidden"}
         aria-hidden="true"
       >
         {letters.map((char, index) => (
