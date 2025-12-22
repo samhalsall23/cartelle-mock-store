@@ -13,7 +13,7 @@ export function ProfileDetails(props: ProfileDetailsProps) {
   // === PROPS ===
   const {
     variant = "regular",
-    className,
+    className = "",
     reviewerImageUrl,
     reviewerName,
     reviewerTitle,

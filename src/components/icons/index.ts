@@ -6,3 +6,6 @@ export * from "./CheveronLeftIcon";
 export * from "./CheveronRightIcon";
 export * from "./ArrowUpRightIcon";
 export * from "./StarIcon";
+export * from "./EmailIcon";
+export * from "./PhoneIcon";
+export * from "./HomeIcon";

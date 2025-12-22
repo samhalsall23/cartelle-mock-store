@@ -8,6 +8,7 @@ import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/lib/animations";
 type AnimateStaggerProps = {
   children?: React.ReactNode;
   className?: string;
+  childClassName?: string;
   staggerDelay?: number;
   duration?: "short" | "normal" | "long";
   disableIsInView?: boolean;
@@ -18,6 +19,7 @@ export function AnimateStagger(props: AnimateStaggerProps) {
   const {
     children,
     className = "",
+    childClassName = "",
     staggerDelay = 0.1,
     duration = "normal",
     disableIsInView = false,
@@ -72,7 +74,7 @@ export function AnimateStagger(props: AnimateStaggerProps) {
     >
       {Array.isArray(children) ? (
         children.map((child, index) => (
-          <motion.div key={index} variants={item}>
+          <motion.div className={childClassName} key={index} variants={item}>
             {child}
           </motion.div>
         ))

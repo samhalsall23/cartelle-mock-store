@@ -7,3 +7,4 @@ export * from "./ReviewCardsSection";
 export * from "./HomeVideoSection";
 export * from "./ProfileDetails";
 export * from "./BlogTile";
+export * from "./ContactCard";
