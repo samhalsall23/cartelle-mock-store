@@ -37,6 +37,7 @@ export default function SupportPage() {
               className="object-cover rounded-sm"
               src="/assets/clothes-model.jpg"
               alt="Support Image"
+              sizes="(max-width: 768px) 100vw, 33vw"
               fill
             />
           </AnimateFadeIn>
