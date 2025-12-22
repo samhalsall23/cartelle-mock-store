@@ -82,8 +82,9 @@ export const Multiple: Story = {
       <AccordionItem value="item-2">
         <AccordionTrigger>Can I track my order?</AccordionTrigger>
         <AccordionContent>
-          Yes, once your order ships, you'll receive a tracking number via
-          email.
+          {
+            "Yes, once your order ships, you'll receive a tracking number via email."
+          }
         </AccordionContent>
       </AccordionItem>
       <AccordionItem value="item-3">
