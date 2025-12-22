@@ -10,14 +10,12 @@ type AnimatedHeadingTextProps = {
   className?: string;
   text: string;
   variant?: "home-screen" | "page-title" | "sub-page-title";
-  hideText?: boolean;
 };
 
 export function AnimatedHeadingText({
   text,
   variant = "page-title",
   className = "",
-  hideText = false,
 }: AnimatedHeadingTextProps) {
   // === REF ===
   const ref = useRef<HTMLHeadingElement | null>(null);
@@ -61,6 +59,8 @@ export function AnimatedHeadingText({
     },
   };
 
+  console.log(isInView);
+
   return (
     <>
       <h3 className="sr-only">{text}</h3>
@@ -68,13 +68,16 @@ export function AnimatedHeadingText({
         ref={ref}
         className={cn(
           className,
-          variant === "page-title" && "xl:text-7xl lg:text-6xl text-5xl ",
+          variant === "page-title" &&
+            "text-4xl sm:text-5xl xl:text-7xl lg:text-6xl",
           variant === "home-screen" && "text-4xl! md:text-5xl! xl:text-6xl",
           variant === "sub-page-title" && "text-2xl md:text-3xl lg:text-4xl",
         )}
         variants={container}
         initial="hidden"
-        animate={hideText ? "hidden" : isInView ? "visible" : "hidden"}
+        animate={
+          variant === "page-title" ? "visible" : isInView ? "visible" : "hidden"
+        }
         aria-hidden="true"
       >
         {letters.map((char, index) => (
