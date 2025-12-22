@@ -16,6 +16,7 @@ export default async function BlogPage() {
       <BaseSection id="blog-page" className="pb-16 flex flex-col gap-8">
         <div className="pt-6 md:pt-10 pb-6">
           <AnimatedHeadingText
+            disableIsInView
             className="pb-1"
             variant="page-title"
             text="Our News"

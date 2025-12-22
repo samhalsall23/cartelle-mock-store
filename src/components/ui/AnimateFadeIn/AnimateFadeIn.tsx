@@ -3,7 +3,10 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 
-import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/lib/animations";
+import {
+  SCROLL_ANIMATION_IN_VIEW_CONFIG,
+  SCROLL_ANIMATION_IN_VIEW_CONFIG_NO_MARGIN,
+} from "@/lib/animations";
 
 type AnimateFadeInProps = {
   children: React.ReactNode;
@@ -11,6 +14,7 @@ type AnimateFadeInProps = {
   delay?: number;
   duration?: "short" | "normal" | "long";
   hidden?: boolean;
+  noMargin?: boolean;
 };
 
 export function AnimateFadeIn(props: AnimateFadeInProps) {
@@ -21,13 +25,19 @@ export function AnimateFadeIn(props: AnimateFadeInProps) {
     delay = 0.1,
     duration = "long",
     hidden = false,
+    noMargin = false,
   } = props;
 
   // === REF ===
   const ref = useRef<HTMLDivElement>(null);
 
   // === HOOKS ===
-  const isInView = useInView(ref, SCROLL_ANIMATION_IN_VIEW_CONFIG);
+  const isInView = useInView(
+    ref,
+    noMargin
+      ? SCROLL_ANIMATION_IN_VIEW_CONFIG_NO_MARGIN
+      : SCROLL_ANIMATION_IN_VIEW_CONFIG,
+  );
 
   // === DURATION MAP ===
   // match tailwind duration classes
@@ -37,7 +47,7 @@ export function AnimateFadeIn(props: AnimateFadeInProps) {
     long: 0.7,
   };
   const durationValue = durationMap[duration] || durationMap["normal"];
-  console.log(isInView);
+  console.log({ isInView });
   return (
     <motion.div
       ref={ref}
