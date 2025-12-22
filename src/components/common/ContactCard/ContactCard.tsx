@@ -1,6 +1,5 @@
 import { ReactNode } from "react";
 import Link from "next/link";
-
 import { cn } from "@/lib";
 
 type ContactCardProps = {
@@ -11,12 +10,20 @@ type ContactCardProps = {
   icon: ReactNode;
 };
 
-export function ContactCard(props: ContactCardProps) {
-  // === PROPS ===
-  const { className = "", href, title, description, icon } = props;
+type ContentProps = {
+  className?: string;
+  title: string;
+  description: string;
+  icon: ReactNode;
+};
 
-  // === RENDERING ===
-  const Content = ({ className }: { className?: string }) => (
+function ContactCardContent({
+  className,
+  title,
+  description,
+  icon,
+}: ContentProps) {
+  return (
     <div
       className={cn(
         "flex flex-col gap-5 p-8 border rounded-sm border-neutral-04 h-full",
@@ -30,14 +37,27 @@ export function ContactCard(props: ContactCardProps) {
       <p className="text-base text-neutral-10">{description}</p>
     </div>
   );
+}
+
+export function ContactCard(props: ContactCardProps) {
+  const { className = "", href, title, description, icon } = props;
+
+  const content = (
+    <ContactCardContent
+      className={className}
+      title={title}
+      description={description}
+      icon={icon}
+    />
+  );
 
   if (href) {
     return (
       <Link className={className} href={href}>
-        <Content />
+        {content}
       </Link>
     );
   }
 
-  return <Content className={className} />;
+  return content;
 }
