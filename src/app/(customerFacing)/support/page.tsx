@@ -10,6 +10,7 @@ import {
   AnimateStagger,
   BaseSection,
   ContactCard,
+  NewsletterCard,
 } from "@/components";
 
 import { supportFaqQuestions, supportContactInfo } from "@/lib";
@@ -68,6 +69,12 @@ export default function SupportPage() {
           ))}
         </AnimateStagger>
       </BaseSection>
+
+      <div className="bg-main-01">
+        <BaseSection id="support-newsletter-section" className="py-16 xl:py-20">
+          <NewsletterCard />
+        </BaseSection>
+      </div>
     </main>
   );
 }

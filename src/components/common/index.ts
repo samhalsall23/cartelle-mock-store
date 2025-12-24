@@ -8,3 +8,4 @@ export * from "./HomeVideoSection";
 export * from "./ProfileDetails";
 export * from "./BlogTile";
 export * from "./ContactCard";
+export * from "./NewsletterCard";
