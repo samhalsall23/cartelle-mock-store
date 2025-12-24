@@ -31,7 +31,7 @@ export function NewsletterCard() {
       </div>
       <AnimateFadeIn className="relative xl:w-1/2 aspect-5/3 order-1 xl:order-2">
         <Image
-          src="/assets/hero-3.jpg"
+          src="/assets/newsletter-image3.jpg"
           alt="Newsletter"
           fill
           className="object-cover rounded-sm"

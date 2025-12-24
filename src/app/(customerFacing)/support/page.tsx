@@ -36,7 +36,7 @@ export default function SupportPage() {
           <AnimateFadeIn className="relative w-full md:w-1/3 min-h-100 max-h-125 h-full">
             <Image
               className="object-cover rounded-sm"
-              src="/assets/clothes-model.jpg"
+              src="/assets/support-faq-image.jpg"
               alt="Support Image"
               sizes="(max-width: 768px) 100vw, 33vw"
               fill
