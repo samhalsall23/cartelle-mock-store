@@ -16,7 +16,7 @@ import {
   aboutTeamMembersData,
 } from "@/lib";
 
-export default function SupportPage() {
+export default function AboutPage() {
   return (
     <main>
       <BaseSection
@@ -45,6 +45,7 @@ export default function SupportPage() {
                 key={`first-${index}`}
               >
                 <Image
+                  priority
                   className="object-cover rounded-sm"
                   src={src}
                   alt={`About us image ${index + 1}`}
