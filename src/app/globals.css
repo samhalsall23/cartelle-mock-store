@@ -346,9 +346,15 @@ Max width utilities
 }
 
 .animate-scroll-left {
-  animation: scroll-left 20s linear infinite;
   width: fit-content;
   will-change: transform;
+  animation: scroll-left 20s linear infinite;
+}
+
+.animate-scroll-left-slow {
+  width: fit-content;
+  will-change: transform;
+  animation: scroll-left 30s linear infinite;
 }
 
 :root {
