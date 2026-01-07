@@ -5,41 +5,16 @@ import {
   AnimateFadeIn,
   BaseSection,
   FeatureCard,
+  NewsletterCard,
+  SectionHeading,
+  TeamMemberCard,
 } from "@/components";
 
-const aboutImageSrcArray = [
-  "/assets/hero-3.jpg",
-  "/assets/clothes-model.jpg",
-  "/assets/hero-3.jpg",
-  "/assets/clothes-model.jpg",
-];
-
-const featureCardsData = [
-  {
-    number: "01",
-    title: "Premium Quality",
-    description:
-      "We source only the finest materials to ensure every piece meets our high standards of excellence.",
-  },
-  {
-    number: "02",
-    title: "Sustainable Fashion",
-    description:
-      "Committed to eco-friendly practices and ethical production methods that protect our planet.",
-  },
-  {
-    number: "03",
-    title: "Expert Craftsmanship",
-    description:
-      "Each item is carefully crafted by skilled artisans with decades of combined experience.",
-  },
-  {
-    number: "04",
-    title: "Customer First",
-    description:
-      "Your satisfaction is our priority with dedicated support and hassle-free returns.",
-  },
-];
+import {
+  aboutFeatureCardsData,
+  aboutImageSrcArray,
+  aboutTeamMembersData,
+} from "@/lib";
 
 export default function SupportPage() {
   return (
@@ -97,19 +72,19 @@ export default function SupportPage() {
         </div>
       </BaseSection>
 
-      <BaseSection id="base-section-facts" className="py-16 xl:py-20">
+      <BaseSection id="about-us-section-facts" className="py-16 xl:py-20">
         <div className="grid grid-cols-1 xl:grid-cols-[1fr_2fr] md:gap-12 xl:items-start">
           <div className="relative aspect-video xl:aspect-auto xl:h-full">
             <Image
               className="object-cover rounded-sm"
-              src="/assets/clothes-model-hover.jpg"
+              src="/assets/about-us-fact-image.jpg"
               alt={"About us image facts"}
               fill
               sizes="(min-width: 1280px) 33vw, 100vw"
             />
           </div>
           <div className="grid xl:col-span-1 grid-cols-1 md:grid-cols-2 xl:grid-rows-2 xl:auto-rows-min gap-y-10 gap-x-6 md:border-y py-10">
-            {featureCardsData.map((card) => (
+            {aboutFeatureCardsData.map((card) => (
               <AnimateFadeIn key={card.number}>
                 <FeatureCard
                   number={card.number}
@@ -121,6 +96,30 @@ export default function SupportPage() {
           </div>
         </div>
       </BaseSection>
+
+      <BaseSection
+        id="about-us-section-team"
+        className="py-16 xl:py-20 gap-8 flex flex-col"
+      >
+        <SectionHeading heading="Meet Our Team" subheading="The super heros" />
+        <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+          {aboutTeamMembersData.map((member, index) => (
+            <AnimateFadeIn delay={index * 0.15} key={member.name}>
+              <TeamMemberCard
+                imageSrc={member.imageSrc}
+                name={member.name}
+                position={member.position}
+              />
+            </AnimateFadeIn>
+          ))}
+        </div>
+      </BaseSection>
+
+      <div className="bg-main-01">
+        <BaseSection id="support-newsletter-section" className="py-16 xl:py-20">
+          <NewsletterCard />
+        </BaseSection>
+      </div>
     </main>
   );
 }
