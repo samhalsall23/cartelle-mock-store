@@ -61,6 +61,7 @@ export default async function BlogIdPage({
 
           <div className="aspect-video w-full relative">
             <Image
+              priority
               src={blog.data.blogImageUrl}
               alt={blog.data.title}
               fill

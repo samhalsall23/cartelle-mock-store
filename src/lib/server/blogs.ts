@@ -78,6 +78,31 @@ export async function getBlogBySlug(
   });
 }
 
+export async function getHomePageBlogs(): Promise<
+  ServerActionResponse<BlogPostWithAuthor[]>
+> {
+  return handleServerAction(async () => {
+    const blogs = await prisma.blogPost.findMany({
+      take: 4,
+      orderBy: {
+        updatedAt: "desc",
+      },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            avatarUrl: true,
+            occupation: true,
+          },
+        },
+      },
+    });
+
+    return blogs;
+  });
+}
+
 // === MUTATIONS ===
 export async function createBlog(
   data: AdminFormAddBlogsData,
@@ -108,6 +133,7 @@ export async function createBlog(
 
     revalidatePath(adminRoutes.blogs);
     revalidatePath(routes.blog);
+    revalidatePath(routes.home);
 
     return { id: created.id };
   });
@@ -120,6 +146,7 @@ export async function updateBlogById(
   return handleServerAction(async () => {
     revalidatePath(adminRoutes.blogs);
     revalidatePath(routes.blog);
+    revalidatePath(routes.home);
 
     if (data.image) {
       const imageFile = data.image;
@@ -175,6 +202,7 @@ export async function deleteBlogById(
     const deleted = await prisma.blogPost.delete({ where: { id } });
     revalidatePath(adminRoutes.blogs);
     revalidatePath(routes.blog);
+    revalidatePath(routes.home);
 
     return { id: deleted.id };
   });

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   SectionHeading,
   BaseSection,
@@ -16,10 +18,14 @@ import {
 } from "@/components";
 import { HomeVideoSectionWrapper } from "@/components/common/HomeVideoSection/HomeVideoSectionClient";
 import { mockReviews } from "@/components/common/ReviewCardsSection/data";
-import { routes } from "@/lib";
-import Link from "next/link";
+import { routes, screamingSnakeToTitle } from "@/lib";
+import { getHomePageBlogs } from "@/lib/server";
 
-export default function HomePage() {
+export default async function HomePage() {
+  // === QUERIES ===
+  const blogPostsResponse = await getHomePageBlogs();
+  const blogPosts = blogPostsResponse.success ? blogPostsResponse.data : [];
+
   return (
     <main>
       <HeroSection />
@@ -165,56 +171,52 @@ export default function HomePage() {
           </Link>
         </div>
         <div className="flex flex-col xl:flex-row gap-12 xl:gap-6">
-          <div className="hidden md:flex flex-1">
-            <BlogLargeTile
-              href="/"
-              title="Caring for Your Clothes"
-              description="Essential Tips to Keep Your Wardrobe Fresh"
-              imageUrl="/assets/cartelle-hero-image.jpg"
-              alt="Caring for Your Clothes"
-              category="Clothing"
-              datePublished={new Date("2024-01-15")}
-              timeToRead={7}
-              profileImageUrl={"/assets/clothes-model.jpg"}
-              authorName={"Olivia Smith"}
-              authorJobTitle={"Fashion Editor"}
-            />
-          </div>
-          <div className="flex-1 gap-12 xl:gap-0 justify-between flex flex-col">
-            <BlogTile
-              className="block md:hidden"
-              href="/"
-              title="Caring for Your Clothes"
-              description="Essential Tips to Keep Your Wardrobe Fresh"
-              imageUrl="/assets/cartelle-hero-image.jpg"
-              alt="Caring for Your Clothes"
-              category="Clothing"
-            />
-            <BlogTile
-              href="/blog/eco-friendly-wardrobe"
-              title="Sustainable Fashion"
-              description="How to Build an Eco-Friendly Wardrobe with Recycled Materials and Mindful Shopping Habits."
-              imageUrl="/assets/hero-3.jpg"
-              alt="Eco-friendly clothing on display"
-              category="Sustainability"
-            />
-            <BlogTile
-              href="/blog/summer-style-tips"
-              title="Summer Style Tips"
-              description="Top 10 Ways to Stay Cool and Stylish This Summer, Featuring Breathable Fabrics and Vibrant Colors."
-              imageUrl="/assets/cartelle-hero-image.jpg"
-              alt="Summer fashion inspiration"
-              category="Fashion"
-            />
-            <BlogTile
-              href="/blog/denim-trends-2024"
-              title="Denim Trends 2024"
-              description="Explore the Latest Denim Styles, From Vintage Cuts to Modern Sustainable Production Techniques."
-              imageUrl="/assets/clothes-model-hover.jpg"
-              alt="Model wearing trendy denim jeans"
-              category="Trends"
-            />
-          </div>
+          {blogPosts.length === 0 && (
+            <p className="text-neutral-10 text-base font-bold">
+              No blog posts available.
+            </p>
+          )}
+          {blogPosts && blogPosts.length > 0 && (
+            <>
+              <div className="hidden md:flex flex-1">
+                <BlogLargeTile
+                  href={`${routes.blog}/${blogPosts[0].slug}`}
+                  title={blogPosts[0].title}
+                  description={blogPosts[0].description}
+                  imageUrl={blogPosts[0].blogImageUrl}
+                  alt={blogPosts[0].title}
+                  category={screamingSnakeToTitle(blogPosts[0].category)}
+                  datePublished={blogPosts[0].updatedAt}
+                  timeToRead={blogPosts[0].duration}
+                  profileImageUrl={blogPosts[0].author.avatarUrl}
+                  authorName={blogPosts[0].author.name}
+                  authorJobTitle={blogPosts[0].author.occupation}
+                />
+              </div>
+              <div className="flex-1 gap-12 xl:gap-0 justify-between flex flex-col">
+                <BlogTile
+                  className="block md:hidden"
+                  href={`${routes.blog}/${blogPosts[0].slug}`}
+                  title={blogPosts[0].title}
+                  description={blogPosts[0].description}
+                  imageUrl={blogPosts[0].blogImageUrl}
+                  alt={blogPosts[0].title}
+                  category={screamingSnakeToTitle(blogPosts[0].category)}
+                />
+                {blogPosts.slice(1, 4).map((post) => (
+                  <BlogTile
+                    key={post.id}
+                    href={`${routes.blog}/${post.slug}`}
+                    title={post.title}
+                    description={post.description}
+                    imageUrl={post.blogImageUrl}
+                    alt={post.title}
+                    category={screamingSnakeToTitle(post.category)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
           <Link
             className={getButtonStyles("light", "w-full h-fit md:hidden")}
             href={routes.blog}
