@@ -1,0 +1,65 @@
+import Link from "next/link";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui";
+
+import { cn, routes } from "@/lib";
+import { ShopSidebarCollectionItem } from "./ShopSidebarCollectionItem";
+
+export const linkClasses =
+  "flex text-neutral-11 hover:text-neutral-10 transition-colors text-base";
+
+type ShopSideBarProps = {
+  collections: { href: string; label: string }[];
+  collectionsOpenByDefault?: boolean;
+};
+
+export function ShopSidebar(props: ShopSideBarProps) {
+  // === PROPS ===
+  const { collections = [], collectionsOpenByDefault = false } = props;
+
+  return (
+    <aside className="flex flex-col md:w-64 shrink-0 divide-y divide-neutral-6">
+      <Link href={routes.shop} className={cn(linkClasses, "pb-3")}>
+        All
+      </Link>
+      <Link
+        href={`${routes.shop}/new-arrivals`}
+        className={cn(linkClasses, "py-3")}
+      >
+        New Arrivals
+      </Link>
+      <Accordion
+        defaultValue={collectionsOpenByDefault ? "collections" : undefined}
+        collapsible
+        type="single"
+        className="w-full"
+      >
+        <AccordionItem value="collections" className="border-b-0">
+          <AccordionTrigger
+            className={cn(
+              linkClasses,
+              "pt-3 hover:no-underline text-base! [&[data-state=open]>svg]:rotate-180",
+            )}
+          >
+            Collections
+          </AccordionTrigger>
+          <AccordionContent className="flex flex-col gap-3 pl-1 pt-0 ">
+            {collections.length > 0 &&
+              collections.map((collection, index) => (
+                <ShopSidebarCollectionItem
+                  key={index}
+                  href={collection.href}
+                  label={collection.label}
+                />
+              ))}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </aside>
+  );
+}

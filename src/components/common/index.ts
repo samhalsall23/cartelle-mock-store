@@ -10,3 +10,4 @@ export * from "./BlogTile";
 export * from "./ContactCard";
 export * from "./NewsletterCard";
 export * from "./TeamMemberCard";
+export * from "./ShopSidebar";
