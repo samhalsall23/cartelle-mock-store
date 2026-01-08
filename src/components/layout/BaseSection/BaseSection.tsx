@@ -10,7 +10,10 @@ export function BaseSection({
   className?: string;
 }) {
   return (
-    <section id={id} className={`px-5 md:px-10 xl:px-12 ${className} mx-auto`}>
+    <section
+      id={id}
+      className={`relative px-5 md:px-10 xl:px-12 ${className} mx-auto`}
+    >
       {children}
     </section>
   );

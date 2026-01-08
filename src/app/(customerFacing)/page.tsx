@@ -77,7 +77,7 @@ export default async function HomePage() {
         </div>
       </BaseSection>
 
-      <div className="border-y border-neutral-03">
+      <div className="relative border-y border-neutral-03">
         <BaseSection
           id="feature-cards"
           className="relative py-16 xl:py-20 overflow-hidden"
@@ -146,7 +146,7 @@ export default async function HomePage() {
         </div>
       </BaseSection>
 
-      <div className="bg-main-01">
+      <div className="relative bg-main-01">
         <ReviewCardsSection reviews={mockReviews} />
       </div>
 

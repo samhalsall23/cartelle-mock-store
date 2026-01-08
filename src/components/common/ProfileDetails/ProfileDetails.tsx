@@ -28,6 +28,7 @@ export function ProfileDetails(props: ProfileDetailsProps) {
         )}
       >
         <Image
+          quality={60}
           src={reviewerImageUrl}
           alt={reviewerName}
           fill

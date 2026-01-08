@@ -116,7 +116,7 @@ export default function AboutPage() {
         </div>
       </BaseSection>
 
-      <div className="bg-main-01">
+      <div className="relative bg-main-01">
         <BaseSection id="support-newsletter-section" className="py-16 xl:py-20">
           <NewsletterCard />
         </BaseSection>
