@@ -8,3 +8,14 @@ export function formatBlogDate(date: Date): string {
   const year = date.getFullYear();
   return `${day} ${month}, ${year}`;
 }
+
+/*
+ * Formats a date to "YYYY-MM-DD" format
+ */
+
+export function formatDateToYYYYMMDD(
+  date: Date | string | null,
+): string | null {
+  if (!date) return null;
+  return new Date(date).toISOString().split("T")[0];
+}

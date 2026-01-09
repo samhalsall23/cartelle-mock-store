@@ -9,7 +9,10 @@ export const routes = {
 
 export const adminRoutes = {
   home: "/admin",
+
   products: "/admin/products",
+  productsCreate: "/admin/products/create",
+
   orders: "/admin/orders",
 
   blogs: "/admin/blogs",

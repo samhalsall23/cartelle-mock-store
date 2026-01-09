@@ -1,19 +1,19 @@
-import { AdminHeading, AdminBlogsTable } from "@/components/admin";
-import { getBlogs } from "@/lib/server/blogs";
+import { AdminHeading, AdminProductsTable } from "@/components/admin";
+import { getAllProductsWithTotalSold } from "@/lib/server";
 
 export default async function Page() {
   // === QUERIES ===
-  const blogs = await getBlogs();
+  const products = await getAllProductsWithTotalSold();
 
-  if (!blogs.success) {
-    return <div>Error loading products: {blogs.error}</div>;
+  if (!products.success) {
+    return <div>Error loading products: {products.error}</div>;
   }
 
   return (
     <div>
       <AdminHeading heading="View Products" />
 
-      <AdminBlogsTable authors={blogs.data} />
+      <AdminProductsTable products={products.data} />
     </div>
   );
 }

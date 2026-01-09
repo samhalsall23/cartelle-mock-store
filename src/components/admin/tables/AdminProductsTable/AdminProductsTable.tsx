@@ -29,55 +29,54 @@ import {
   AdminDropdownMenuCheckboxItem,
   buttonVariants,
 } from "@/components/admin";
-import {
-  adminRoutes,
-  cn,
-  screamingSnakeToTitle,
-  formatDateToYYYYMMDD,
-} from "@/lib";
-import { BlogPost } from "@prisma/client";
-import { blogColumns, defaultVisibleBlogColumnIds } from "./columns";
-import { deleteBlogById } from "@/lib/server/blogs";
+import { adminRoutes, cn, formatDateToYYYYMMDD } from "@/lib";
+import { productColumns, defaultVisibleProductColumnIds } from "./columns";
+import { ProductGetAllCounts } from "@/types";
+import { deleteProductById } from "@/lib/server";
 
-export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
+export function AdminProductsTable({
+  products,
+}: {
+  products: ProductGetAllCounts[];
+}) {
   // === STATE ===
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [columnsVisible, setColumnsVisible] = useState<Set<string>>(
-    defaultVisibleBlogColumnIds,
+    defaultVisibleProductColumnIds,
   );
-  const [blogsState, setBlogsState] = useState(authors);
+  const [productsState, setProductsState] = useState(products);
   const [searchTerm, setSearchTerm] = useState("");
 
   // === FUNCTIONS ===
-  const deleteAuthor = async (id: string) => {
-    const deleted = await deleteBlogById(id);
+  const deleteProduct = async (id: string) => {
+    const deleted = await deleteProductById(id);
 
     if (!deleted.success) {
-      console.error("Error deleting blog:", deleted.error);
-      toast.error("Failed to delete blog. Please try again.");
+      console.error("Error deleting product:", deleted.error);
+      toast.error("Failed to delete product. Please try again.");
       return;
     }
 
     setPendingDeleteId(null);
-    setBlogsState((prev) => prev.filter((blog) => blog.id !== id));
-    toast.success("Blog deleted successfully.");
+    setProductsState((prev) => prev.filter((product) => product.id !== id));
+    toast.success("Product deleted successfully.");
   };
 
-  const formatBlogs = (blogs: BlogPost[]) => {
-    return blogs.map((blog) => ({
-      ...blog,
-      category: screamingSnakeToTitle(blog.category),
-      publishedAt: formatDateToYYYYMMDD(blog.publishedAt),
-      createdAt: formatDateToYYYYMMDD(blog.createdAt),
-      updatedAt: formatDateToYYYYMMDD(blog.updatedAt),
+  const formatProducts = (products: ProductGetAllCounts[]) => {
+    return products.map((product) => ({
+      ...product,
+      price: `${product.price.toFixed(2)}`,
+      isActive: product.isActive ? "Yes" : "No",
+      createdAt: formatDateToYYYYMMDD(product.createdAt),
+      updatedAt: formatDateToYYYYMMDD(product.updatedAt),
     }));
   };
 
   // === MEMO ===
-  const filteredBlogs = formatBlogs(
-    blogsState.filter((blog) =>
-      blog.title.toLowerCase().includes(searchTerm.toLowerCase()),
+  const filteredProducts = formatProducts(
+    productsState.filter((product) =>
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()),
     ),
   );
 
@@ -86,19 +85,19 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
       <div className="flex justify-between items-center">
         <AdminInput
           type="text"
-          placeholder="Search for blogs"
+          placeholder="Search for products"
           className="my-3 max-w-lg"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
         />
         <Link
-          href={adminRoutes.blogsCreate}
+          href={adminRoutes.productsCreate}
           className={cn(
             "ms-auto me-3",
             buttonVariants({ variant: "default", size: "default" }),
           )}
         >
-          Add Blog
+          Add Product
         </Link>
         <div className="flex justify-end">
           {/* === COLUMN TOGGLER === */}
@@ -108,7 +107,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
             </AdminDropdownMenuTrigger>
             <AdminDropdownMenuContent>
               <AdminDropdownMenuLabel>Show/Hide Columns</AdminDropdownMenuLabel>
-              {blogColumns.map((column) => (
+              {productColumns.map((column) => (
                 <AdminDropdownMenuCheckboxItem
                   key={column.accessorKey}
                   checked={columnsVisible.has(column.accessorKey)}
@@ -132,16 +131,16 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
         </div>
       </div>
       <AdminBaseTable
-        data={filteredBlogs}
+        data={filteredProducts}
         columns={[
-          ...blogColumns.filter((column) =>
+          ...productColumns.filter((column) =>
             columnsVisible.has(column.accessorKey),
           ),
           {
             id: "actions",
             enableHiding: false,
             cell: (cell) => {
-              const blog = cell.row.original;
+              const product = cell.row.original;
 
               return (
                 <AdminDropdownMenu>
@@ -153,7 +152,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
                   </AdminDropdownMenuTrigger>
 
                   <AdminDropdownMenuContent align="end">
-                    <Link href={`${adminRoutes.blogs}/${blog.id}`}>
+                    <Link href={`${adminRoutes.products}/${product.id}`}>
                       <AdminDropdownMenuItem>Edit</AdminDropdownMenuItem>
                     </Link>
                     <AdminDropdownMenuSeparator />
@@ -161,7 +160,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
                     <AdminDropdownMenuItem
                       variant="destructive"
                       onSelect={() => {
-                        setPendingDeleteId(blog.id);
+                        setPendingDeleteId(product.id);
                       }}
                     >
                       <AdminTooltip>
@@ -191,7 +190,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
         <AdminAlertDialogContent>
           <AdminAlertDialogHeader>
             <AdminAlertDialogTitle>
-              Are you sure you want to delete this blog?
+              Are you sure you want to delete this product?
             </AdminAlertDialogTitle>
             <AdminAlertDialogDescription>
               This action cannot be undone.
@@ -208,7 +207,7 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
               onClick={() => {
                 setDeletingId(pendingDeleteId);
                 if (pendingDeleteId) {
-                  deleteAuthor(pendingDeleteId);
+                  deleteProduct(pendingDeleteId);
                 }
               }}
             >

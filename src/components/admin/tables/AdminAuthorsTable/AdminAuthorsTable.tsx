@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,7 +29,6 @@ import {
 } from "@/components/admin";
 import { deleteAuthorById } from "@/lib/server";
 import { AuthorWithPostCount } from "@/types";
-import Link from "next/link";
 import { adminRoutes } from "@/lib";
 import { authorColumns } from "./columns";
 
