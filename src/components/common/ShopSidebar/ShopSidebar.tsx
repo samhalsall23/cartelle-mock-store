@@ -53,7 +53,7 @@ export function ShopSidebar(props: ShopSideBarProps) {
               collections.map((collection, index) => (
                 <ShopSidebarCollectionItem
                   key={index}
-                  href={routes.shopCollections + `/${collection.id}`}
+                  href={routes.shopCollections + `/${collection.slug}`}
                   label={collection.name}
                 />
               ))}

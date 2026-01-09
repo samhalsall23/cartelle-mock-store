@@ -117,7 +117,7 @@ export default async function HomePage() {
               title={collection.name}
               description={collection.tagline}
               imageUrl={collection.imageUrl}
-              href={routes.shopCollections + `/${collection.id}`}
+              href={routes.shopCollections + `/${collection.slug}`}
             />
           ))}
         </div>

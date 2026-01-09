@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { OrderStatus } from "@prisma/client";
 
 import { prisma } from "../prisma";
 import {
@@ -22,14 +23,9 @@ export async function getAllProductsWithTotalSold(): Promise<
           where: {
             order: {
               status: {
-                notIn: ["CANCELLED", "REFUNDED"],
+                notIn: [OrderStatus.CANCELLED, OrderStatus.REFUNDED],
               },
             },
-          },
-        },
-        category: {
-          select: {
-            name: true,
           },
         },
       },

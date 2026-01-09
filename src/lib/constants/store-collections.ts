@@ -1,52 +1,42 @@
-export const STORE_COLLECTION_DRESSES = "Dresses";
-export const STORE_COLLECTION_DRESSES_TAGLINE =
-  "Timeless elegance in every silhouette.";
+import { ProductCategoryEnum } from "@prisma/client";
 
-export const STORE_COLLECTION_OUTERWEAR = "Outerwear";
-export const STORE_COLLECTION_OUTERWEAR_TAGLINE =
-  "Impeccable craftsmanship meets modern protection.";
-
-export const STORE_COLLECTION_SHOES = "Shoes";
-export const STORE_COLLECTION_SHOES_TAGLINE =
-  "Artisanal footwear for the discerning.";
-
-export const STORE_COLLECTION_BAGS_ACCESSORIES = "Bags & Accessories";
-export const STORE_COLLECTION_BAGS_ACCESSORIES_TAGLINE =
-  "The finishing touch to refined style.";
-
-export const STORE_COLLECTION_TOPS_BOTTOMS = "Tops & Bottoms";
-export const STORE_COLLECTION_TOPS_BOTTOMS_TAGLINE =
-  "Essential pieces, elevated design.";
-
-export const STORE_COLLECTIONS = [
-  {
-    id: "dresses",
-    name: STORE_COLLECTION_DRESSES,
-    tagline: STORE_COLLECTION_DRESSES_TAGLINE,
+const CATEGORY_METADATA: Record<
+  ProductCategoryEnum,
+  { name: string; tagline: string; imageUrl: string }
+> = {
+  [ProductCategoryEnum.DRESSES]: {
+    name: "Dresses",
+    tagline: "Timeless elegance in every silhouette.",
     imageUrl: "/assets/store-collection-dresses.jpg",
   },
-  {
-    id: "outerwear",
-    name: STORE_COLLECTION_OUTERWEAR,
-    tagline: STORE_COLLECTION_OUTERWEAR_TAGLINE,
+  [ProductCategoryEnum.OUTERWEAR]: {
+    name: "Outerwear",
+    tagline: "Impeccable craftsmanship meets modern protection.",
     imageUrl: "/assets/store-collection-outerwear.jpg",
   },
-  {
-    id: "tops-bottoms",
-    name: STORE_COLLECTION_TOPS_BOTTOMS,
-    tagline: STORE_COLLECTION_TOPS_BOTTOMS_TAGLINE,
+  [ProductCategoryEnum.TOPS_BOTTOMS]: {
+    name: "Tops & Bottoms",
+    tagline: "Essential pieces, elevated design.",
     imageUrl: "/assets/store-collection-tops-bottoms.jpg",
   },
-  {
-    id: "bags-accessories",
-    name: STORE_COLLECTION_BAGS_ACCESSORIES,
-    tagline: STORE_COLLECTION_BAGS_ACCESSORIES_TAGLINE,
+  [ProductCategoryEnum.BAGS_ACCESSORIES]: {
+    name: "Bags & Accessories",
+    tagline: "The finishing touch to refined style.",
     imageUrl: "/assets/store-collection-bags-accessories.jpg",
   },
-  {
-    id: "shoes",
-    name: STORE_COLLECTION_SHOES,
-    tagline: STORE_COLLECTION_SHOES_TAGLINE,
+  [ProductCategoryEnum.SHOES]: {
+    name: "Shoes",
+    tagline: "Artisanal footwear for the discerning.",
     imageUrl: "/assets/store-collection-shoes.jpg",
   },
-];
+};
+
+export const STORE_COLLECTIONS = Object.entries(CATEGORY_METADATA).map(
+  ([category, metadata]) => ({
+    id: category,
+    name: metadata.name,
+    tagline: metadata.tagline,
+    imageUrl: metadata.imageUrl,
+    slug: category.toLowerCase().replace("_", "-"),
+  }),
+);

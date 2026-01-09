@@ -70,7 +70,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
       name: productData?.name,
       description: productData?.description,
       price: productData?.price ? Number(productData.price) : undefined,
-      categoryId: productData?.categoryId,
+      category: productData?.category,
       slug: productData?.slug,
       isActive: productData?.isActive ?? true,
     },
@@ -218,7 +218,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
               </AdminField>
 
               {/* CATEGORY */}
-              <AdminField>
+              {/* <AdminField>
                 <AdminFieldLabel>Category</AdminFieldLabel>
                 <select
                   {...register("categoryId")}
@@ -232,7 +232,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
                   ))}
                 </select>
                 <AdminFieldError errors={[errors.categoryId]} />
-              </AdminField>
+              </AdminField> */}
 
               {/* IS ACTIVE */}
               <AdminField>

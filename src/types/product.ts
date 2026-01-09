@@ -16,11 +16,6 @@ export type ProductGetAllCounts = Omit<
           };
         };
       };
-      category: {
-        select: {
-          name: true;
-        };
-      };
     };
   }>,
   "orderItems" | "price"

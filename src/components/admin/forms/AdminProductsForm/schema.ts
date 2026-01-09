@@ -1,3 +1,4 @@
+import { ProductCategoryEnum } from "@prisma/client";
 import { z } from "zod";
 
 export const AdminProductsFormSchema = (isEditMode: boolean) =>
@@ -8,7 +9,18 @@ export const AdminProductsFormSchema = (isEditMode: boolean) =>
       .number()
       .positive("Price must be greater than 0")
       .multipleOf(0.01, "Price can have at most 2 decimal places"),
-    categoryId: z.string().min(1, "Category is required"),
+    category: z
+      .string()
+      .min(1, "Category is required")
+      .refine(
+        (val) =>
+          Object.values(ProductCategoryEnum).includes(
+            val as ProductCategoryEnum,
+          ),
+        {
+          message: "Invalid category",
+        },
+      ),
     slug: z
       .string()
       .min(1, "Slug is required")

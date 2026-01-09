@@ -56,7 +56,7 @@ export default async function ShopPage({
     if (id && id.length === 2) {
       const [, collectionId] = id;
       const storeCollection = STORE_COLLECTIONS.find(
-        (collection) => collectionId === collection.id,
+        (collection) => collectionId === collection.slug,
       );
 
       return {
