@@ -16,18 +16,17 @@ datasource db {
 
 // === PRODUCT MODEL ===
 model Product {
-  id          String      @id @default(cuid())
+  id          String              @id @default(cuid())
   name        String
   description String
-  price       Decimal     @db.Decimal(10, 2)
-  isActive    Boolean     @default(true)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  price       Decimal             @db.Decimal(10, 2)
+  isActive    Boolean             @default(true)
+  createdAt   DateTime            @default(now())
+  updatedAt   DateTime            @updatedAt
   images      String[]
   sizes       Size[]
-  categoryId  String
-  category    Category    @relation(fields: [categoryId], references: [id])
-  slug        String      @unique
+  category    ProductCategoryEnum
+  slug        String              @unique
   orderItems  OrderItem[]
 }
 
@@ -51,11 +50,12 @@ model Size {
 }
 
 // === CATEGORY MODEL ===
-model Category {
-  id       String    @id @default(cuid())
-  name     String    @unique
-  slug     String    @unique
-  products Product[]
+enum ProductCategoryEnum {
+  DRESSES
+  OUTERWEAR
+  TOPS_BOTTOMS
+  BAGS_ACCESSORIES
+  SHOES
 }
 
 // === ORDER MODEL ===
