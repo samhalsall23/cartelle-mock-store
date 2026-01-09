@@ -5,6 +5,8 @@ import {
   ShopSidebar,
 } from "@/components";
 
+import { STORE_COLLECTIONS } from "@/lib";
+
 // === MOCK PRODUCTS GRID COMPONENT ===
 function ProductsGrid() {
   return (
@@ -38,9 +40,47 @@ function ProductsGrid() {
 export default async function ShopPage({
   params,
 }: {
-  params: { id: string[] };
+  params: Promise<{ id?: string[] }>;
 }) {
-  //   const getShop;
+  // === PARAMS ===
+  const { id } = await params;
+
+  // === CONSTANTS ===
+  const DEFAULT_TITLE = "Explore Our Shop";
+  const DEFAULT_DESCRIPTION =
+    "Discover handpicked products crafted with care and passion.";
+
+  // === FUNCTIONS ===
+  const getTitle = (): { title: string; description: string } => {
+    // /shop/collections/[collection-id]
+    if (id && id.length === 2) {
+      const [, collectionId] = id;
+      const storeCollection = STORE_COLLECTIONS.find(
+        (collection) => collectionId === collection.id,
+      );
+
+      return {
+        title: storeCollection?.name ?? DEFAULT_TITLE,
+        description: storeCollection?.tagline ?? DEFAULT_DESCRIPTION,
+      };
+    }
+
+    // /shop/new-arrivals
+    if (id && id.length === 1) {
+      return {
+        title: "New Arrivals",
+        description: "Discover the latest additions to our collection.",
+      };
+    }
+
+    // /shop (default)
+    return {
+      title: DEFAULT_TITLE,
+      description: DEFAULT_DESCRIPTION,
+    };
+  };
+
+  const { title, description } = getTitle();
 
   return (
     <main>
@@ -48,38 +88,17 @@ export default async function ShopPage({
         <div className="flex flex-col gap-1 pt-6 md:pt-10 pb-6">
           <AnimatedHeadingText
             disableIsInView
-            text="Explore Our Shop"
+            text={title}
             variant="page-title"
             className="pb-1"
           />
-          <p className="text-neutral-10 text-base">
-            {"Discover handpicked products crafted with care and passion."}
-          </p>
+          <p className="text-neutral-10 text-base">{description}</p>
         </div>
       </BaseSection>
 
       <BaseSection id="products-section" className="pb-16 xl:pb-20">
         <div className="relative flex flex-col md:flex-row gap-8 md:gap-12">
-          <ShopSidebar
-            collections={[
-              {
-                label: "Summer",
-                href: "/shop",
-              },
-              {
-                label: "Summer",
-                href: "/shop",
-              },
-              {
-                label: "Summer",
-                href: "/shop",
-              },
-              {
-                label: "Summer",
-                href: "/shop",
-              },
-            ]}
-          />
+          <ShopSidebar collections={STORE_COLLECTIONS} />
           <ProductsGrid />
         </div>
       </BaseSection>

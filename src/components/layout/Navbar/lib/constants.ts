@@ -1,4 +1,5 @@
 import { routes } from "@/lib/routing/routes";
+import { STORE_COLLECTIONS } from "@/lib/constants/store-collections";
 import { NavItemType } from "../types";
 
 export const HOME_NAVBAR_TEXT = "Home";
@@ -31,35 +32,18 @@ export const navItems: NavItemType[] = [
           {
             id: "shop-category-new",
             text: "New Arrivals",
-            href: routes.shop,
+            href: `${routes.shop}/new-arrivals`,
           },
         ],
       },
       {
         id: "shop-collections",
         text: "Collections",
-        items: [
-          {
-            id: "shop-collection-skincare",
-            text: "Skincare Products",
-            href: routes.shop,
-          },
-          {
-            id: "shop-collection-furniture",
-            text: "Furniture",
-            href: routes.shop,
-          },
-          {
-            id: "shop-collection-technology",
-            text: "Technology",
-            href: routes.shop,
-          },
-          {
-            id: "shop-collection-clothing",
-            text: "Clothing",
-            href: routes.shop,
-          },
-        ],
+        items: STORE_COLLECTIONS.map((collection) => ({
+          id: `shop-collection-${collection.id}`,
+          text: collection.name,
+          href: `${routes.shop}/collections/${collection.id}`,
+        })),
       },
     ],
   },

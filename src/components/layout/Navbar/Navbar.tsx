@@ -75,6 +75,7 @@ export function Navbar() {
                     <NavbarSubMenu
                       show={showSubMenu}
                       subItems={item.subItems}
+                      onClose={() => setShowSubMenu(false)}
                     />
                   </div>
                 </div>

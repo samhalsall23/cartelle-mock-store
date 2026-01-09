@@ -9,10 +9,11 @@ import { NavItemSubItemType } from "./types";
 type NavbarSubMenuProps = {
   show: boolean;
   subItems: NavItemSubItemType[];
+  onClose?: () => void;
 };
 
 export function NavbarSubMenu(props: NavbarSubMenuProps) {
-  const { show, subItems } = props;
+  const { show, subItems, onClose } = props;
 
   const containerClass = cn(
     "bg-white rounded-sm shadow-custom p-6 w-fit transition-all duration-300 ease-in-out",
@@ -38,7 +39,9 @@ export function NavbarSubMenu(props: NavbarSubMenuProps) {
             <p className="text-body-medium text-light pb-6">{subItem.text}</p>
             <div className="flex flex-col gap-4">
               {subItem.items.map((item) => (
-                <CustomLink key={item.id} text={item.text} href={item.href} />
+                <div key={item.id} onClick={onClose}>
+                  <CustomLink text={item.text} href={item.href} />
+                </div>
               ))}
             </div>
           </div>

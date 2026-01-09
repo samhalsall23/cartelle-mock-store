@@ -7,20 +7,21 @@ import {
   AccordionTrigger,
 } from "@/components/ui";
 
-import { cn, routes } from "@/lib";
+import { cn, routes, STORE_COLLECTIONS } from "@/lib";
 import { ShopSidebarCollectionItem } from "./ShopSidebarCollectionItem";
 
 export const linkClasses =
   "flex text-neutral-11 hover:text-neutral-10 transition-colors text-base";
 
 type ShopSideBarProps = {
-  collections: { href: string; label: string }[];
+  collections: typeof STORE_COLLECTIONS;
   collectionsOpenByDefault?: boolean;
 };
 
 export function ShopSidebar(props: ShopSideBarProps) {
   // === PROPS ===
   const { collections = [], collectionsOpenByDefault = false } = props;
+  console.log(collections);
 
   return (
     <aside className="flex flex-col w-full md:w-64 shrink-0 divide-y divide-neutral-6 md:sticky md:top-30 self-start">
@@ -53,8 +54,8 @@ export function ShopSidebar(props: ShopSideBarProps) {
               collections.map((collection, index) => (
                 <ShopSidebarCollectionItem
                   key={index}
-                  href={collection.href}
-                  label={collection.label}
+                  href={routes.shopCollections + `/${collection.id}`}
+                  label={collection.name}
                 />
               ))}
           </AccordionContent>

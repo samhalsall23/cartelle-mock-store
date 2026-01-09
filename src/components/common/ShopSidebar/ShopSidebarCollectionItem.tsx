@@ -1,6 +1,5 @@
 import Link from "next/link";
 
-import { routes } from "@/lib";
 import { linkClasses } from "./ShopSidebar";
 
 type ShopSidebarCollectionItemProps = {
@@ -15,7 +14,7 @@ export function ShopSidebarCollectionItem(
   const { href, label } = props;
 
   return (
-    <Link href={`${routes.shop}${href}`} className={linkClasses}>
+    <Link href={href} className={linkClasses}>
       <span className="text-neutral-04 pr-2">•</span>
       <span>{label}</span>
     </Link>
