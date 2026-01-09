@@ -16,7 +16,13 @@ export const AdminBlogsFormSchema = (isEditMode: boolean) =>
           message: "Invalid category",
         },
       ),
-    slug: z.string().min(1, "Slug is required"),
+    slug: z
+      .string()
+      .min(1, "Slug is required")
+      .regex(
+        /^[a-z0-9]+(?:-[a-z0-9]+)*$/,
+        "Slug must be lowercase with hyphens only",
+      ),
     content: z.string().min(1, "Content is required"),
     authorId: z.string().min(1, "Author is required"),
     image: isEditMode
