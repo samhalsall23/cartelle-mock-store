@@ -11,6 +11,7 @@ export type BlogTileProps = {
   alt: string;
   category: string;
   isBlogPage?: boolean;
+  priority?: boolean;
 };
 
 export function BlogTile(props: BlogTileProps) {
@@ -24,6 +25,7 @@ export function BlogTile(props: BlogTileProps) {
     alt,
     category,
     isBlogPage = false,
+    priority = false,
   } = props;
 
   return (
@@ -42,6 +44,7 @@ export function BlogTile(props: BlogTileProps) {
           imageUrl={imageUrl}
           alt={alt}
           category={category}
+          priority={priority}
         />
       </div>
       <div

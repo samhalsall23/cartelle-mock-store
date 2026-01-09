@@ -39,7 +39,7 @@ export default async function BlogPage() {
                   new Date(b.updatedAt).getTime() -
                   new Date(a.updatedAt).getTime(),
               )
-              .map((blog) => (
+              .map((blog, index) => (
                 <AnimateFadeIn key={blog.id}>
                   <BlogTile
                     isBlogPage={true}
@@ -49,6 +49,7 @@ export default async function BlogPage() {
                     imageUrl={blog.blogImageUrl}
                     alt={blog.title}
                     category={screamingSnakeToTitle(blog.category)}
+                    priority={index < 3}
                   />
                 </AnimateFadeIn>
               ))}

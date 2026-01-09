@@ -79,6 +79,7 @@ export default function AboutPage() {
             <Image
               className="object-cover rounded-sm"
               src="/assets/about-us-fact-image.jpg"
+              priority
               alt={"About us image facts"}
               fill
               sizes="(min-width: 1280px) 33vw, 100vw"

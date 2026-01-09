@@ -32,6 +32,7 @@ export function ProfileDetails(props: ProfileDetailsProps) {
           src={reviewerImageUrl}
           alt={reviewerName}
           fill
+          sizes="48px"
           className="object-cover rounded-full"
         />
       </div>

@@ -8,6 +8,7 @@ type BlogTileImageProps = {
   imageUrl: string;
   alt: string;
   category: string;
+  priority?: boolean;
 };
 
 export function BlogTileImage(props: BlogTileImageProps) {
@@ -19,6 +20,7 @@ export function BlogTileImage(props: BlogTileImageProps) {
     imageUrl,
     alt,
     category,
+    priority = false,
   } = props;
 
   return (
@@ -36,6 +38,7 @@ export function BlogTileImage(props: BlogTileImageProps) {
       {/*Blog Image*/}
       <div
         className={cn(
+          isLargeTile && "absolute inset-0 w-full h-full",
           !isLargeTile && "relative overflow-hidden rounded-sm h-full",
           !isLargeTile && isBlogPage && "aspect-video",
           !isLargeTile && !isBlogPage && "aspect-video xl:aspect-4/3",
@@ -46,7 +49,7 @@ export function BlogTileImage(props: BlogTileImageProps) {
           alt={alt}
           fill
           sizes={sizes}
-          loading="lazy"
+          priority={priority}
           className="absolute w-full h-full object-cover rounded-sm"
         />
       </div>

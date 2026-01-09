@@ -15,7 +15,6 @@ function ProductsGrid() {
         price={89.99}
         primaryImageUrl={"/assets/clothes-model.jpg"}
         hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-        loading="eager"
       />
       <ProductTile
         id={"2"}
@@ -23,7 +22,6 @@ function ProductsGrid() {
         price={159.99}
         primaryImageUrl={"/assets/clothes-model.jpg"}
         hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-        loading="eager"
       />
       <ProductTile
         id={"3"}
@@ -31,7 +29,6 @@ function ProductsGrid() {
         price={129.99}
         primaryImageUrl={"/assets/clothes-model.jpg"}
         hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-        loading="eager"
       />
     </div>
   );

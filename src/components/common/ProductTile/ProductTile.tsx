@@ -8,7 +8,6 @@ type ProductTileProps = {
   primaryImageUrl: string;
   hoverImageUrl: string;
   priority?: boolean;
-  loading?: "lazy" | "eager";
 };
 
 export function ProductTile(props: ProductTileProps) {
@@ -20,7 +19,6 @@ export function ProductTile(props: ProductTileProps) {
     primaryImageUrl,
     hoverImageUrl,
     priority = false,
-    loading = "lazy",
   } = props;
 
   return (
@@ -36,7 +34,6 @@ export function ProductTile(props: ProductTileProps) {
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           priority={priority}
-          loading={loading}
           className="object-cover transition-all duration-700 ease-in-out group-hover:opacity-0"
         />
 
@@ -46,7 +43,6 @@ export function ProductTile(props: ProductTileProps) {
           alt={`${name} - alternate view`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          loading="lazy"
           className="object-cover transition-all duration-700 ease-in-out opacity-0 group-hover:opacity-100"
         />
 

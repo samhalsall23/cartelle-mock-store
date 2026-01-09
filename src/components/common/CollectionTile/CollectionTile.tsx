@@ -18,7 +18,6 @@ export function CollectionTile(props: CollectionTileProps) {
     <Link href={href} className="group block w-full">
       <div className="relative aspect-4/3 overflow-hidden rounded-sm xl:flex">
         <Image
-          loading="lazy"
           className="object-cover transition-transform duration-300 group-hover:scale-105"
           fill
           sizes="(max-width: 768px) 100vw, 50vw"

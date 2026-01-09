@@ -50,7 +50,6 @@ export default async function HomePage() {
               price={89.99}
               primaryImageUrl={"/assets/clothes-model.jpg"}
               hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-              loading="eager"
             />
             <ProductTile
               id={"2"}
@@ -58,7 +57,6 @@ export default async function HomePage() {
               price={159.99}
               primaryImageUrl={"/assets/clothes-model.jpg"}
               hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-              loading="eager"
             />
             <ProductTile
               id={"3"}
@@ -66,7 +64,6 @@ export default async function HomePage() {
               price={129.99}
               primaryImageUrl={"/assets/clothes-model.jpg"}
               hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-              loading="eager"
             />
           </AnimateFadeIn>
           <Button

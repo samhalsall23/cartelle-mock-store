@@ -283,8 +283,8 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
                         src={preview || blogData?.blogImageUrl || ""}
                         alt="Preview"
                         fill
+                        priority
                         sizes="(max-width: 768px) 100vw, 240px"
-                        loading="eager"
                         className="rounded object-cover"
                       />
                     </div>
