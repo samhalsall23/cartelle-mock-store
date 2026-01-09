@@ -39,12 +39,12 @@ export function Footer() {
               <CustomLink variant="on-dark" href={routes.shop} text="Shop" />
               <CustomLink
                 variant="on-dark"
-                href={routes.shop}
+                href={routes.shopNewArrivals}
                 text="New Arrivals"
               />
               <CustomLink
                 variant="on-dark"
-                href={routes.support}
+                href={routes.shopCollections}
                 text="Collections"
               />
             </div>

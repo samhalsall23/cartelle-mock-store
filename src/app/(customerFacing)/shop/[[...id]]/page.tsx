@@ -65,8 +65,18 @@ export default async function ShopPage({
       };
     }
 
-    // /shop/new-arrivals
+    // /shop/new-arrivals or /shop/collections
     if (id && id.length === 1) {
+      const [subpage] = id;
+
+      if (subpage === "collections") {
+        return {
+          title: "Shop Collections",
+          description:
+            "Explore our curated collections, featuring seasonal and themed selections.",
+        };
+      }
+
       return {
         title: "New Arrivals",
         description: "Discover the latest additions to our collection.",

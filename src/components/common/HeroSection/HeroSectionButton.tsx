@@ -1,20 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useState, useCallback } from "react";
 import { motion } from "framer-motion";
 
 import { ArrowUpRightIcon, getButtonStyles } from "@/components";
-import { cn } from "@/lib";
+import { cn, routes } from "@/lib";
 
 type HeroButtonSectionProps = {
   className?: string;
-  onClick?: () => void;
 };
 
-export function HeroSectionButton({
-  className,
-  onClick,
-}: HeroButtonSectionProps) {
+export function HeroSectionButton({ className }: HeroButtonSectionProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [buttonWidth, setButtonWidth] = useState(0);
   const [circleWidth, setCircleWidth] = useState(0);
@@ -28,11 +25,11 @@ export function HeroSectionButton({
   }, []);
 
   return (
-    <button
+    <Link
+      href={routes.shop}
       className={cn(className, "flex gap-1 relative cursor-pointer")}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      onClick={onClick}
       aria-label="Shop now - Navigate to products"
       type="button"
     >
@@ -58,6 +55,6 @@ export function HeroSectionButton({
       >
         <ArrowUpRightIcon />
       </motion.div>
-    </button>
+    </Link>
   );
 }

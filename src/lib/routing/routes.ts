@@ -4,6 +4,7 @@ export const routes = {
   support: "/support",
   blog: "/blog",
   shop: "/shop",
+  shopNewArrivals: "/shop/new-arrivals",
   shopCollections: "/shop/collections",
 };
 

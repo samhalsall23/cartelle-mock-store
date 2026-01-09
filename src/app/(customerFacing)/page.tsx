@@ -37,11 +37,12 @@ export default async function HomePage() {
               heading="New Arrivals"
               subheading="Fresh Selections"
             />
-            <Button
-              className="ms-auto h-fit hidden md:inline-block"
-              variant="light"
-              text={"View all products"}
-            />
+            <Link
+              className={getButtonStyles("light", "ms-auto h-fit")}
+              href={routes.shop}
+            >
+              {"View all products"}
+            </Link>
           </div>
           <AnimateFadeIn className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
             <ProductTile

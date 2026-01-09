@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 import { BaseSection } from "@/components/layout";
 import { AnimateFadeIn } from "@/components/ui";
-import { cn } from "@/lib";
+import { cn, routes } from "@/lib";
 import { HeroSectionButton } from "./HeroSectionButton";
 
 export function HeroSection() {
