@@ -27,15 +27,15 @@ export function NavbarSubMenu(props: NavbarSubMenuProps) {
       <div className="flex gap-6">
         <div className="w-[150px] h-auto self-stretch relative">
           <Image
-            className="rounded-sm"
-            src={"/assets/chair-image.jpg"}
-            alt="chair"
+            className="rounded-sm object-cover"
+            src={"/assets/store-submenu-clothes.jpg"}
+            alt="Store submenu image"
             fill
             sizes="150px"
           />
         </div>
         {subItems?.map((subItem) => (
-          <div key={subItem.id} className="flex flex-col pb-10 w-[150px]">
+          <div key={subItem.id} className="flex flex-col pb-0 w-[150px]">
             <p className="text-body-medium text-light pb-6">{subItem.text}</p>
             <div className="flex flex-col gap-4">
               {subItem.items.map((item) => (

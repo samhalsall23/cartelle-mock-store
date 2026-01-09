@@ -32,12 +32,12 @@ export default function SupportPage() {
             }
           </p>
         </div>
-        <div className="flex flex-col gap-10 md:gap-0 md:flex-row justify-between pt-8 items-center">
+        <div className="flex flex-col gap-10 md:gap-0 md:flex-row justify-between pt-12 items-center">
           <AnimateFadeIn className="relative w-full md:w-1/3 min-h-100 max-h-125 h-full">
             <Image
               priority
               className="object-cover rounded-sm"
-              src="/assets/support-faq-image.jpg"
+              src="/assets/support-hero.jpg"
               alt="Support Image"
               sizes="(max-width: 768px) 100vw, 33vw"
               fill
