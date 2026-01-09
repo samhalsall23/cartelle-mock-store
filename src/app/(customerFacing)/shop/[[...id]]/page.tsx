@@ -8,7 +8,7 @@ import {
 // === MOCK PRODUCTS GRID COMPONENT ===
 function ProductsGrid() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
       <ProductTile
         id={"1"}
         name={"Organic Cotton Oversized Tee"}
@@ -59,7 +59,7 @@ export default async function ShopPage({
       </BaseSection>
 
       <BaseSection id="products-section" className="pb-16 xl:pb-20">
-        <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+        <div className="relative flex flex-col md:flex-row gap-8 md:gap-12">
           <ShopSidebar
             collections={[
               {

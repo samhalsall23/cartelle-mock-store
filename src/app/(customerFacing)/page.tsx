@@ -18,7 +18,7 @@ import {
 } from "@/components";
 import { HomeVideoSectionWrapper } from "@/components/common/HomeVideoSection/HomeVideoSectionClient";
 import { mockReviews } from "@/components/common/ReviewCardsSection/data";
-import { routes, screamingSnakeToTitle } from "@/lib";
+import { routes, screamingSnakeToTitle, STORE_COLLECTIONS } from "@/lib";
 import { getHomePageBlogs } from "@/lib/server";
 
 export default async function HomePage() {
@@ -110,36 +110,15 @@ export default async function HomePage() {
             heading="Collections"
             subheading="Curated for quality"
           />
-          <CollectionTile
-            title="Summer Essentials"
-            description="Lightweight and breathable."
-            imageUrl="/assets/clothes-model.jpg"
-            href="/collections/summer-essentials"
-          />
-          <CollectionTile
-            title="Winter Warmth"
-            description="Cozy knits and comfort."
-            imageUrl="/assets/hero-3.jpg"
-            href="/collections/winter-collection"
-          />
-          <CollectionTile
-            title="Professional Edge"
-            description="Sophisticated workplace styles."
-            imageUrl="/assets/clothes-model-hover.jpg"
-            href="/collections/professional"
-          />
-          <CollectionTile
-            title="Weekend Casual"
-            description="Effortless everyday comfort."
-            imageUrl="/assets/cartelle-hero-image.jpg"
-            href="/collections/casual-wear"
-          />
-          <CollectionTile
-            title="Premium Denim"
-            description="Finest quality craftsmanship."
-            imageUrl="/assets/hero-3.jpg"
-            href="/collections/premium-denim"
-          />
+          {STORE_COLLECTIONS.map((collection) => (
+            <CollectionTile
+              key={collection.name}
+              title={collection.name}
+              description={collection.tagline}
+              imageUrl={collection.imageUrl}
+              href={routes.shopCollections + `/${collection.id}`}
+            />
+          ))}
         </div>
       </BaseSection>
 

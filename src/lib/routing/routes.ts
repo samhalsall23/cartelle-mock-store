@@ -4,6 +4,7 @@ export const routes = {
   support: "/support",
   blog: "/blog",
   shop: "/shop",
+  shopCollections: "/shop/collections",
 };
 
 export const adminRoutes = {
