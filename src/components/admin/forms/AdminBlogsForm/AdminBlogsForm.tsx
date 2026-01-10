@@ -187,31 +187,36 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
               <AdminFieldGroup className="lg:max-w-md">
                 {/* TITLE */}
                 <AdminField>
-                  <AdminFieldLabel>Title</AdminFieldLabel>
-                  <AdminInput {...register("title")} />
+                  <AdminFieldLabel htmlFor="title">Title</AdminFieldLabel>
+                  <AdminInput id="title" {...register("title")} />
                   <AdminFieldError errors={[errors.title]} />
                 </AdminField>
 
                 {/* OCCUPATION */}
                 <AdminField>
-                  <AdminFieldLabel>Description</AdminFieldLabel>
+                  <AdminFieldLabel htmlFor="description">
+                    Description
+                  </AdminFieldLabel>
                   <AdminFieldDescription>
                     One sentence summary of the blog
                   </AdminFieldDescription>
-                  <AdminTextarea {...register("description")} />
+                  <AdminTextarea
+                    id="description"
+                    {...register("description")}
+                  />
                   <AdminFieldError errors={[errors.description]} />
                 </AdminField>
 
                 {/* CATEGORY */}
                 <AdminField>
-                  <AdminFieldLabel>Category</AdminFieldLabel>
+                  <AdminFieldLabel htmlFor="category">Category</AdminFieldLabel>
                   <AdminSelect
                     value={categoryValue}
                     onValueChange={(val) =>
                       setValue("category", val, { shouldValidate: true })
                     }
                   >
-                    <AdminSelectTrigger className="w-[180px]">
+                    <AdminSelectTrigger id="category" className="w-[180px]">
                       <AdminSelectValue />
                     </AdminSelectTrigger>
                     <AdminSelectContent>
@@ -232,24 +237,24 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
 
                 {/* SLUG */}
                 <AdminField>
-                  <AdminFieldLabel>Slug</AdminFieldLabel>
+                  <AdminFieldLabel htmlFor="slug">Slug</AdminFieldLabel>
                   <AdminFieldDescription>
                     {'Readable unique identifier for URL (e.g. "my-blog-post")'}
                   </AdminFieldDescription>
-                  <AdminInput {...register("slug")} />
+                  <AdminInput id="slug" {...register("slug")} />
                   <AdminFieldError errors={[errors.slug]} />
                 </AdminField>
 
                 {/* AUTHOR */}
                 <AdminField>
-                  <AdminFieldLabel>Author</AdminFieldLabel>
+                  <AdminFieldLabel htmlFor="authorId">Author</AdminFieldLabel>
                   <AdminSelect
                     value={authorIdValue}
                     onValueChange={(val) =>
                       setValue("authorId", val, { shouldValidate: true })
                     }
                   >
-                    <AdminSelectTrigger className="w-[180px]">
+                    <AdminSelectTrigger id="authorId" className="w-[180px]">
                       <AdminSelectValue />
                     </AdminSelectTrigger>
                     <AdminSelectContent>
@@ -267,9 +272,12 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
 
                 {/* IMAGE */}
                 <AdminField>
-                  <AdminFieldLabel>Blog Image</AdminFieldLabel>
+                  <AdminFieldLabel htmlFor="blogImage">
+                    Blog Image
+                  </AdminFieldLabel>
 
                   <AdminInput
+                    id="blogImage"
                     ref={fileInputRef}
                     type="file"
                     accept="image/*"
@@ -295,12 +303,16 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
               {/* CONTENT */}
               <AdminFieldGroup>
                 <AdminField>
-                  <AdminFieldLabel>Content</AdminFieldLabel>
+                  <AdminFieldLabel htmlFor="content">Content</AdminFieldLabel>
                   <AdminFieldDescription>For title use #</AdminFieldDescription>
                   <AdminFieldDescription>
                     For new line use /n
                   </AdminFieldDescription>
-                  <AdminTextarea rows={10} {...register("content")} />
+                  <AdminTextarea
+                    id="content"
+                    rows={10}
+                    {...register("content")}
+                  />
                   <AdminFieldError errors={[errors.content]} />
                 </AdminField>
 

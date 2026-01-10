@@ -19,3 +19,7 @@ export function formatDateToYYYYMMDD(
   if (!date) return null;
   return new Date(date).toISOString().split("T")[0];
 }
+
+export function roundToTwoDecimals(value: number): number {
+  return Math.round(value * 100) / 100;
+}

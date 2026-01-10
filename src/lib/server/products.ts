@@ -1,16 +1,19 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { OrderStatus } from "@prisma/client";
+
+import { OrderStatus, ProductCategoryEnum } from "@prisma/client";
 
 import { prisma } from "../prisma";
 import {
   ProductGetAllCounts,
+  ProductGetByIdResponse,
   ProductMutationInput,
   ServerActionResponse,
 } from "@/types";
-import { handleServerAction } from "./helpers";
 import { adminRoutes, routes } from "../routing";
+import { handleServerAction } from "./helpers";
+import { AdminProductsFormNoFileData } from "@/components/admin";
 
 // === FETCHES ===
 export async function getAllProductsWithTotalSold(): Promise<
@@ -47,7 +50,69 @@ export async function getAllProductsWithTotalSold(): Promise<
   });
 }
 
+export async function getProductById(
+  id: string,
+): Promise<ServerActionResponse<ProductGetByIdResponse | null>> {
+  return handleServerAction(async () => {
+    const product = await prisma.product.findFirst({
+      where: { id },
+    });
+
+    return product;
+  });
+}
+
 // === MUTATIONS ===
+export async function createProduct(
+  data: AdminProductsFormNoFileData,
+): Promise<ServerActionResponse<ProductMutationInput>> {
+  return handleServerAction(async () => {
+    const created = await prisma.product.create({
+      data: {
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        category: data.category as ProductCategoryEnum,
+        slug: data.slug,
+        isActive: data.isActive,
+        images: data.imageUrls,
+      },
+    });
+
+    revalidatePath(adminRoutes.products);
+    revalidatePath(routes.home);
+    revalidatePath(routes.shop);
+
+    return { id: created.id };
+  });
+}
+
+export async function updateProductById(
+  id: string,
+  data: AdminProductsFormNoFileData,
+): Promise<ServerActionResponse<ProductMutationInput>> {
+  return handleServerAction(async () => {
+    const created = await prisma.product.update({
+      where: { id },
+      data: {
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        category: data.category as ProductCategoryEnum,
+        slug: data.slug,
+        isActive: data.isActive,
+        images: data.imageUrls,
+      },
+    });
+
+    revalidatePath(adminRoutes.products);
+    revalidatePath(routes.home);
+    revalidatePath(routes.shop);
+
+    return { id: created.id };
+  });
+}
+
 export async function deleteProductById(
   id: string,
 ): Promise<ServerActionResponse<ProductMutationInput>> {

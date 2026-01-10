@@ -9,3 +9,4 @@ export * from "./AdminField";
 export * from "./AdminSeparator";
 export * from "./AdminTextarea";
 export * from "./AdminSelect";
+export * from "./AdminCheckbox";

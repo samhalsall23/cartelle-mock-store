@@ -169,23 +169,26 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
             <AdminFieldGroup>
               {/* NAME */}
               <AdminField>
-                <AdminFieldLabel>Name</AdminFieldLabel>
-                <AdminInput {...register("name")} />
+                <AdminFieldLabel htmlFor="name">Name</AdminFieldLabel>
+                <AdminInput id="name" {...register("name")} />
                 <AdminFieldError errors={[errors.name]} />
               </AdminField>
 
               {/* OCCUPATION */}
               <AdminField>
-                <AdminFieldLabel>Occupation</AdminFieldLabel>
-                <AdminInput {...register("occupation")} />
+                <AdminFieldLabel htmlFor="occupation">
+                  Occupation
+                </AdminFieldLabel>
+                <AdminInput id="occupation" {...register("occupation")} />
                 <AdminFieldError errors={[errors.occupation]} />
               </AdminField>
 
               {/* IMAGE */}
               <AdminField>
-                <AdminFieldLabel>Profile Image</AdminFieldLabel>
+                <AdminFieldLabel htmlFor="image">Profile Image</AdminFieldLabel>
 
                 <AdminInput
+                  id="image"
                   ref={fileInputRef}
                   type="file"
                   accept="image/*"

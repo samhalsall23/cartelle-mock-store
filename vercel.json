@@ -1,12 +1,16 @@
 {
   "crons": [
     {
-      "path": "/api/cleanup-unused-author-images",
+      "path": "/api/authors/cleanup-unused-images",
       "schedule": "0 0 * * *"
     },
     {
-      "path": "/api/cleanup-unused-blog-images",
+      "path": "/api/blogs/cleanup-unused-images",
       "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/products/cleanup-unused-blobs",
+      "schedule": "0 2 * * *"
     }
   ]
 }

@@ -2,7 +2,7 @@ export const productColumns = [
   { accessorKey: "id", header: "ID" },
   { accessorKey: "name", header: "Name" },
   { accessorKey: "description", header: "Description" },
-  { accessorKey: "category.name", header: "Category" },
+  { accessorKey: "category", header: "Category" },
   { accessorKey: "price", header: "Price" },
   { accessorKey: "slug", header: "Slug" },
   { accessorKey: "totalSold", header: "Total Sold" },
@@ -13,7 +13,7 @@ export const productColumns = [
 
 export const defaultVisibleProductColumnIds = new Set([
   "name",
-  "category.name",
+  "category",
   "price",
   "totalSold",
   "isActive",

@@ -29,7 +29,12 @@ import {
   AdminDropdownMenuCheckboxItem,
   buttonVariants,
 } from "@/components/admin";
-import { adminRoutes, cn, formatDateToYYYYMMDD } from "@/lib";
+import {
+  adminRoutes,
+  cn,
+  formatDateToYYYYMMDD,
+  screamingSnakeToTitle,
+} from "@/lib";
 import { productColumns, defaultVisibleProductColumnIds } from "./columns";
 import { ProductGetAllCounts } from "@/types";
 import { deleteProductById } from "@/lib/server";
@@ -66,6 +71,7 @@ export function AdminProductsTable({
   const formatProducts = (products: ProductGetAllCounts[]) => {
     return products.map((product) => ({
       ...product,
+      category: screamingSnakeToTitle(product.category),
       price: `${product.price.toFixed(2)}`,
       isActive: product.isActive ? "Yes" : "No",
       createdAt: formatDateToYYYYMMDD(product.createdAt),

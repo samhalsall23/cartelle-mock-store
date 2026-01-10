@@ -23,3 +23,6 @@ export type ProductGetAllCounts = Omit<
   totalSold: number;
   price: number;
 };
+
+// === PRODUCT GET BY ID RESPONSE ===
+export type ProductGetByIdResponse = Prisma.ProductGetPayload<object>;
