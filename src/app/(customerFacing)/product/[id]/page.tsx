@@ -104,29 +104,19 @@ export default async function ProductPage(props: ProductPageProps) {
                   <label className="text-sm font-semibold text-neutral-10">
                     Select Size
                   </label>
-                  <ToggleGroup type="single" variant="outline">
-                    <ToggleGroupItem value="xs" variant="outline">
-                      XS
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="s" variant="outline">
-                      S
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="m" variant="outline">
-                      M
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="l" variant="outline">
-                      L
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="xl" variant="outline">
-                      XL
-                    </ToggleGroupItem>
+                  <ToggleGroup type="single">
+                    <ToggleGroupItem value="xs">XS</ToggleGroupItem>
+                    <ToggleGroupItem value="s">S</ToggleGroupItem>
+                    <ToggleGroupItem value="m">M</ToggleGroupItem>
+                    <ToggleGroupItem value="l">L</ToggleGroupItem>
+                    <ToggleGroupItem value="xl">XL</ToggleGroupItem>
                   </ToggleGroup>
                 </div>
                 <Button text="Add to Cart" className="w-full" />
               </div>
 
               <Accordion collapsible type="single">
-                {PRODUCT_ACCORDION_ITEMS.map((item, index) => (
+                {PRODUCT_ACCORDION_ITEMS.map((item) => (
                   <AccordionItem key={item.value} value={item.value}>
                     <AccordionTrigger className="text-base" smallVariant>
                       {item.trigger}
