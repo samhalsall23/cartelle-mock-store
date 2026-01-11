@@ -85,7 +85,7 @@ export default async function ProductPage(props: ProductPageProps) {
               ))}
             </div>
 
-            <div className="w-full lg:w-[40%] flex flex-col gap-10 lg:sticky lg:top-22 self-start">
+            <div className="w-full lg:w-[40%] flex flex-col gap-8 lg:gap-10 lg:sticky lg:top-22 self-start">
               <div className="flex flex-col gap-2">
                 <AnimatedHeadingText
                   text={product.name}
