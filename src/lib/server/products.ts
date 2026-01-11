@@ -62,6 +62,18 @@ export async function getProductById(
   });
 }
 
+export async function getProductBySlug(
+  slug: string,
+): Promise<ServerActionResponse<ProductGetByIdResponse | null>> {
+  return handleServerAction(async () => {
+    const product = await prisma.product.findFirst({
+      where: { slug },
+    });
+
+    return product;
+  });
+}
+
 // === MUTATIONS ===
 export async function createProduct(
   data: AdminProductsFormNoFileData,

@@ -9,7 +9,11 @@ import { SCROLL_ANIMATION_IN_VIEW_CONFIG } from "@/lib/animations";
 type AnimatedHeadingTextProps = {
   className?: string;
   text: string;
-  variant?: "home-screen" | "page-title" | "sub-page-title";
+  variant?:
+    | "home-screen"
+    | "page-title"
+    | "sub-page-title"
+    | "product-page-title";
   disableIsInView?: boolean;
 };
 
@@ -26,10 +30,11 @@ export function AnimatedHeadingText({
   const isInView = useInView(ref, SCROLL_ANIMATION_IN_VIEW_CONFIG);
 
   // === FUNCTIONS ===
-  const letters = text.split("");
+  const words = text.split(" ");
 
   const staggerValueMap: { [key: string]: number } = {
     "home-screen": 0.03,
+    "product-page-title": 0.03,
     "sub-page-title": 0.03,
     "page-title": 0.01,
   };
@@ -68,6 +73,8 @@ export function AnimatedHeadingText({
         ref={ref}
         className={cn(
           className,
+          variant === "product-page-title" &&
+            "font-medium text-2xl md:text-3xl xl:text-4xl",
           variant === "page-title" &&
             "text-4xl sm:text-5xl xl:text-7xl lg:text-6xl",
           variant === "home-screen" && "text-4xl! md:text-5xl! xl:text-6xl",
@@ -78,17 +85,22 @@ export function AnimatedHeadingText({
         animate={disableIsInView ? "visible" : isInView ? "visible" : "hidden"}
         aria-hidden="true"
       >
-        {letters.map((char, index) => (
-          <motion.span
-            key={index}
-            variants={letter}
-            style={{
-              display: "inline-block",
-              willChange: "transform, opacity, filter",
-            }}
-          >
-            {char === " " ? "\u00A0" : char}
-          </motion.span>
+        {words.map((word, wordIndex) => (
+          <span key={wordIndex} className="inline-block whitespace-nowrap">
+            {word.split("").map((char, charIndex) => (
+              <motion.span
+                key={`${wordIndex}-${charIndex}`}
+                variants={letter}
+                style={{
+                  display: "inline-block",
+                  willChange: "transform, opacity, filter",
+                }}
+              >
+                {char}
+              </motion.span>
+            ))}
+            {wordIndex < words.length - 1 && "\u00A0"}
+          </span>
         ))}
       </motion.h2>
     </>

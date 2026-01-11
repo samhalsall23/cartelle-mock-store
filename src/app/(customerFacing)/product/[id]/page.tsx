@@ -1,0 +1,188 @@
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+  AnimatedHeadingText,
+  BaseSection,
+  BreadCrumb,
+  Button,
+  ProductTile,
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@/components";
+import {
+  BLOG_NAVBAR_TEXT,
+  SHOP_NAVBAR_TEXT,
+} from "@/components/layout/Navbar/lib";
+import { cn, PRODUCT_ACCORDION_ITEMS, routes } from "@/lib";
+import { getProductBySlug } from "@/lib/server";
+import Image from "next/image";
+
+type ProductPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default async function ProductPage(props: ProductPageProps) {
+  // === PROPS ===
+  const { params } = props;
+
+  // === PARAMS ===
+  const { id } = await params;
+
+  // === FETCHES ===
+  const productData = await getProductBySlug(id);
+
+  if (!productData.success || !productData.data) {
+    return (
+      <main>
+        <section className="pb-16 md:pb-25 px-5 md:px-0 w-100 md:w-75 xl:w-60">
+          <BreadCrumb
+            items={[{ label: BLOG_NAVBAR_TEXT, href: routes.blog }]}
+          />
+        </section>
+      </main>
+    );
+  }
+
+  // === PREPARE DATA ===
+  const product = productData.data;
+
+  return (
+    <main>
+      <BaseSection id="support-section" className="pb-16 xl:pb-20">
+        <div className="flex flex-col gap-1 pt-6 md:pt-10 ">
+          <div className="pb-4">
+            <BreadCrumb
+              items={[
+                { label: SHOP_NAVBAR_TEXT, href: routes.shop },
+                { label: product.name },
+              ]}
+            />
+          </div>
+
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-12 relative">
+            <div className="w-full lg:w-[60%] flex flex-col gap-6">
+              {product.images.map((imageUrl, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "relative w-full h-0 pb-[100%]",
+                    index === 0 && "hidden lg:block",
+                  )}
+                >
+                  <Image
+                    priority={index === 0}
+                    src={imageUrl}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 1280px) 100vw, 65vw"
+                    className="object-cover rounded-sm"
+                  />
+                </div>
+              ))}
+            </div>
+
+            <div className="w-full lg:w-[40%] flex flex-col gap-10 lg:sticky lg:top-22 self-start">
+              <div className="flex flex-col gap-2">
+                <AnimatedHeadingText
+                  text={product.name}
+                  variant="product-page-title"
+                />
+                <h4 className="text-xl md:text-2xl font-medium pb-2">
+                  ${product.price.toFixed(2)}
+                </h4>
+                <p className="text-neutral-10 text-base">
+                  {product.description}
+                </p>
+              </div>
+
+              <div className="flex flex-col gap-6">
+                <div className="flex flex-col gap-3">
+                  <label className="text-sm font-semibold text-neutral-10">
+                    Select Size
+                  </label>
+                  <ToggleGroup type="single" variant="outline">
+                    <ToggleGroupItem value="xs" variant="outline">
+                      XS
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="s" variant="outline">
+                      S
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="m" variant="outline">
+                      M
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="l" variant="outline">
+                      L
+                    </ToggleGroupItem>
+                    <ToggleGroupItem value="xl" variant="outline">
+                      XL
+                    </ToggleGroupItem>
+                  </ToggleGroup>
+                </div>
+                <Button text="Add to Cart" className="w-full" />
+              </div>
+
+              <Accordion collapsible type="single">
+                {PRODUCT_ACCORDION_ITEMS.map((item, index) => (
+                  <AccordionItem key={item.value} value={item.value}>
+                    <AccordionTrigger className="text-base" smallVariant>
+                      {item.trigger}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-sm" smallVariant>
+                      {item.content}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </div>
+            <div className="flex flex-col gap-6">
+              {product.images.map((imageUrl, index) => (
+                <div
+                  key={index}
+                  className={cn(
+                    "relative w-full h-0 pb-[100%]",
+                    index > 0 && "hidden lg:block",
+                  )}
+                >
+                  <Image
+                    priority={index === 0}
+                    src={imageUrl}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 1280px) 100vw, 65vw"
+                    className="object-cover rounded-sm"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </BaseSection>
+      <BaseSection
+        id="related-products-section"
+        className="pt-10 pb-16 xl:pb-20 flex flex-col gap-8"
+      >
+        <AnimatedHeadingText text="Browse more" variant="product-page-title" />
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full relative">
+          <ProductTile
+            id={"1"}
+            name={"Organic Cotton Oversized Tee"}
+            price={89.99}
+            primaryImageUrl={"/assets/clothes-model.jpg"}
+            hoverImageUrl={"/assets/clothes-model-hover.jpg"}
+          />
+          <ProductTile
+            id={"2"}
+            name={"Premium Wool Blend Sweater"}
+            price={159.99}
+            primaryImageUrl={"/assets/clothes-model.jpg"}
+            hoverImageUrl={"/assets/clothes-model-hover.jpg"}
+          />
+        </div>
+      </BaseSection>
+    </main>
+  );
+}

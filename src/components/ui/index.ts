@@ -8,3 +8,4 @@ export * from "./AnimatedReviewText";
 export * from "./SectionHeading";
 export * from "./BreadCrumb";
 export * from "./Accordion";
+export * from "./ToggleGroup";

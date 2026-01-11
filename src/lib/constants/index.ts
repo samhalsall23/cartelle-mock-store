@@ -5,3 +5,4 @@ export * from "./support-contact-info";
 export * from "./about-page-data";
 export * from "./store-collections";
 export * from "./api-routes";
+export * from "./product-page-data";

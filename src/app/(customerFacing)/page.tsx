@@ -38,7 +38,10 @@ export default async function HomePage() {
               subheading="Fresh Selections"
             />
             <Link
-              className={getButtonStyles("light", "ms-auto h-fit")}
+              className={getButtonStyles(
+                "light",
+                "ms-auto h-fit hidden md:block",
+              )}
               href={routes.shop}
             >
               {"View all products"}

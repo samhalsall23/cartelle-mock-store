@@ -28,20 +28,31 @@ function AccordionItem({
 function AccordionTrigger({
   className,
   children,
+  smallVariant = false,
   ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Trigger>) {
+}: React.ComponentProps<typeof AccordionPrimitive.Trigger> & {
+  smallVariant?: boolean;
+}) {
   return (
     <AccordionPrimitive.Header className="flex">
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "cursor-pointer focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-neutral-11 text-left text-base xl:text-lg font-normal tracking-tight transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180",
+          "cursor-pointer focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md text-neutral-11 text-left font-normal tracking-tight transition-all outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 [&[data-state=open]>svg]:rotate-180",
+          smallVariant
+            ? "py-3 text-sm xl:text-base items-center"
+            : "py-4 text-base xl:text-lg",
           className,
         )}
         {...props}
       >
         {children}
-        <ChevronDownIcon className="text-neutral-08 pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200" />
+        <ChevronDownIcon
+          className={cn(
+            "text-neutral-08 pointer-events-none shrink-0 translate-y-0.5 transition-transform duration-200",
+            smallVariant ? "size-3.5" : "size-4",
+          )}
+        />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
   );
@@ -50,15 +61,23 @@ function AccordionTrigger({
 function AccordionContent({
   className,
   children,
+  smallVariant = false,
   ...props
-}: React.ComponentProps<typeof AccordionPrimitive.Content>) {
+}: React.ComponentProps<typeof AccordionPrimitive.Content> & {
+  smallVariant?: boolean;
+}) {
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-base xl:text-lg text-neutral-10"
+      className={cn(
+        "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-neutral-10",
+        smallVariant ? "text-sm xl:text-base" : "text-base xl:text-lg",
+      )}
       {...props}
     >
-      <div className={cn("pt-0 pb-4", className)}>{children}</div>
+      <div className={cn(smallVariant ? "pt-0 pb-3" : "pt-0 pb-4", className)}>
+        {children}
+      </div>
     </AccordionPrimitive.Content>
   );
 }
