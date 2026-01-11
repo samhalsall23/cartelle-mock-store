@@ -171,6 +171,13 @@ export default async function ProductPage(props: ProductPageProps) {
             primaryImageUrl={"/assets/clothes-model.jpg"}
             hoverImageUrl={"/assets/clothes-model-hover.jpg"}
           />
+          <ProductTile
+            id={"2"}
+            name={"Premium Wool Blend Sweater"}
+            price={159.99}
+            primaryImageUrl={"/assets/clothes-model.jpg"}
+            hoverImageUrl={"/assets/clothes-model-hover.jpg"}
+          />
         </div>
       </BaseSection>
     </main>
