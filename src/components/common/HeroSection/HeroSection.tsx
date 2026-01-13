@@ -60,7 +60,7 @@ export function HeroSection() {
               <h1 className={cn("text-[clamp(2.5rem,8vw,5rem)]!")}>
                 Effortlessly Selling
               </h1>
-              <h5 className="text-white md:text-neutral-04">
+              <h5 className="text-white md:text-neutral-04 font-medium">
                 Discover quality products with fast shipping and secure
                 checkout.
               </h5>

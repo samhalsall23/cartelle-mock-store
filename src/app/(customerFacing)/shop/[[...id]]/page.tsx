@@ -6,44 +6,21 @@ import {
 } from "@/components";
 
 import { STORE_COLLECTIONS } from "@/lib";
-
-// === MOCK PRODUCTS GRID COMPONENT ===
-function ProductsGrid() {
-  return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
-      <ProductTile
-        id={"1"}
-        name={"Organic Cotton Oversized Tee"}
-        price={89.99}
-        primaryImageUrl={"/assets/clothes-model.jpg"}
-        hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-      />
-      <ProductTile
-        id={"2"}
-        name={"Premium Wool Blend Sweater"}
-        price={159.99}
-        primaryImageUrl={"/assets/clothes-model.jpg"}
-        hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-      />
-      <ProductTile
-        id={"3"}
-        name={"Vintage Denim Straight Leg Jeans"}
-        price={129.99}
-        primaryImageUrl={"/assets/clothes-model.jpg"}
-        hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-      />
-    </div>
-  );
-}
+import { getProductsByCategory } from "@/lib/server";
 
 // === PAGE ===
 export default async function ShopPage({
   params,
 }: {
-  params: Promise<{ id?: string[] }>;
+  params: Promise<{ ids?: string[] }>;
 }) {
   // === PARAMS ===
-  const { id } = await params;
+  const { ids } = await params;
+  const paramCategory = ids?.[1];
+
+  // === FETCHES ===
+  const products = await getProductsByCategory(paramCategory);
+  const productsList = products.success ? products.data : [];
 
   // === CONSTANTS ===
   const DEFAULT_TITLE = "Explore Our Shop";
@@ -52,9 +29,9 @@ export default async function ShopPage({
 
   // === FUNCTIONS ===
   const getTitle = (): { title: string; description: string } => {
-    // /shop/collections/[collection-id]
-    if (id && id.length === 2) {
-      const [, collectionId] = id;
+    // /shop/collections/[collection-ids]
+    if (ids && ids.length === 2) {
+      const [, collectionId] = ids;
       const storeCollection = STORE_COLLECTIONS.find(
         (collection) => collectionId === collection.slug,
       );
@@ -66,8 +43,8 @@ export default async function ShopPage({
     }
 
     // /shop/new-arrivals or /shop/collections
-    if (id && id.length === 1) {
-      const [subpage] = id;
+    if (ids && ids.length === 1) {
+      const [subpage] = ids;
 
       if (subpage === "collections") {
         return {
@@ -109,7 +86,36 @@ export default async function ShopPage({
       <BaseSection id="products-section" className="pb-16 xl:pb-20">
         <div className="relative flex flex-col md:flex-row gap-8 md:gap-12">
           <ShopSidebar collections={STORE_COLLECTIONS} />
-          <ProductsGrid />
+
+          {/* ERROR LOADING PRODUCTS */}
+          {products.success === false && (
+            <p className="text-neutral-8 text-center col-span-full">
+              Failed to load products.
+            </p>
+          )}
+
+          {/* PRODUCTS GRID */}
+          {products.success && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
+              {products.data.length === 0 && (
+                <p className="text-neutral-8 text-center col-span-full">
+                  No products found.
+                </p>
+              )}
+              {products.data.length > 0 &&
+                products.data.map((product, index) => (
+                  <ProductTile
+                    priority={index < 3}
+                    key={product.id}
+                    id={product.id}
+                    name={product.name}
+                    price={product.price.toNumber()}
+                    primaryImageUrl={product.images[0]}
+                    hoverImageUrl={product.images[1]}
+                  />
+                ))}
+            </div>
+          )}
         </div>
       </BaseSection>
     </main>

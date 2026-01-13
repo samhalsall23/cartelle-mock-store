@@ -55,7 +55,9 @@ export function ProductTile(props: ProductTileProps) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <p className="text-lg text-neutral-12 line-clamp-2">{name}</p>
+        <p className="text-lg text-neutral-12 line-clamp-2 font-medium">
+          {name}
+        </p>
         <p className="text-base text-neutral-10 ">${price.toFixed(2)}</p>
       </div>
     </Link>

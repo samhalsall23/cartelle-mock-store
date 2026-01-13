@@ -19,10 +19,13 @@ import {
 import { HomeVideoSectionWrapper } from "@/components/common/HomeVideoSection/HomeVideoSectionClient";
 import { mockReviews } from "@/components/common/ReviewCardsSection/data";
 import { routes, screamingSnakeToTitle, STORE_COLLECTIONS } from "@/lib";
-import { getHomePageBlogs } from "@/lib/server";
+import { getHomePageBlogs, getThreeLatestProducts } from "@/lib/server";
 
 export default async function HomePage() {
   // === QUERIES ===
+  const products = await getThreeLatestProducts();
+  const productsList = products.success ? products.data : [];
+
   const blogPostsResponse = await getHomePageBlogs();
   const blogPosts = blogPostsResponse.success ? blogPostsResponse.data : [];
 
@@ -47,29 +50,20 @@ export default async function HomePage() {
               {"View all products"}
             </Link>
           </div>
+
           <AnimateFadeIn className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            <ProductTile
-              id={"1"}
-              name={"Organic Cotton Oversized Tee"}
-              price={89.99}
-              primaryImageUrl={"/assets/clothes-model.jpg"}
-              hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-            />
-            <ProductTile
-              id={"2"}
-              name={"Premium Wool Blend Sweater"}
-              price={159.99}
-              primaryImageUrl={"/assets/clothes-model.jpg"}
-              hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-            />
-            <ProductTile
-              id={"3"}
-              name={"Vintage Denim Straight Leg Jeans"}
-              price={129.99}
-              primaryImageUrl={"/assets/clothes-model.jpg"}
-              hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-            />
+            {productsList.map((product) => (
+              <ProductTile
+                key={product.id}
+                id={product.id}
+                name={product.name}
+                price={product.price.toNumber()}
+                primaryImageUrl={product.images[0]}
+                hoverImageUrl={product.images[1]}
+              />
+            ))}
           </AnimateFadeIn>
+
           <Button
             className="w-full md:hidden"
             variant="light"

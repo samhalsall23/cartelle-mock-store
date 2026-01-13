@@ -2,12 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 
-import { OrderStatus, ProductCategoryEnum } from "@prisma/client";
+import { OrderStatus, Product, ProductCategoryEnum } from "@prisma/client";
 
 import { prisma } from "../prisma";
 import {
   ProductGetAllCounts,
-  ProductGetByIdResponse,
   ProductMutationInput,
   ServerActionResponse,
 } from "@/types";
@@ -16,6 +15,31 @@ import { handleServerAction } from "./helpers";
 import { AdminProductsFormNoFileData } from "@/components/admin";
 
 // === FETCHES ===
+export async function getThreeLatestProducts(): Promise<
+  ServerActionResponse<Product[]>
+> {
+  return handleServerAction(async () => {
+    const products = await prisma.product.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 3,
+    });
+
+    return products;
+  });
+}
+
+export async function getProductsByCategory(
+  category?: string,
+): Promise<ServerActionResponse<Product[]>> {
+  return handleServerAction(async () => {
+    const products = await prisma.product.findMany({
+      where: category ? { category: category as ProductCategoryEnum } : {},
+    });
+
+    return products;
+  });
+}
+
 export async function getAllProductsWithTotalSold(): Promise<
   ServerActionResponse<ProductGetAllCounts[]>
 > {
@@ -52,7 +76,7 @@ export async function getAllProductsWithTotalSold(): Promise<
 
 export async function getProductById(
   id: string,
-): Promise<ServerActionResponse<ProductGetByIdResponse | null>> {
+): Promise<ServerActionResponse<Product | null>> {
   return handleServerAction(async () => {
     const product = await prisma.product.findFirst({
       where: { id },
@@ -64,7 +88,7 @@ export async function getProductById(
 
 export async function getProductBySlug(
   slug: string,
-): Promise<ServerActionResponse<ProductGetByIdResponse | null>> {
+): Promise<ServerActionResponse<Product | null>> {
   return handleServerAction(async () => {
     const product = await prisma.product.findFirst({
       where: { slug },
