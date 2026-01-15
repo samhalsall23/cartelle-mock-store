@@ -46,11 +46,15 @@ export async function getAllProductsWithTotalSold(): Promise<
   return handleServerAction(async () => {
     const products = await prisma.product.findMany({
       include: {
-        orderItems: {
-          where: {
-            order: {
-              status: {
-                notIn: [OrderStatus.CANCELLED, OrderStatus.REFUNDED],
+        cartItems: {
+          include: {
+            cart: {
+              include: {
+                order: {
+                  select: {
+                    status: true,
+                  },
+                },
               },
             },
           },
@@ -59,11 +63,18 @@ export async function getAllProductsWithTotalSold(): Promise<
     });
 
     return products.map((product) => {
-      // Need to sum up total sold from order items as can order multiple quantities of same product
-      const totalSold = product.orderItems.reduce(
-        (sum, item) => sum + item.quantity,
-        0,
-      );
+      // Sum up total sold from cart items where cart has an order that's not cancelled/refunded
+      const totalSold = product.cartItems.reduce((sum, item) => {
+        const order = item.cart.order;
+        if (
+          order &&
+          order.status !== OrderStatus.CANCELLED &&
+          order.status !== OrderStatus.REFUNDED
+        ) {
+          return sum + item.quantity;
+        }
+        return sum;
+      }, 0);
 
       return {
         ...product,

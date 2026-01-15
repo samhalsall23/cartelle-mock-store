@@ -7,18 +7,22 @@ export type ProductMutationInput = { id: string };
 export type ProductGetAllCounts = Omit<
   Prisma.ProductGetPayload<{
     include: {
-      orderItems: {
+      cartItems: {
         include: {
-          order: {
-            select: {
-              status: true;
+          cart: {
+            include: {
+              order: {
+                select: {
+                  status: true;
+                };
+              };
             };
           };
         };
       };
     };
   }>,
-  "orderItems" | "price"
+  "cartItems" | "price"
 > & {
   totalSold: number;
   price: number;
