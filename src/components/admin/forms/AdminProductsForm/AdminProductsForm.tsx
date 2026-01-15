@@ -99,6 +99,36 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
   const isActiveValue = watch("isActive");
 
   // === FUNCTIONS ===
+  const compressImage = async (file: File): Promise<File | null> => {
+    try {
+      const compressedBlob = await imageCompression(file, {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      });
+
+      if (compressedBlob.size > 1 * 1024 * 1024) {
+        toast.error(
+          `Error compressing ${file.name}. Please choose smaller files.`,
+        );
+        return null;
+      }
+
+      if (!["image/jpeg", "image/png"].includes(compressedBlob.type)) {
+        toast.error(`${file.name}: Only JPEG and PNG formats are accepted`);
+        return null;
+      }
+
+      return new File([compressedBlob], file.name, {
+        type: compressedBlob.type,
+        lastModified: Date.now(),
+      });
+    } catch {
+      toast.error(`Failed to compress ${file.name}`);
+      return null;
+    }
+  };
+
   const handleRemoveImage = (index: number, previewUrl: string) => {
     // TO DO: Refactor to not calculate offset
     if (existingImageUrls.includes(previewUrl)) {
@@ -125,55 +155,24 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
       return;
     }
 
-    const compressionPromises = selectedFiles.map(async (file) => {
-      try {
-        const compressedBlob = await imageCompression(file, {
-          maxSizeMB: 1, // 1MB
-          maxWidthOrHeight: 1920, // Full HD width for zoom and large displays
-          useWebWorker: true,
-        });
+    // Compress all selected files in parallel
+    const compressionResults = await Promise.all(
+      selectedFiles.map(compressImage),
+    );
 
-        if (compressedBlob.size > 1 * 1024 * 1024) {
-          toast.error(
-            `Error compressing ${file.name}. Please choose smaller files.`,
-          );
-          return null;
-        }
+    // Filter out failed compressions
+    const validFiles = compressionResults.filter(
+      (file): file is File => file !== null,
+    );
 
-        if (!["image/jpeg", "image/png"].includes(compressedBlob.type)) {
-          toast.error(`${file.name}: Only JPEG and PNG formats are accepted`);
-          return null;
-        }
-
-        return new File([compressedBlob], file.name, {
-          type: compressedBlob.type,
-          lastModified: Date.now(),
-        });
-      } catch {
-        toast.error(`Failed to compress ${file.name}`);
-        return null;
-      }
-    });
-
-    const compressionResults = await Promise.all(compressionPromises);
-
-    const compressedFiles: File[] = [];
-
-    compressionResults.forEach((file) => {
-      if (file) {
-        compressedFiles.push(file);
-      }
-    });
-
-    if (compressedFiles.length === 0) {
+    if (validFiles.length === 0) {
       return;
     }
 
-    const updatedFiles = [...files, ...compressedFiles];
+    // Add new files to existing ones
+    const updatedFiles = [...files, ...validFiles];
 
-    setValue("images", updatedFiles, {
-      shouldValidate: true,
-    });
+    setValue("images", updatedFiles, { shouldValidate: true });
     setFiles(updatedFiles);
   };
 
