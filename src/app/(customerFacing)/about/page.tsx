@@ -103,7 +103,7 @@ export default function AboutPage() {
         id="about-us-section-team"
         className="py-16 xl:py-20 gap-8 flex flex-col"
       >
-        <SectionHeading heading="Meet Our Team" subheading="The super heros" />
+        <SectionHeading heading="Meet Our Team" subheading="The superheroes" />
         <div className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
           {aboutTeamMembersData.map((member, index) => (
             <AnimateFadeIn delay={index * 0.15} key={member.name}>
