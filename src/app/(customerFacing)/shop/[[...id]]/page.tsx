@@ -108,6 +108,7 @@ export default async function ShopPage({
                     priority={index < 3}
                     key={product.id}
                     id={product.id}
+                    slug={product.slug}
                     name={product.name}
                     price={product.price.toNumber()}
                     primaryImageUrl={product.images[0]}

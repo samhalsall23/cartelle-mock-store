@@ -1,3 +1,4 @@
+import { routes } from "@/lib";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -8,6 +9,7 @@ type ProductTileProps = {
   primaryImageUrl: string;
   hoverImageUrl: string;
   priority?: boolean;
+  slug?: string;
 };
 
 export function ProductTile(props: ProductTileProps) {
@@ -19,11 +21,13 @@ export function ProductTile(props: ProductTileProps) {
     primaryImageUrl,
     hoverImageUrl,
     priority = false,
+    slug = "",
   } = props;
 
   return (
     <Link
-      href={`/product/${id}`}
+      id={id}
+      href={slug ? `/${routes.product}/${slug}` : `/${routes.product}/${id}`}
       className="group relative flex flex-col gap-3 w-full"
     >
       <div className="relative aspect-square overflow-hidden rounded-sm">

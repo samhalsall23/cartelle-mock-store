@@ -159,6 +159,7 @@ export default async function ProductPage(props: ProductPageProps) {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full relative">
           <ProductTile
             id={"1"}
+            slug="organic-cotton-oversized-tee"
             name={"Organic Cotton Oversized Tee"}
             price={89.99}
             primaryImageUrl={"/assets/clothes-model.jpg"}
@@ -166,6 +167,7 @@ export default async function ProductPage(props: ProductPageProps) {
           />
           <ProductTile
             id={"2"}
+            slug="ss"
             name={"Premium Wool Blend Sweater"}
             price={159.99}
             primaryImageUrl={"/assets/clothes-model.jpg"}
@@ -173,6 +175,7 @@ export default async function ProductPage(props: ProductPageProps) {
           />
           <ProductTile
             id={"2"}
+            slug="2"
             name={"Premium Wool Blend Sweater"}
             price={159.99}
             primaryImageUrl={"/assets/clothes-model.jpg"}
