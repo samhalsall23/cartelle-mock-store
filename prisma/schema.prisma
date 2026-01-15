@@ -1,12 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  // output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,7 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// === PRODUCT MODEL ===
+// === PRODUCT ===
 model Product {
   id          String              @id @default(cuid())
   name        String
@@ -24,13 +17,22 @@ model Product {
   createdAt   DateTime            @default(now())
   updatedAt   DateTime            @updatedAt
   images      String[]
-  sizes       Size[]
-  category    ProductCategoryEnum
   slug        String              @unique
-  orderItems  OrderItem[]
+  category    ProductCategoryEnum
+  cartItems   CartItem[]
+  sizes       Size[]
 }
 
-// === SIZE MODEL ===
+model Size {
+  id         String     @id @default(cuid())
+  name       SizeEnum?
+  customName String?
+  productId  String
+  stock      Int        @default(0)
+  cartItems  CartItem[]
+  product    Product    @relation(fields: [productId], references: [id])
+}
+
 enum SizeEnum {
   XS
   S
@@ -39,17 +41,6 @@ enum SizeEnum {
   XL
 }
 
-model Size {
-  id         String      @id @default(cuid())
-  name       SizeEnum?
-  customName String? // For sizes not in enum
-  productId  String
-  product    Product     @relation(fields: [productId], references: [id])
-  stock      Int         @default(0)
-  orderItems OrderItem[]
-}
-
-// === CATEGORY MODEL ===
 enum ProductCategoryEnum {
   DRESSES
   OUTERWEAR
@@ -58,7 +49,71 @@ enum ProductCategoryEnum {
   SHOES
 }
 
-// === ORDER MODEL ===
+// === CART ===
+model Cart {
+  id          String     @id @default(cuid())
+  userId      String?
+  status      CartStatus @default(ACTIVE)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  checkoutAt  DateTime?
+  abandonedAt DateTime?
+
+  items CartItem[]
+  order Order?
+
+  @@index([status])
+  @@index([updatedAt])
+}
+
+model CartItem {
+  id        String  @id @default(cuid())
+  cartId    String
+  productId String
+  sizeId    String
+  quantity  Int
+  unitPrice Decimal @db.Decimal(10, 2)
+  title     String
+  image     String
+
+  cart    Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+  size    Size    @relation(fields: [sizeId], references: [id])
+
+  @@unique([cartId, productId, sizeId])
+}
+
+enum CartStatus {
+  ACTIVE
+  CHECKOUT
+  ABANDONED
+  ORDERED
+}
+
+// === ORDER ===
+model Order {
+  id              String        @id @default(cuid())
+  orderNumber     Int           @default(autoincrement())
+  cartId          String        @unique
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  customerName    String
+  customerEmail   String
+  customerAddress String
+  customerPhone   String
+  totalPrice      Decimal       @db.Decimal(10, 2)
+  status          OrderStatus   @default(PENDING)
+  paymentMethod   PaymentMethod
+  paymentStatus   PaymentStatus @default(PENDING)
+
+  cart Cart @relation(fields: [cartId], references: [id])
+
+  @@index([customerEmail])
+  @@index([status])
+  @@index([paymentStatus])
+  @@index([createdAt])
+}
+
 enum OrderStatus {
   PENDING
   PAID
@@ -80,49 +135,7 @@ enum PaymentMethod {
   STRIPE
 }
 
-model Order {
-  id              String        @id @default(cuid())
-  orderNumber     Int           @default(autoincrement())
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  customerName    String
-  customerEmail   String
-  customerAddress String
-  customerPhone   String
-  totalPrice      Decimal       @db.Decimal(10, 2)
-  status          OrderStatus   @default(PENDING)
-  paymentMethod   PaymentMethod
-  paymentStatus   PaymentStatus @default(PENDING)
-  items           OrderItem[]
-
-  @@index([customerEmail])
-  @@index([status])
-  @@index([paymentStatus])
-  @@index([createdAt])
-}
-
-model OrderItem {
-  id        String  @id @default(cuid())
-  orderId   String
-  order     Order   @relation(fields: [orderId], references: [id])
-  productId String
-  product   Product @relation(fields: [productId], references: [id])
-  sizeId    String
-  size      Size?   @relation(fields: [sizeId], references: [id])
-  quantity  Int
-  unitPrice Decimal @db.Decimal(10, 2)
-  lineTotal Decimal @db.Decimal(10, 2)
-}
-
-// === BLOG MODEL ===
-enum BlogCategory {
-  TRENDS
-  SUSTAINABILITY
-  STYLE_GUIDES
-  DESIGNERS
-  SHOPPING_TIPS
-}
-
+// === BLOG ===
 model BlogPost {
   id           String       @id @default(cuid())
   title        String
@@ -133,10 +146,10 @@ model BlogPost {
   publishedAt  DateTime?
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
-  author       Author       @relation(fields: [authorId], references: [id])
   authorId     String
-  duration     Int // Estimated reading time in minutes
+  duration     Int
   blogImageUrl String
+  author       Author       @relation(fields: [authorId], references: [id])
 }
 
 model Author {
@@ -145,4 +158,12 @@ model Author {
   occupation String
   avatarUrl  String
   posts      BlogPost[]
+}
+
+enum BlogCategory {
+  TRENDS
+  SUSTAINABILITY
+  STYLE_GUIDES
+  DESIGNERS
+  FASHION_NEWS
 }
