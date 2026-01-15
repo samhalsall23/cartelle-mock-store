@@ -241,8 +241,6 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
           </AdminFieldSet>
         </AdminFieldGroup>
       </form>
-
-      <AdminToaster position="top-right" />
     </div>
   );
 }

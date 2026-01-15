@@ -354,8 +354,6 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
           </AdminFieldSet>
         </AdminFieldGroup>
       </form>
-
-      <AdminToaster position="top-right" />
     </div>
   );
 }

@@ -24,7 +24,6 @@ import {
   AdminAlertDialogAction,
   AdminAlertDialogHeader,
   AdminAlertDialogFooter,
-  AdminToaster,
   AdminInput,
 } from "@/components/admin";
 import { deleteAuthorById } from "@/lib/server";
@@ -138,9 +137,6 @@ export function AdminAuthorsTable({
           },
         ]}
       />
-
-      {/* === TOASTER === */}
-      <AdminToaster position="top-right" />
 
       {/* === DELETE CONFIRMATION MODAL === */}
       <AdminAlertDialog

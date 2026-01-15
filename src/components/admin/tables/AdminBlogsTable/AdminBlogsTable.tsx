@@ -23,7 +23,6 @@ import {
   AdminAlertDialogAction,
   AdminAlertDialogHeader,
   AdminAlertDialogFooter,
-  AdminToaster,
   AdminInput,
   AdminDropdownMenuLabel,
   AdminDropdownMenuCheckboxItem,
@@ -179,9 +178,6 @@ export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
           },
         ]}
       />
-
-      {/* === TOASTER === */}
-      <AdminToaster position="top-right" />
 
       {/* === DELETE CONFIRMATION MODAL === */}
       <AdminAlertDialog

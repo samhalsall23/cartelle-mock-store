@@ -1,6 +1,6 @@
 import React from "react";
 
-import { AdminNavbar } from "@/components/admin";
+import { AdminNavbar, AdminToaster } from "@/components/admin";
 
 export default function AdminLayout({
   children,
@@ -13,6 +13,7 @@ export default function AdminLayout({
       <main className="flex-1 px-5 md:px-10 xl:px-12 py-6 bg-white">
         {children}
       </main>
+      <AdminToaster position="top-right" />
     </div>
   );
 }

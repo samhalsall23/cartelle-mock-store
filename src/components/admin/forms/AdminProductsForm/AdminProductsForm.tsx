@@ -18,7 +18,6 @@ import {
   AdminFieldLabel,
   AdminFieldSet,
   AdminInput,
-  AdminToaster,
   AdminTextarea,
   AdminSelect,
   AdminSelectTrigger,
@@ -477,8 +476,6 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
           </AdminFieldSet>
         </AdminFieldGroup>
       </form>
-
-      <AdminToaster position="top-right" />
     </div>
   );
 }
