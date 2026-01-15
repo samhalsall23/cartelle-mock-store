@@ -82,6 +82,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
       category: productData?.category,
       slug: productData?.slug,
       isActive: productData?.isActive ?? true,
+      imageUrls: productData?.images || [],
     },
   });
 
@@ -101,7 +102,9 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
   const handleRemoveImage = (index: number, previewUrl: string) => {
     // TO DO: Refactor to not calculate offset
     if (existingImageUrls.includes(previewUrl)) {
-      setExistingImageUrls((prev) => prev.filter((url) => url !== previewUrl));
+      const updatedUrls = existingImageUrls.filter((url) => url !== previewUrl);
+      setExistingImageUrls(updatedUrls);
+      setValue("imageUrls", updatedUrls, { shouldValidate: true });
       return;
     }
 
@@ -185,10 +188,6 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
     productId?: string;
     existingImageUrls?: string[];
   }) => {
-    if (!isEdit && !data.images?.length) {
-      return toast.error("Please select at least one image");
-    }
-
     try {
       let uploadedUrls: string[] = [];
 
