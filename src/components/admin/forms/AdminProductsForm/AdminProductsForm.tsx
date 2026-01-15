@@ -58,12 +58,9 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
   // === STATE ===
   const [files, setFiles] = useState<File[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [existingImageUrls, setExistingImageUrls] = useState<string[]>(
-    productData?.images || [],
-  );
 
   // === HOOKS ===
-  const sessionPreviewUrls = usePreviewUrls(files);
+  const newImagePreviews = usePreviewUrls(files);
 
   const {
     register,
@@ -86,17 +83,18 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
     },
   });
 
-  // === MEMOS ===
-  const previewUrls = useMemo(() => {
-    if (!productData) {
-      return sessionPreviewUrls;
-    }
-    return [...existingImageUrls, ...sessionPreviewUrls];
-  }, [sessionPreviewUrls, existingImageUrls, productData]);
-
   // === WATCHERS ===
   const categoryValue = watch("category");
   const isActiveValue = watch("isActive");
+  const savedImageUrls = watch("imageUrls") || []; // Existing images from database
+
+  // === MEMOS ===
+  const allImagePreviews = useMemo(() => {
+    if (!productData) {
+      return newImagePreviews;
+    }
+    return [...savedImageUrls, ...newImagePreviews];
+  }, [newImagePreviews, savedImageUrls, productData]);
 
   // === FUNCTIONS ===
   const compressImage = async (file: File): Promise<File | null> => {
@@ -131,9 +129,8 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
 
   const handleRemoveImage = (index: number, previewUrl: string) => {
     // TO DO: Refactor to not calculate offset
-    if (existingImageUrls.includes(previewUrl)) {
-      const updatedUrls = existingImageUrls.filter((url) => url !== previewUrl);
-      setExistingImageUrls(updatedUrls);
+    if (savedImageUrls.includes(previewUrl)) {
+      const updatedUrls = savedImageUrls.filter((url) => url !== previewUrl);
       setValue("imageUrls", updatedUrls, { shouldValidate: true });
       return;
     }
@@ -253,7 +250,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
       data,
       isEdit: true,
       productId: productData?.id,
-      existingImageUrls: existingImageUrls || [],
+      existingImageUrls: savedImageUrls,
     });
 
   const onDelete = async () => {
@@ -354,17 +351,18 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
                 >
                   Choose Files
                 </AdminButton>
-                {previewUrls.length > 0 && (
+                {allImagePreviews.length > 0 && (
                   <AdminFieldDescription>
-                    {previewUrls.length}{" "}
-                    {previewUrls.length === 1 ? "file" : "files"} selected
+                    {allImagePreviews.length}{" "}
+                    {allImagePreviews.length === 1 ? "file" : "files"} selected
                   </AdminFieldDescription>
                 )}
                 <AdminFieldError errors={[errors.images]} />
 
-                {(previewUrls.length > 0 || productData?.images.length) && (
+                {(allImagePreviews.length > 0 ||
+                  productData?.images.length) && (
                   <div className="grid grid-cols-3 gap-4 mt-2">
-                    {previewUrls.map((preview, index) => (
+                    {allImagePreviews.map((preview, index) => (
                       <div
                         key={index}
                         className="relative w-full aspect-square group"
