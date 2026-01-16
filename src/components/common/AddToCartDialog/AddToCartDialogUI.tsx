@@ -15,11 +15,11 @@ type AddToCartDialogUIProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   productName: string;
-  price: number;
+  price: string;
   imageUrl: string;
   size?: string;
-  productType?: string;
-  cartItemCount?: number;
+  category?: string;
+  quantity?: number;
 };
 
 export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
@@ -31,13 +31,13 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
     price,
     imageUrl,
     size,
-    productType,
-    cartItemCount,
+    category,
+    quantity,
   } = props;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md">
+      <DialogContent>
         <DialogHeader>
           <div className="flex items-center gap-2 py-2">
             <CircleCheckIcon />
@@ -58,16 +58,14 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
               />
             </div>
             <div className="flex flex-1 flex-col gap-1.5">
-              <h4 className="text-base line-clamp-2">{productName}</h4>
-              {productType && (
-                <p className="text-sm text-neutral-10">{productType}</p>
+              <h4 className="text-lg line-clamp-2">{productName}</h4>
+              {category && (
+                <p className="text-sm text-neutral-10">{category}</p>
               )}
               <div className="flex flex-col gap-0.5 text-sm text-neutral-10">
                 {size && <p>Size {size}</p>}
               </div>
-              <p className="mt-auto text-base text-neutral-10">
-                ${price.toFixed(2)}
-              </p>
+              <p className="mt-auto text-base text-neutral-10">${price}</p>
             </div>
           </div>
 
@@ -78,7 +76,7 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
               className={getButtonStyles("light")}
               onClick={() => onOpenChange(false)}
             >
-              View Cart{cartItemCount ? ` (${cartItemCount})` : ""}
+              View Cart{quantity ? ` (${quantity})` : ""}
             </Link>
             <Link
               href="/checkout"

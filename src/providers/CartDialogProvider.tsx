@@ -5,11 +5,11 @@ import { createContext, useContext, useState, ReactNode } from "react";
 // === TYPES ===
 interface DialogProduct {
   productName: string;
-  price: number;
+  price: string;
   imageUrl: string;
   size?: string;
-  productType?: string;
-  cartItemCount?: number;
+  category?: string;
+  quantity?: number;
 }
 
 interface CartContextType {

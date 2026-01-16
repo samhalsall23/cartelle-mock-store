@@ -38,7 +38,7 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed left-0 right-0 bottom-0 top-0 md:top-[81.594] z-50 md:z-20 bg-black/50",
         className,
       )}
       {...props}
@@ -60,12 +60,10 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "bg-background data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed z-50 grid w-full gap-4 rounded-lg border p-6 shadow-lg duration-200 outline-none",
-          // Mobile: bottom sheet - slides up from bottom
-          "bottom-0 left-0 right-0 w-full rounded-b-none",
+          "bg-white data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed z-50 grid w-full gap-4 rounded-lg  p-6 shadow-lg duration-200 outline-none",
+          "bottom-0 left-0 right-0 w-dvw rounded-b-none max-w-none",
           "data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom",
-          // Desktop (md+): top-right under navbar - slides down from top
-          "md:bottom-auto md:left-auto md:right-6 md:top-20 md:max-w-md md:rounded-sm md:rounded-t-none",
+          "md:bottom-auto md:left-auto md:right-12 md:top-20 md:max-w-md md:rounded-sm md:rounded-t-none",
           "md:data-[state=closed]:slide-out-to-top md:data-[state=open]:slide-in-from-top",
           className,
         )}
@@ -116,7 +114,7 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-base text-neutral-10", className)}
+      className={cn("text-base text-neutral-12", className)}
       {...props}
     />
   );

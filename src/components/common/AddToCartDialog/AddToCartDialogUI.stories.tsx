@@ -30,7 +30,7 @@ const meta = {
       description: "Name of the product added to cart",
     },
     price: {
-      control: { type: "number", min: 0, step: 0.01 },
+      control: "text",
       description: "Product price",
     },
     imageUrl: {
@@ -41,11 +41,11 @@ const meta = {
       control: "text",
       description: "Selected size (optional)",
     },
-    productType: {
+    category: {
       control: "text",
       description: "Product type/category (optional)",
     },
-    cartItemCount: {
+    quantity: {
       control: { type: "number", min: 0, step: 1 },
       description: "Total items in cart for 'View Cart' button",
     },
@@ -58,11 +58,11 @@ type Story = StoryObj<typeof meta>;
 export const Interactive: Story = {
   args: {
     productName: "Cashmere Blend Turtleneck Sweater",
-    productType: "Luxury Knitwear",
-    price: 495.0,
+    category: "Luxury Knitwear",
+    price: "495.00",
     imageUrl: "/assets/clothes-model.jpg",
     size: "M",
-    cartItemCount: 3,
+    quantity: 3,
     open: false,
     onOpenChange: () => {},
   },

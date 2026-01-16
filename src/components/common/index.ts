@@ -1,3 +1,4 @@
+export * from "./AddToCartButton";
 export * from "./AddToCartDialog";
 export * from "./HeroSection";
 export * from "./ProductTile";

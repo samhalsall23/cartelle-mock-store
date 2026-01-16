@@ -16,8 +16,8 @@ export function AddToCartDialog() {
       price={dialogProduct.price}
       imageUrl={dialogProduct.imageUrl}
       size={dialogProduct.size}
-      productType={dialogProduct.productType}
-      cartItemCount={dialogProduct.cartItemCount}
+      category={dialogProduct.category}
+      quantity={dialogProduct.quantity}
     />
   );
 }

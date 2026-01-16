@@ -3,10 +3,10 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
+  AddToCartButton,
   AnimatedHeadingText,
   BaseSection,
   BreadCrumb,
-  Button,
   ProductTile,
   ToggleGroup,
   ToggleGroupItem,
@@ -15,7 +15,12 @@ import {
   BLOG_NAVBAR_TEXT,
   SHOP_NAVBAR_TEXT,
 } from "@/components/layout/Navbar/lib";
-import { cn, PRODUCT_ACCORDION_ITEMS, routes } from "@/lib";
+import {
+  cn,
+  PRODUCT_ACCORDION_ITEMS,
+  routes,
+  screamingSnakeToTitle,
+} from "@/lib";
 import { getProductBySlug } from "@/lib/server";
 import Image from "next/image";
 
@@ -70,7 +75,7 @@ export default async function ProductPage(props: ProductPageProps) {
                   key={index}
                   className={cn(
                     "relative w-full h-0 pb-[100%]",
-                    index === 0 && "hidden lg:block",
+                    index !== 0 && "hidden lg:block",
                   )}
                 >
                   <Image
@@ -112,7 +117,15 @@ export default async function ProductPage(props: ProductPageProps) {
                     <ToggleGroupItem value="xl">XL</ToggleGroupItem>
                   </ToggleGroup>
                 </div>
-                <Button text="Add to Cart" className="w-full" />
+                <AddToCartButton
+                  productId={product.id}
+                  productName={product.name}
+                  price={product.price.toFixed(2)}
+                  imageUrl={product.images[0]}
+                  size="M"
+                  category={screamingSnakeToTitle(product.category)}
+                  className="w-full"
+                />
               </div>
 
               <Accordion collapsible type="single">
@@ -134,7 +147,7 @@ export default async function ProductPage(props: ProductPageProps) {
                   key={index}
                   className={cn(
                     "relative w-full h-0 pb-[100%]",
-                    index > 0 && "hidden lg:block",
+                    index === 0 && "hidden lg:block",
                   )}
                 >
                   <Image

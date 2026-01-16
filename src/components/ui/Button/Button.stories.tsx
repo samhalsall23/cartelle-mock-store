@@ -71,3 +71,18 @@ export const Disabled: Story = {
     disabled: true,
   },
 };
+
+export const Loading: Story = {
+  args: {
+    text: "Loading Button",
+    isLoading: true,
+  },
+};
+
+export const LightLoading: Story = {
+  args: {
+    text: "Loading Button",
+    isLoading: true,
+    variant: "light",
+  },
+};
