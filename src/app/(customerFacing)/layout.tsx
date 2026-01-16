@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Footer, Navbar } from "@/components";
+import { AddToCartDialog, Footer, Navbar } from "@/components";
+import { CartDialogProvider } from "@/providers";
 
 export default function CustomerLayout({
   children,
@@ -8,10 +9,11 @@ export default function CustomerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <CartDialogProvider>
       <Navbar />
       {children}
       <Footer />
-    </>
+      <AddToCartDialog />
+    </CartDialogProvider>
   );
 }

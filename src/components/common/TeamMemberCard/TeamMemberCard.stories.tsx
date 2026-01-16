@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { TeamMemberCard } from "./TeamMemberCard";
 
 const meta = {
-  title: "Base/TeamMemberCard",
+  title: "Common/TeamMemberCard",
   component: TeamMemberCard,
   parameters: {
     layout: "centered",

@@ -3,7 +3,7 @@ import { ContactCard } from "./ContactCard";
 import { Mail } from "lucide-react";
 
 const meta = {
-  title: "Base/ContactCard",
+  title: "Common/ContactCard",
   component: ContactCard,
   parameters: {
     layout: "centered",

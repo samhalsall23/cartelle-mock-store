@@ -3,7 +3,7 @@ import { HeroSection } from "./HeroSection";
 import { BaseSection } from "@/components/layout";
 
 const meta = {
-  title: "Base/HeroSection",
+  title: "Common/HeroSection",
   component: HeroSection,
   parameters: {
     layout: "fullscreen",

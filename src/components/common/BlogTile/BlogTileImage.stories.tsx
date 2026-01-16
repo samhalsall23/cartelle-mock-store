@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { BlogTileImage } from "./BlogTileImage";
 
 const meta: Meta<typeof BlogTileImage> = {
-  title: "Base/BlogTile/BlogTileImage",
+  title: "Common/BlogTile/BlogTileImage",
   component: BlogTileImage,
   parameters: {
     layout: "centered",

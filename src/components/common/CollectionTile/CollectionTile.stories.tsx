@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { CollectionTile } from "./CollectionTile";
 
 const meta = {
-  title: "Base/CollectionTile",
+  title: "Common/CollectionTile",
   component: CollectionTile,
   parameters: {
     layout: "centered",

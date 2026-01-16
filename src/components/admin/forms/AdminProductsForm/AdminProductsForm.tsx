@@ -85,9 +85,11 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
   // === WATCHERS ===
   const categoryValue = watch("category");
   const isActiveValue = watch("isActive");
-  const savedImageUrls = watch("imageUrls") || []; // Existing images from database
+  const imageUrlsValue = watch("imageUrls");
 
   // === MEMOS ===
+  const savedImageUrls = useMemo(() => imageUrlsValue || [], [imageUrlsValue]);
+
   const allImagePreviews = useMemo(() => {
     if (!productData) {
       return newImagePreviews;

@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { BlogLargeTile } from "./BlogLargeTile";
 
 const meta: Meta<typeof BlogLargeTile> = {
-  title: "Base/BlogTile/BlogLargeTile",
+  title: "Common/BlogTile/BlogLargeTile",
   component: BlogLargeTile,
   parameters: {
     layout: "centered",

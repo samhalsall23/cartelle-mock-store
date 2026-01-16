@@ -27,7 +27,7 @@ export function ProductTile(props: ProductTileProps) {
   return (
     <Link
       id={id}
-      href={slug ? `/${routes.product}/${slug}` : `/${routes.product}/${id}`}
+      href={slug ? `${routes.product}/${slug}` : `${routes.product}/${id}`}
       className="group relative flex flex-col gap-3 w-full"
     >
       <div className="relative aspect-square overflow-hidden rounded-sm">

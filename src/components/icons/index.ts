@@ -9,3 +9,4 @@ export * from "./StarIcon";
 export * from "./EmailIcon";
 export * from "./PhoneIcon";
 export * from "./HomeIcon";
+export * from "./CircleCheckIcon";

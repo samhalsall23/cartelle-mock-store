@@ -28,7 +28,9 @@
       "@/types": ["types"],
       "@/types/*": ["types/*"],
       "@/hooks": ["hooks"],
-      "@/hooks/*": ["hooks/*"]
+      "@/hooks/*": ["hooks/*"],
+      "@/providers": ["providers"],
+      "@/providers/*": ["providers/*"]
     }
   },
   "include": [

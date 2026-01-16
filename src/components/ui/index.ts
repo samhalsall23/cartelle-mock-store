@@ -9,3 +9,4 @@ export * from "./SectionHeading";
 export * from "./BreadCrumb";
 export * from "./Accordion";
 export * from "./ToggleGroup";
+export * from "./Dialog";

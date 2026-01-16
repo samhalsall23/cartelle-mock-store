@@ -25,7 +25,6 @@ import {
   AdminSelectTrigger,
   AdminSelectValue,
   AdminTextarea,
-  AdminToaster,
 } from "@/components/admin";
 
 import { usePreviewUrl } from "@/hooks";

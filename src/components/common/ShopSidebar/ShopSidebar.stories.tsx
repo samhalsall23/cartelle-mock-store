@@ -4,7 +4,7 @@ import { ShopSidebar } from "./ShopSidebar";
 import { STORE_COLLECTIONS } from "@/lib";
 
 const meta = {
-  title: "Base/ShopSidebar",
+  title: "Common/ShopSidebar",
   component: ShopSidebar,
   parameters: {
     layout: "padded",

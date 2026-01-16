@@ -4,7 +4,7 @@ import { ReviewCardsSection } from "./ReviewCardsSection";
 import { mockReviews } from "./data";
 
 const meta = {
-  title: "Base/ReviewCardsSection",
+  title: "Common/ReviewCardsSection",
   component: ReviewCardsSection,
   parameters: {
     layout: "fullscreen",

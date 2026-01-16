@@ -12,15 +12,17 @@ import { getProductsByCategory } from "@/lib/server";
 export default async function ShopPage({
   params,
 }: {
-  params: Promise<{ ids?: string[] }>;
+  params: Promise<{ id?: string[] }>;
 }) {
   // === PARAMS ===
-  const { ids } = await params;
-  const paramCategory = ids?.[1];
+  const { id } = await params;
+  const paramCategory =
+    id && id.length === 2
+      ? id[1].toUpperCase().split("-").join("_")
+      : undefined;
 
   // === FETCHES ===
   const products = await getProductsByCategory(paramCategory);
-  const productsList = products.success ? products.data : [];
 
   // === CONSTANTS ===
   const DEFAULT_TITLE = "Explore Our Shop";
@@ -29,9 +31,9 @@ export default async function ShopPage({
 
   // === FUNCTIONS ===
   const getTitle = (): { title: string; description: string } => {
-    // /shop/collections/[collection-ids]
-    if (ids && ids.length === 2) {
-      const [, collectionId] = ids;
+    // /shop/collections/[collection-id]
+    if (id && id.length === 2) {
+      const [, collectionId] = id;
       const storeCollection = STORE_COLLECTIONS.find(
         (collection) => collectionId === collection.slug,
       );
@@ -43,8 +45,8 @@ export default async function ShopPage({
     }
 
     // /shop/new-arrivals or /shop/collections
-    if (ids && ids.length === 1) {
-      const [subpage] = ids;
+    if (id && id.length === 1) {
+      const [subpage] = id;
 
       if (subpage === "collections") {
         return {
@@ -85,7 +87,10 @@ export default async function ShopPage({
 
       <BaseSection id="products-section" className="pb-16 xl:pb-20">
         <div className="relative flex flex-col md:flex-row gap-8 md:gap-12">
-          <ShopSidebar collections={STORE_COLLECTIONS} />
+          <ShopSidebar
+            collections={STORE_COLLECTIONS}
+            collectionsOpenByDefault={id && id.length === 2}
+          />
 
           {/* ERROR LOADING PRODUCTS */}
           {products.success === false && (

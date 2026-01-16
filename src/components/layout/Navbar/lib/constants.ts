@@ -42,7 +42,7 @@ export const navItems: NavItemType[] = [
         items: STORE_COLLECTIONS.map((collection) => ({
           id: `shop-collection-${collection.id}`,
           text: collection.name,
-          href: `${routes.shop}/collections/${collection.id}`,
+          href: `${routes.shop}/collections/${collection.slug}`,
         })),
       },
     ],

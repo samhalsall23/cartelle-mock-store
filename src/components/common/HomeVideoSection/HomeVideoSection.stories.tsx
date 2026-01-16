@@ -4,7 +4,7 @@ import { HomeVideoSection } from "./HomeVideoSection";
 import { HomeVideoSectionWrapper } from "./HomeVideoSectionClient";
 
 const meta: Meta<typeof HomeVideoSection> = {
-  title: "Base/HomeVideoSection",
+  title: "Common/HomeVideoSection",
   component: HomeVideoSection,
   parameters: {
     layout: "fullscreen",
