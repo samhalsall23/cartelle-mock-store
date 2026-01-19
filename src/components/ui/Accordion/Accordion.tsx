@@ -72,6 +72,7 @@ function AccordionContent({
       className={cn(
         "data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-neutral-10",
         smallVariant ? "text-sm xl:text-base" : "text-base xl:text-lg",
+        className,
       )}
       {...props}
     >
