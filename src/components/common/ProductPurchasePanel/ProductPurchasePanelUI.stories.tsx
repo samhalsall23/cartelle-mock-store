@@ -59,6 +59,7 @@ export const Default: Story = {
     },
     defaultSize: "size_s",
     isLoading: false,
+    isError: false,
     onAddToCart: async () => {},
   },
   render: (args) => (
