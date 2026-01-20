@@ -1,27 +1,17 @@
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-  AddToCartButton,
   AnimatedHeadingText,
   BaseSection,
   BreadCrumb,
   ProductTile,
-  ToggleGroup,
-  ToggleGroupItem,
+  ProductPurchasePanel,
 } from "@/components";
 import {
   BLOG_NAVBAR_TEXT,
   SHOP_NAVBAR_TEXT,
 } from "@/components/layout/Navbar/lib";
-import {
-  cn,
-  PRODUCT_ACCORDION_ITEMS,
-  routes,
-  screamingSnakeToTitle,
-} from "@/lib";
+import { cn, routes } from "@/lib";
 import { getProductBySlug } from "@/lib/server";
+import { SizeTypeEnum } from "@prisma/client";
 import Image from "next/image";
 
 type ProductPageProps = {
@@ -53,7 +43,10 @@ export default async function ProductPage(props: ProductPageProps) {
   }
 
   // === PREPARE DATA ===
-  const product = productData.data;
+  const product = {
+    ...productData.data,
+    price: productData.data.price.toFixed(2),
+  };
 
   return (
     <main>
@@ -90,57 +83,15 @@ export default async function ProductPage(props: ProductPageProps) {
               ))}
             </div>
 
-            <div className="w-full lg:w-[40%] flex flex-col gap-8 lg:gap-10 lg:sticky lg:top-22 self-start">
-              <div className="flex flex-col gap-2">
-                <AnimatedHeadingText
-                  text={product.name}
-                  variant="product-page-title"
-                />
-                <h4 className="text-xl md:text-2xl font-medium pb-2">
-                  ${product.price.toFixed(2)}
-                </h4>
-                <p className="text-neutral-10 text-base">
-                  {product.description}
-                </p>
-              </div>
+            <ProductPurchasePanel
+              product={product}
+              defaultSize={
+                product.sizeType === SizeTypeEnum.OneSize
+                  ? product.sizes[0]?.id
+                  : ""
+              }
+            />
 
-              <div className="flex flex-col gap-6">
-                <div className="flex flex-col gap-3">
-                  <label className="text-sm font-semibold text-neutral-10">
-                    Select Size
-                  </label>
-                  <ToggleGroup type="single">
-                    <ToggleGroupItem value="xs">XS</ToggleGroupItem>
-                    <ToggleGroupItem value="s">S</ToggleGroupItem>
-                    <ToggleGroupItem value="m">M</ToggleGroupItem>
-                    <ToggleGroupItem value="l">L</ToggleGroupItem>
-                    <ToggleGroupItem value="xl">XL</ToggleGroupItem>
-                  </ToggleGroup>
-                </div>
-                <AddToCartButton
-                  productId={product.id}
-                  productName={product.name}
-                  price={product.price.toFixed(2)}
-                  imageUrl={product.images[0]}
-                  size="M"
-                  category={screamingSnakeToTitle(product.category)}
-                  className="w-full"
-                />
-              </div>
-
-              <Accordion collapsible type="single">
-                {PRODUCT_ACCORDION_ITEMS.map((item) => (
-                  <AccordionItem key={item.value} value={item.value}>
-                    <AccordionTrigger className="text-base" smallVariant>
-                      {item.trigger}
-                    </AccordionTrigger>
-                    <AccordionContent className="text-sm" smallVariant>
-                      {item.content}
-                    </AccordionContent>
-                  </AccordionItem>
-                ))}
-              </Accordion>
-            </div>
             <div className="flex flex-col gap-6">
               {product.images.map((imageUrl, index) => (
                 <div

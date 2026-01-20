@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { Product, ProductCategoryEnum } from "@prisma/client";
+import { Product, ProductCategoryEnum, SizeTypeEnum } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -30,7 +30,12 @@ import {
 
 import { AdminProductsFormData, AdminProductsFormSchema } from "./schema";
 
-import { roundToTwoDecimals, STORE_COLLECTIONS, API_ROUTES } from "@/lib";
+import {
+  roundToTwoDecimals,
+  STORE_COLLECTIONS,
+  API_ROUTES,
+  SIZE_TEMPLATES,
+} from "@/lib";
 import {
   createProduct,
   deleteProductById,
@@ -77,6 +82,8 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
         : undefined,
       category: productData?.category,
       slug: productData?.slug,
+      sizeType:
+        isEditMode && productData?.sizeType ? productData?.sizeType : undefined,
       isActive: productData?.isActive ?? true,
       imageUrls: productData?.images || [],
     },
@@ -84,6 +91,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
 
   // === WATCHERS ===
   const categoryValue = watch("category");
+  const sizeTypeValue = watch("sizeType");
   const isActiveValue = watch("isActive");
   const imageUrlsValue = watch("imageUrls");
 
@@ -430,6 +438,40 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
                 </AdminSelectContent>
               </AdminSelect>
               <AdminFieldError errors={[errors.category]} />
+            </AdminField>
+
+            {/* SIZES */}
+            <AdminField>
+              <AdminFieldLabel htmlFor="productSizes">Sizes</AdminFieldLabel>
+              {isEditMode && (
+                <AdminFieldDescription>
+                  Size is not editable
+                </AdminFieldDescription>
+              )}
+              <AdminSelect
+                value={sizeTypeValue ?? ""}
+                disabled={isEditMode}
+                onValueChange={(val) =>
+                  setValue("sizeType", val as SizeTypeEnum, {
+                    shouldValidate: true,
+                  })
+                }
+              >
+                <AdminSelectTrigger id="productSizes" className="w-[180px]">
+                  <AdminSelectValue />
+                </AdminSelectTrigger>
+                <AdminSelectContent>
+                  <AdminSelectGroup>
+                    {Object.keys(SIZE_TEMPLATES).map((size) => (
+                      <AdminSelectItem key={size} value={size}>
+                        {size} (
+                        {SIZE_TEMPLATES[size as SizeTypeEnum].join(", ")})
+                      </AdminSelectItem>
+                    ))}
+                  </AdminSelectGroup>
+                </AdminSelectContent>
+              </AdminSelect>
+              <AdminFieldError errors={[errors.sizeType]} />
             </AdminField>
 
             {/* IS ACTIVE */}

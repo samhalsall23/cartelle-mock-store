@@ -27,3 +27,10 @@ export type ProductGetAllCounts = Omit<
   totalSold: number;
   price: number;
 };
+
+// PRODUCT WITH SIZES
+export type ProductWithSizes = Prisma.ProductGetPayload<{
+  include: {
+    sizes: true;
+  };
+}>;

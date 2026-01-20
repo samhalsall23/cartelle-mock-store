@@ -1,4 +1,4 @@
-import { ProductCategoryEnum } from "@prisma/client";
+import { ProductCategoryEnum, SizeTypeEnum } from "@prisma/client";
 import { z } from "zod";
 
 export const AdminProductsFormSchema = (isEditMode: boolean) =>
@@ -29,6 +29,8 @@ export const AdminProductsFormSchema = (isEditMode: boolean) =>
         ),
 
       isActive: z.boolean(),
+
+      sizeType: z.enum(SizeTypeEnum, "Choose a size template"),
 
       images: isEditMode
         ? z.array(z.instanceof(File)).optional()

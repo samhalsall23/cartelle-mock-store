@@ -1,4 +1,3 @@
-export * from "./AddToCartButton";
 export * from "./AddToCartDialog";
 export * from "./HeroSection";
 export * from "./ProductTile";
@@ -13,3 +12,4 @@ export * from "./ContactCard";
 export * from "./NewsletterCard";
 export * from "./TeamMemberCard";
 export * from "./ShopSidebar";
+export * from "./ProductPurchasePanel";

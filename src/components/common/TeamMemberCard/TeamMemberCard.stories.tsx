@@ -44,6 +44,11 @@ export const Default: Story = {
     name: "Sarah Johnson",
     position: "Creative Director",
   },
+  render: (args) => (
+    <div style={{ width: 320, height: 400 }}>
+      <TeamMemberCard {...args} />
+    </div>
+  ),
 };
 
 export const CEO: Story = {
@@ -52,6 +57,11 @@ export const CEO: Story = {
     name: "Michael Chen",
     position: "Chief Executive Officer",
   },
+  render: (args) => (
+    <div style={{ width: 320, height: 400 }}>
+      <TeamMemberCard {...args} />
+    </div>
+  ),
 };
 
 export const Designer: Story = {
@@ -60,4 +70,9 @@ export const Designer: Story = {
     name: "Emily Rodriguez",
     position: "Lead Designer",
   },
+  render: (args) => (
+    <div style={{ width: 320, height: 400 }}>
+      <TeamMemberCard {...args} />
+    </div>
+  ),
 };
