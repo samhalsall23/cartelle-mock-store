@@ -6,6 +6,7 @@ import { useCartDialog } from "@/providers";
 import { ProductWithSizes } from "@/types";
 import { ProductPurchasePanelUI } from "./ProductPurchasePanelUI";
 import { screamingSnakeToTitle } from "@/lib";
+import { addToCart } from "@/lib/server";
 
 type ProductPurchasePanelProps = {
   product: Omit<ProductWithSizes, "price"> & { price: string };
@@ -18,6 +19,7 @@ export function ProductPurchasePanel(props: ProductPurchasePanelProps) {
 
   // === STATE ===
   const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   // === CONTEXT ===
   const { showDialog } = useCartDialog();
@@ -27,13 +29,16 @@ export function ProductPurchasePanel(props: ProductPurchasePanelProps) {
     setIsLoading(true);
 
     try {
-      //   await addToCartAction({
-      //     productId: product.id,
-      //     sizeId,
-      //     quantity: 1,
-      //   });
+      const result = await addToCart({
+        productId: product.id,
+        sizeId,
+        quantity: 1,
+      });
 
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!result.success) {
+        setIsError(true);
+        return;
+      }
 
       showDialog({
         productName: product.name,
@@ -41,10 +46,8 @@ export function ProductPurchasePanel(props: ProductPurchasePanelProps) {
         imageUrl: product.images[0],
         size: sizeLabel,
         category: screamingSnakeToTitle(product.category),
-        quantity: 1,
+        quantity: result.data.quantity,
       });
-    } catch {
-      // Handle error (e.g., show notification)
     } finally {
       setIsLoading(false);
     }
@@ -53,6 +56,7 @@ export function ProductPurchasePanel(props: ProductPurchasePanelProps) {
   return (
     <ProductPurchasePanelUI
       isLoading={isLoading}
+      isError={isError}
       product={product}
       onAddToCart={handleAddToCart}
       defaultSize={defaultSize}

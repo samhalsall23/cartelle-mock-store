@@ -5,6 +5,7 @@ import Link from "next/link";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/Dialog";
@@ -42,6 +43,9 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
           <div className="flex items-center gap-2 py-2">
             <CircleCheckIcon />
             <DialogTitle>Added to Cart</DialogTitle>
+            <DialogDescription className="sr-only">
+              Item successfully added to your cart.
+            </DialogDescription>
           </div>
         </DialogHeader>
 

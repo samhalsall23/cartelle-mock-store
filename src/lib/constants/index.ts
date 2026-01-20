@@ -7,3 +7,4 @@ export * from "./store-collections";
 export * from "./api-routes";
 export * from "./product-page-data";
 export * from "./product-sizes";
+export * from "./cookie-variables";

@@ -15,15 +15,22 @@ import { useState } from "react";
 import { ProductWithSizes } from "@/types";
 
 type ProductPurchasePanelUIProps = {
+  isLoading: boolean;
+  isError: boolean;
   product: Omit<ProductWithSizes, "price"> & { price: string };
   defaultSize?: string;
-  isLoading: boolean;
   onAddToCart: (sizeId: string, sizeLabel: string) => Promise<void>;
 };
 
 export function ProductPurchasePanelUI(props: ProductPurchasePanelUIProps) {
   // === PROPS ===
-  const { product, defaultSize = "", onAddToCart, isLoading = false } = props;
+  const {
+    isLoading = false,
+    isError = false,
+    product,
+    defaultSize = "",
+    onAddToCart,
+  } = props;
 
   // === STATE ===
   const [selectedSize, setSelectedSize] = useState<string>(defaultSize);
@@ -89,6 +96,13 @@ export function ProductPurchasePanelUI(props: ProductPurchasePanelUIProps) {
               ))}
             </ToggleGroup>
           </div>
+        )}
+
+        {isError && (
+          <p className="text-red-500 text-sm">
+            An error occurred while adding the product to the cart. Please try
+            again.
+          </p>
         )}
 
         <Button
