@@ -9,7 +9,6 @@ export function usePreviewUrls(files?: File[] | null) {
   useEffect(() => {
     return () => {
       previewUrls.forEach((url) => {
-        console.log("revoke" + url);
         URL.revokeObjectURL(url);
       });
     };

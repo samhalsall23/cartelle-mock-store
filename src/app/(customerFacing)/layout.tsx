@@ -1,19 +1,25 @@
 import React from "react";
 
 import { AddToCartDialog, Footer, Navbar } from "@/components";
-import { CartDialogProvider } from "@/providers";
+import { CartCountProvider, CartDialogProvider } from "@/providers";
+import { getCartItemCount } from "@/lib/server";
 
-export default function CustomerLayout({
+export default async function CustomerLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const cartItemCount = await getCartItemCount();
+  const count = cartItemCount.success ? cartItemCount.data.quantity : 0;
+
   return (
-    <CartDialogProvider>
-      <Navbar />
-      {children}
-      <Footer />
-      <AddToCartDialog />
-    </CartDialogProvider>
+    <CartCountProvider initialCount={count}>
+      <CartDialogProvider>
+        <Navbar />
+        {children}
+        <Footer />
+        <AddToCartDialog />
+      </CartDialogProvider>
+    </CartCountProvider>
   );
 }

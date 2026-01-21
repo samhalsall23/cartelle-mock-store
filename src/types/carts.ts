@@ -1,1 +1,1 @@
-export type CartAddMutationQuantity = { quantity: number };
+export type CartQuantityReturn = { quantity: number };

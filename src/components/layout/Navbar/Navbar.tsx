@@ -17,12 +17,16 @@ import {
   CustomLink,
   SearchIcon,
 } from "@/components";
+import { useCartCount } from "@/providers";
 
 export function Navbar() {
-  // === State ===
+  // === STATE ===
   const [showSubMenu, setShowSubMenu] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null);
+
+  // === CART CONTEXT ===
+  const { itemCount } = useCartCount();
 
   return (
     <div className="sticky top-0 left-0 w-full z-40 bg-white">
@@ -102,12 +106,19 @@ export function Navbar() {
           <button
             aria-label="Checkout"
             className={cn(
-              "p-3 cursor-pointer transition-opacity duration-300 ease-in-out",
+              "p-3 relative cursor-pointer transition-opacity duration-300 ease-in-out",
               showMobileMenu ? "opacity-0 pointer-events-none" : "opacity-100",
               showMobileMenu ? "will-change-opacity" : "will-change-auto",
             )}
           >
             <CheckoutIcon />
+            {itemCount > 0 && (
+              <div className="absolute flex items-center justify-center bg-neutral-12 rounded-full w-3.5 h-3.5 top-0 right-0 mt-1.5 me-1.5">
+                <span className="text-[9px] font-medium text-neutral-00">
+                  {itemCount < 9 ? itemCount : "9+"}
+                </span>
+              </div>
+            )}
           </button>
           <button
             aria-label="Menu"

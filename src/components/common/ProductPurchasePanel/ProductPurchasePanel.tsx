@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { useCartDialog } from "@/providers";
+import { useCartCount, useCartDialog } from "@/providers";
 import { ProductWithSizes } from "@/types";
 import { ProductPurchasePanelUI } from "./ProductPurchasePanelUI";
 import { screamingSnakeToTitle } from "@/lib";
@@ -23,6 +23,7 @@ export function ProductPurchasePanel(props: ProductPurchasePanelProps) {
 
   // === CONTEXT ===
   const { showDialog } = useCartDialog();
+  const { refreshCartCount } = useCartCount();
 
   // === FUNCTIONS ===
   const handleAddToCart = async (sizeId: string, sizeLabel: string) => {
@@ -50,6 +51,7 @@ export function ProductPurchasePanel(props: ProductPurchasePanelProps) {
       });
     } finally {
       setIsLoading(false);
+      refreshCartCount();
     }
   };
 
