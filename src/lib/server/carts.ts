@@ -75,6 +75,9 @@ export async function getCart(): Promise<ServerActionResponse<FullCart>> {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     const items: CartItemWithDetails[] = cartItems.map((item) => ({

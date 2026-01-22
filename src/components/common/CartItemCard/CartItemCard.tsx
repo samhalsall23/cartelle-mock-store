@@ -18,6 +18,7 @@ export function CartItemCard(props: CartItemCardProps) {
   const { item } = props;
 
   // === STATE ===
+  const [optimisticQuantity, setOptimisticQuantity] = useState(item.quantity);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,6 +34,8 @@ export function CartItemCard(props: CartItemCardProps) {
       return;
     }
 
+    const previousQuantity = optimisticQuantity;
+    setOptimisticQuantity(newQuantity);
     setIsLoading(true);
     setError(null);
 
@@ -43,6 +46,7 @@ export function CartItemCard(props: CartItemCardProps) {
       });
 
       if (!result.success) {
+        setOptimisticQuantity(previousQuantity);
         setError(result.error || "Failed to update quantity");
         return;
       }
@@ -50,6 +54,7 @@ export function CartItemCard(props: CartItemCardProps) {
       refreshCartCount();
       router.refresh();
     } catch {
+      setOptimisticQuantity(previousQuantity);
       setError("An unexpected error occurred");
     } finally {
       setIsLoading(false);
@@ -57,11 +62,11 @@ export function CartItemCard(props: CartItemCardProps) {
   };
 
   const handleIncrement = () => {
-    handleQuantityUpdate(item.quantity + 1);
+    handleQuantityUpdate(optimisticQuantity + 1);
   };
 
   const handleDecrement = () => {
-    handleQuantityUpdate(item.quantity - 1);
+    handleQuantityUpdate(optimisticQuantity - 1);
   };
 
   const handleDelete = async () => {
@@ -93,7 +98,7 @@ export function CartItemCard(props: CartItemCardProps) {
       title={item.title}
       image={item.image}
       size={item.size}
-      quantity={item.quantity}
+      quantity={optimisticQuantity}
       unitPrice={item.unitPrice}
       isLoading={isLoading}
       error={error}
