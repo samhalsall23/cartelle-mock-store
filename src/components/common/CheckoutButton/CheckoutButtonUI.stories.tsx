@@ -49,7 +49,9 @@ export const Interactive: Story = {
           {...args}
           onClick={() => {
             setClicked(true);
-            args.onClick && args.onClick();
+              if (args.onClick) {
+                args.onClick();
+              }
           }}
         />
         <p className="text-sm text-neutral-08">
