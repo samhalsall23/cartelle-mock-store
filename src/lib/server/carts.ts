@@ -18,7 +18,7 @@ import {
   CartSummary,
 } from "@/types";
 import { handleServerAction } from "./helpers";
-import { Prisma } from "@prisma/client";
+import { CartStatus, Prisma } from "@prisma/client";
 
 // === QUERIES ===
 export async function getCartItemCount(): Promise<
@@ -374,5 +374,23 @@ export async function removeCartItem({
     });
 
     return { quantity: cartQuantity };
+  });
+}
+
+export async function updateCartStatus(
+  status: CartStatus,
+): Promise<ServerActionResponse<void>> {
+  return handleServerAction(async () => {
+    const cookieStore = await cookies();
+    const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
+
+    if (!existingCartId) {
+      throw new Error("Cart not found");
+    }
+
+    await prisma.cart.update({
+      where: { id: existingCartId },
+      data: { status },
+    });
   });
 }

@@ -12,6 +12,7 @@ import {
 import { CircleCheckIcon } from "@/components/icons";
 import { getButtonStyles } from "@/components/ui/Button";
 import { SIZE_TYPES } from "@/lib";
+import { CheckoutButton } from "@/components/common/CheckoutButton/CheckoutButton";
 
 type AddToCartDialogUIProps = {
   open: boolean;
@@ -85,13 +86,8 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
             >
               View Cart{quantity ? ` (${quantity})` : ""}
             </Link>
-            <Link
-              href="/checkout"
-              className={getButtonStyles("dark")}
-              onClick={() => onOpenChange(false)}
-            >
-              Checkout
-            </Link>
+
+            <CheckoutButton />
           </div>
         </div>
       </DialogContent>

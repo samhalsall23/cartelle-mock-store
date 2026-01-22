@@ -1,7 +1,5 @@
-import { getButtonStyles } from "@/components";
-import { cn, routes } from "@/lib";
 import { CartSummary } from "@/types";
-import Link from "next/link";
+import { CheckoutButton } from "@/components/common/CheckoutButton/CheckoutButton";
 
 type CartSummaryPanelProps = {
   summary: CartSummary;
@@ -37,12 +35,7 @@ export function CartSummaryPanel(props: CartSummaryPanelProps) {
           </div>
         </div>
 
-        <Link
-          className={cn("w-full", getButtonStyles("dark"))}
-          href={routes.checkout}
-        >
-          Checkout
-        </Link>
+        <CheckoutButton className="w-full" />
       </div>
     </div>
   );
