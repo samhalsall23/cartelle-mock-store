@@ -7,6 +7,8 @@ export const routes = {
   shop: "/shop",
   shopNewArrivals: "/shop/new-arrivals",
   shopCollections: "/shop/collections",
+  cart: "/cart",
+  checkout: "/checkout",
 };
 
 export const adminRoutes = {

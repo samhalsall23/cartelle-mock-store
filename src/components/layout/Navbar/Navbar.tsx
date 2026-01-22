@@ -103,8 +103,9 @@ export function Navbar() {
           >
             <SearchIcon />
           </button>
-          <button
-            aria-label="Checkout"
+          <Link
+            href={routes.cart}
+            aria-label="Cart"
             className={cn(
               "p-3 relative cursor-pointer transition-opacity duration-300 ease-in-out",
               showMobileMenu ? "opacity-0 pointer-events-none" : "opacity-100",
@@ -119,7 +120,7 @@ export function Navbar() {
                 </span>
               </div>
             )}
-          </button>
+          </Link>
           <button
             aria-label="Menu"
             onClick={() => {

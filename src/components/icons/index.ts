@@ -10,3 +10,6 @@ export * from "./EmailIcon";
 export * from "./PhoneIcon";
 export * from "./HomeIcon";
 export * from "./CircleCheckIcon";
+export * from "./TrashIcon";
+export * from "./MinusIcon";
+export * from "./PlusIcon";

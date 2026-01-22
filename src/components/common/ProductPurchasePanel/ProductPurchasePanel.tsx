@@ -49,6 +49,7 @@ export function ProductPurchasePanel(props: ProductPurchasePanelProps) {
         category: screamingSnakeToTitle(product.category),
         quantity: result.data.quantity,
       });
+      setIsError(false);
     } finally {
       setIsLoading(false);
       refreshCartCount();
