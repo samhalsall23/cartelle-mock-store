@@ -29,7 +29,7 @@ import {
 
 import { usePreviewUrl } from "@/hooks";
 import { AdminBlogsFormData, AdminBlogsFormSchema } from "./schema";
-import { createBlog, deleteBlogById, updateBlogById } from "@/lib/server/blogs";
+import { createBlog, deleteBlogById, updateBlogById } from "@/lib/server";
 import { BLOG_CATEGORY_OPTIONS } from "./constants";
 import { convertStringToBlog } from "@/lib/parsers";
 

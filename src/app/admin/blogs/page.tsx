@@ -1,5 +1,5 @@
 import { AdminHeading, AdminBlogsTable } from "@/components/admin";
-import { getBlogs } from "@/lib/server/blogs";
+import { getBlogs } from "@/lib/server";
 
 export default async function Page() {
   // === QUERIES ===

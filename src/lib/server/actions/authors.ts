@@ -1,43 +1,17 @@
 "use server";
 
-import { Author } from "@prisma/client";
 import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
-import {
-  AuthorWithPostCount,
-  AuthorMutationInput,
-  ServerActionResponse,
-} from "@/types";
-import { handleServerAction } from "./helpers";
+import { AuthorMutationInput, ServerActionResponse } from "@/types";
 import {
   AdminFormAddAuthorsData,
   AdminFormEditAuthorsData,
 } from "@/components/admin/forms/AdminAuthorsForm/schema";
-import { BLOB_STORAGE_PREFIXES } from "../constants";
-import { adminRoutes } from "../routing";
-
-// === FETCHES ===
-export async function getAuthors(): Promise<
-  ServerActionResponse<AuthorWithPostCount[]>
-> {
-  return handleServerAction(() =>
-    prisma.author.findMany({
-      include: { _count: { select: { posts: true } } },
-    }),
-  );
-}
-
-export async function getAuthorById(
-  id: string,
-): Promise<ServerActionResponse<Author | null>> {
-  return handleServerAction(() =>
-    prisma.author.findUnique({
-      where: { id },
-    }),
-  );
-}
+import { BLOB_STORAGE_PREFIXES } from "@/lib/constants";
+import { adminRoutes } from "@/lib/routing";
+import { handleServerAction } from "../helpers/helpers";
 
 // === MUTATIONS ===
 export async function deleteAuthorById(

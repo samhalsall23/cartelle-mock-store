@@ -5,17 +5,17 @@ import { revalidatePath } from "next/cache";
 import { OrderStatus, Product, ProductCategoryEnum } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
-import { prisma } from "../prisma";
+import { prisma } from "@/lib/prisma";
 import {
   ProductGetAllCounts,
   ProductMutationInput,
   ProductWithSizes,
   ServerActionResponse,
 } from "@/types";
-import { adminRoutes, routes } from "../routing";
-import { handleServerAction } from "./helpers";
+import { adminRoutes, routes } from "@/lib/routing";
+import { handleServerAction } from "../helpers/helpers";
 import { AdminProductsFormNoFileData } from "@/components/admin";
-import { SIZE_TEMPLATES } from "../constants";
+import { SIZE_TEMPLATES } from "@/lib/constants";
 
 // === FETCHES ===
 export async function getThreeLatestProducts(): Promise<

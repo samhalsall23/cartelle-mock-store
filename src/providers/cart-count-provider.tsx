@@ -6,20 +6,15 @@ import { createContext, useContext, useState, ReactNode } from "react";
 type CartCountContextType = {
   itemCount: number;
   refreshCartCount: () => Promise<void>;
+  setItemCount: React.Dispatch<React.SetStateAction<number>>;
 };
 
 const CartCountContext = createContext<CartCountContextType | undefined>(
   undefined,
 );
 
-export function CartCountProvider({
-  children,
-  initialCount = 0,
-}: {
-  children: ReactNode;
-  initialCount?: number;
-}) {
-  const [itemCount, setItemCount] = useState(initialCount);
+export function CartCountProvider({ children }: { children: ReactNode }) {
+  const [itemCount, setItemCount] = useState(0);
 
   const refreshCartCount = async () => {
     const result = await getCartItemCount();
@@ -29,7 +24,9 @@ export function CartCountProvider({
   };
 
   return (
-    <CartCountContext.Provider value={{ itemCount, refreshCartCount }}>
+    <CartCountContext.Provider
+      value={{ itemCount, refreshCartCount, setItemCount }}
+    >
       {children}
     </CartCountContext.Provider>
   );

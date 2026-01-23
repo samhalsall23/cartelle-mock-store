@@ -1,5 +1,7 @@
 import { BaseSection } from "@/components";
 
+export const dynamic = "force-dynamic";
+
 export default function CheckoutPage() {
   return (
     <main>

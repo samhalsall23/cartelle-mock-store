@@ -10,9 +10,9 @@ import {
   BlogPostWithAuthor,
   ServerActionResponse,
 } from "@/types";
-import { getReadingMinutes, handleServerAction } from "./helpers";
-import { BLOB_STORAGE_PREFIXES } from "../constants";
-import { adminRoutes, routes } from "../routing";
+import { getReadingMinutes, handleServerAction } from "@/lib/server";
+import { BLOB_STORAGE_PREFIXES } from "@/lib/constants";
+import { adminRoutes, routes } from "@/lib/routing";
 import {
   AdminFormAddBlogsData,
   AdminFormEditBlogsData,

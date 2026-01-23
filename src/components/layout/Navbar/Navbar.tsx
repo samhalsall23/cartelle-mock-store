@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { cn, routes } from "@/lib";
 
@@ -18,6 +18,7 @@ import {
   SearchIcon,
 } from "@/components";
 import { useCartCount } from "@/providers";
+import { getCartItemCount } from "@/lib/server";
 
 export function Navbar() {
   // === STATE ===
@@ -26,7 +27,16 @@ export function Navbar() {
   const [activeSubMenu, setActiveSubMenu] = useState<string | null>(null);
 
   // === CART CONTEXT ===
-  const { itemCount } = useCartCount();
+  const { itemCount, setItemCount } = useCartCount();
+
+  // === EFFECTS ===
+  useEffect(() => {
+    getCartItemCount().then((result) => {
+      if (result.success) {
+        setItemCount(result.data.quantity);
+      }
+    });
+  }, [setItemCount]);
 
   return (
     <div className="sticky top-0 left-0 w-full z-40 bg-white">

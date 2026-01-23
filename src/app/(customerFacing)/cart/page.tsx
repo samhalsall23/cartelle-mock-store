@@ -2,6 +2,8 @@ import { BaseSection, BreadCrumb } from "@/components";
 import { getCart } from "@/lib/server";
 import { EmptyCart, CartSummaryPanel, CartItemCard } from "@/components";
 
+export const dynamic = "force-dynamic";
+
 export default async function CartPage() {
   // === FETCHES ===
   const cartData = await getCart();

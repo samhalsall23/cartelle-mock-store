@@ -8,7 +8,7 @@ import {
   COOKIE_CART_ID,
   MAX_CART_ITEM_QUANTITY,
   MAX_CART_TOTAL_QUANTITY,
-} from "../constants";
+} from "@/lib/constants";
 import { Decimal } from "@prisma/client/runtime/library";
 import {
   CartQuantityReturn,
@@ -17,7 +17,7 @@ import {
   CartItemWithDetails,
   CartSummary,
 } from "@/types";
-import { handleServerAction } from "./helpers";
+import { handleServerAction } from "../helpers/helpers";
 import { CartStatus, Prisma } from "@prisma/client";
 
 // === QUERIES ===
