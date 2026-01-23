@@ -1,6 +1,6 @@
 "use client";
 
-import { getCartItemCount } from "@/lib/server";
+import { getCartItemCount } from "@/lib/server/actions";
 import { createContext, useContext, useState, ReactNode } from "react";
 
 type CartCountContextType = {

@@ -40,7 +40,7 @@ import {
   createProduct,
   deleteProductById,
   updateProductById,
-} from "@/lib/server";
+} from "@/lib/server/actions";
 import { usePreviewUrls } from "@/hooks";
 import { CloseIcon } from "@/components/icons";
 

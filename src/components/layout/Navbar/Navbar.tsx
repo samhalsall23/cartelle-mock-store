@@ -18,7 +18,7 @@ import {
   SearchIcon,
 } from "@/components";
 import { useCartCount } from "@/providers";
-import { getCartItemCount } from "@/lib/server";
+import { getCartItemCount } from "@/lib/server/actions";
 
 export function Navbar() {
   // === STATE ===

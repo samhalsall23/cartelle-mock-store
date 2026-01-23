@@ -19,7 +19,7 @@ import {
 import { HomeVideoSectionWrapper } from "@/components/common/HomeVideoSection/HomeVideoSectionClient";
 import { mockReviews } from "@/components/common/ReviewCardsSection/data";
 import { routes, screamingSnakeToTitle, STORE_COLLECTIONS } from "@/lib";
-import { getHomePageBlogs, getThreeLatestProducts } from "@/lib/server";
+import { getHomePageBlogs, getThreeLatestProducts } from "@/lib/server/queries";
 
 export default async function HomePage() {
   // === QUERIES ===

@@ -5,7 +5,7 @@ import {
   BlogTile,
 } from "@/components";
 import { routes, screamingSnakeToTitle } from "@/lib";
-import { getBlogs } from "@/lib/server";
+import { getBlogs } from "@/lib/server/queries";
 
 export default async function BlogPage() {
   // === QUERIES ===

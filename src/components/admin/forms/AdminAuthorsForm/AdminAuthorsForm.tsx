@@ -24,7 +24,11 @@ import {
   AdminAuthorsFormSchema,
   AdminFormEditAuthorsData,
 } from "./schema";
-import { createAuthor, deleteAuthorById, updateAuthorById } from "@/lib/server";
+import {
+  createAuthor,
+  deleteAuthorById,
+  updateAuthorById,
+} from "@/lib/server/actions";
 import { usePreviewUrl } from "@/hooks";
 
 type AdminAuthorsFormProps = {

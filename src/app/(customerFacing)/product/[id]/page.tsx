@@ -10,7 +10,7 @@ import {
   SHOP_NAVBAR_TEXT,
 } from "@/components/layout/Navbar/lib";
 import { cn, routes } from "@/lib";
-import { getProductBySlug } from "@/lib/server";
+import { getProductBySlug } from "@/lib/server/queries";
 import { SizeTypeEnum } from "@prisma/client";
 import Image from "next/image";
 

@@ -36,7 +36,7 @@ import {
 } from "@/lib";
 import { productColumns, defaultVisibleProductColumnIds } from "./columns";
 import { ProductGetAllCounts } from "@/types";
-import { deleteProductById } from "@/lib/server";
+import { deleteProductById } from "@/lib/server/actions";
 
 export function AdminProductsTable({
   products,

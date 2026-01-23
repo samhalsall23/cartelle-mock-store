@@ -1,5 +1,5 @@
 import { AdminBlogsForm, AdminHeading } from "@/components/admin";
-import { getAuthors, getBlogById } from "@/lib/server";
+import { getAuthors, getBlogById } from "@/lib/server/queries";
 
 export default async function Page({ params }: { params: { id: string } }) {
   // === PARAMS ===

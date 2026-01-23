@@ -1,5 +1,5 @@
 import { BaseSection, BreadCrumb } from "@/components";
-import { getCart } from "@/lib/server";
+import { getCart } from "@/lib/server/queries";
 import { EmptyCart, CartSummaryPanel, CartItemCard } from "@/components";
 
 export const dynamic = "force-dynamic";

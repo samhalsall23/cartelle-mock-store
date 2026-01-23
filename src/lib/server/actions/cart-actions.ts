@@ -10,21 +10,15 @@ import {
   MAX_CART_TOTAL_QUANTITY,
 } from "@/lib/constants";
 import { Decimal } from "@prisma/client/runtime/library";
-import {
-  CartQuantityReturn,
-  ServerActionResponse,
-  FullCart,
-  CartItemWithDetails,
-  CartSummary,
-} from "@/types";
-import { handleServerAction } from "../helpers/helpers";
+import { CartQuantityReturn, ServerActionResponse } from "@/types";
+import { wrapServerCall } from "../helpers/helpers";
 import { CartStatus, Prisma } from "@prisma/client";
 
 // === QUERIES ===
 export async function getCartItemCount(): Promise<
   ServerActionResponse<CartQuantityReturn>
 > {
-  return handleServerAction(async () => {
+  return wrapServerCall(async () => {
     const cookieStore = await cookies();
     const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
 
@@ -40,78 +34,6 @@ export async function getCartItemCount(): Promise<
     const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
 
     return { quantity: totalQuantity };
-  });
-}
-
-export async function getCart(): Promise<ServerActionResponse<FullCart>> {
-  return handleServerAction(async () => {
-    const cookieStore = await cookies();
-    const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
-
-    if (!existingCartId) {
-      return {
-        items: [],
-        summary: {
-          subtotal: "$0.00",
-          shipping: "Free",
-          total: "$0.00",
-          itemCount: 0,
-        },
-      };
-    }
-
-    const cartItems = await prisma.cartItem.findMany({
-      where: { cartId: existingCartId },
-      include: {
-        size: {
-          select: {
-            id: true,
-            label: true,
-          },
-        },
-        product: {
-          select: {
-            slug: true,
-          },
-        },
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    const items: CartItemWithDetails[] = cartItems.map((item) => ({
-      id: item.id,
-      cartId: item.cartId,
-      productId: item.productId,
-      sizeId: item.sizeId,
-      quantity: item.quantity,
-      unitPrice: item.unitPrice,
-      title: item.title,
-      image: item.image,
-      size: item.size,
-      slug: item.product.slug,
-    }));
-
-    // Calculate total
-    const subtotalDecimal = items.reduce((sum, item) => {
-      const itemTotal = item.unitPrice.toNumber() * item.quantity;
-      return sum + itemTotal;
-    }, 0);
-
-    const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
-
-    const summary: CartSummary = {
-      subtotal: `$${subtotalDecimal.toFixed(2)}`,
-      shipping: "Free",
-      total: `$${subtotalDecimal.toFixed(2)}`,
-      itemCount,
-    };
-
-    return {
-      items,
-      summary,
-    };
   });
 }
 
@@ -185,7 +107,7 @@ export async function addToCart({
   sizeId: string;
   quantity: number;
 }): Promise<ServerActionResponse<CartQuantityReturn>> {
-  return handleServerAction(async () => {
+  return wrapServerCall(async () => {
     const cookieStore = await cookies();
 
     const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
@@ -295,7 +217,7 @@ export async function updateCartItemQuantity({
   cartItemId: string;
   quantity: number;
 }): Promise<ServerActionResponse<CartQuantityReturn>> {
-  return handleServerAction(async () => {
+  return wrapServerCall(async () => {
     const cookieStore = await cookies();
     const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
 
@@ -349,7 +271,7 @@ export async function removeCartItem({
 }: {
   cartItemId: string;
 }): Promise<ServerActionResponse<CartQuantityReturn>> {
-  return handleServerAction(async () => {
+  return wrapServerCall(async () => {
     const cookieStore = await cookies();
     const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
 
@@ -380,7 +302,7 @@ export async function removeCartItem({
 export async function updateCartStatus(
   status: CartStatus,
 ): Promise<ServerActionResponse<void>> {
-  return handleServerAction(async () => {
+  return wrapServerCall(async () => {
     const cookieStore = await cookies();
     const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
 

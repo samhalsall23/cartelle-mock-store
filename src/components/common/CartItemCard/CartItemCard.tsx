@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useCartCount } from "@/providers";
 import { CartItemWithDetails } from "@/types";
 import { CartItemCardUI } from "./CartItemCardUI";
-import { updateCartItemQuantity, removeCartItem } from "@/lib/server";
+import { updateCartItemQuantity, removeCartItem } from "@/lib/server/actions";
 import { MAX_CART_ITEM_QUANTITY } from "@/lib";
 
 type CartItemCardProps = {

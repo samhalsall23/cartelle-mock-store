@@ -1,13 +1,13 @@
 import { prisma } from "@/lib/prisma";
 import { AuthorWithPostCount, ServerActionResponse } from "@/types";
-import { handleServerAction } from "../actions";
 import { Author } from "@prisma/client";
+import { wrapServerCall } from "@/lib/server/helpers";
 
 // === FETCHES ===
 export async function getAuthors(): Promise<
   ServerActionResponse<AuthorWithPostCount[]>
 > {
-  return handleServerAction(() =>
+  return wrapServerCall(() =>
     prisma.author.findMany({
       include: { _count: { select: { posts: true } } },
     }),
@@ -17,7 +17,7 @@ export async function getAuthors(): Promise<
 export async function getAuthorById(
   id: string,
 ): Promise<ServerActionResponse<Author | null>> {
-  return handleServerAction(() =>
+  return wrapServerCall(() =>
     prisma.author.findUnique({
       where: { id },
     }),

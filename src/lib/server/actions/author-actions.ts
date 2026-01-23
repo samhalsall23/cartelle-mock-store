@@ -11,13 +11,13 @@ import {
 } from "@/components/admin/forms/AdminAuthorsForm/schema";
 import { BLOB_STORAGE_PREFIXES } from "@/lib/constants";
 import { adminRoutes } from "@/lib/routing";
-import { handleServerAction } from "../helpers/helpers";
+import { wrapServerCall } from "../helpers/helpers";
 
 // === MUTATIONS ===
 export async function deleteAuthorById(
   id: string,
 ): Promise<ServerActionResponse<AuthorMutationInput>> {
-  return handleServerAction(async () => {
+  return wrapServerCall(async () => {
     const deleted = await prisma.author.delete({ where: { id } });
 
     revalidatePath(adminRoutes.authors);
@@ -30,7 +30,7 @@ export async function deleteAuthorById(
 export async function createAuthor(
   data: AdminFormAddAuthorsData,
 ): Promise<ServerActionResponse<AuthorMutationInput>> {
-  return handleServerAction(async () => {
+  return wrapServerCall(async () => {
     const imageFile = data.image;
     const imageFileName = BLOB_STORAGE_PREFIXES.AUTHORS + data.name;
 
@@ -58,7 +58,7 @@ export async function updateAuthorById(
   id: string,
   data: AdminFormEditAuthorsData,
 ): Promise<ServerActionResponse<AuthorMutationInput>> {
-  return handleServerAction(async () => {
+  return wrapServerCall(async () => {
     revalidatePath(adminRoutes.authors);
     revalidatePath(adminRoutes.blogs);
     revalidatePath(adminRoutes.blogsCreate);

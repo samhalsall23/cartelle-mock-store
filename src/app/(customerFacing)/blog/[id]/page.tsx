@@ -3,7 +3,7 @@ import Image from "next/image";
 import { AnimatedHeadingText, BreadCrumb, ProfileDetails } from "@/components";
 import { BLOG_NAVBAR_TEXT } from "@/components/layout/Navbar/lib";
 import { routes } from "@/lib";
-import { getBlogBySlug } from "@/lib/server";
+import { getBlogBySlug } from "@/lib/server/queries";
 import { formatBlogDate } from "@/lib/utils";
 import { convertStringToBlog } from "@/lib/parsers";
 

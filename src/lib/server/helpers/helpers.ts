@@ -1,6 +1,6 @@
 import { ServerActionResponse } from "@/types";
 
-export async function handleServerAction<T>(
+export async function wrapServerCall<T>(
   fn: () => Promise<T>,
 ): Promise<ServerActionResponse<T>> {
   try {

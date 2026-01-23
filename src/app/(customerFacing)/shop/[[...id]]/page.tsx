@@ -6,7 +6,7 @@ import {
 } from "@/components";
 
 import { STORE_COLLECTIONS } from "@/lib";
-import { getProductsByCategory } from "@/lib/server";
+import { getProductsByCategory } from "@/lib/server/queries";
 
 // === PAGE ===
 export default async function ShopPage({

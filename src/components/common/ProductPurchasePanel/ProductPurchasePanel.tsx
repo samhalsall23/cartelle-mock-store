@@ -6,7 +6,7 @@ import { useCartCount, useCartDialog } from "@/providers";
 import { ProductWithSizes } from "@/types";
 import { ProductPurchasePanelUI } from "./ProductPurchasePanelUI";
 import { screamingSnakeToTitle } from "@/lib";
-import { addToCart } from "@/lib/server";
+import { addToCart } from "@/lib/server/actions";
 
 type ProductPurchasePanelProps = {
   product: Omit<ProductWithSizes, "price"> & { price: string };

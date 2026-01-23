@@ -1,5 +1,5 @@
 import { AdminHeading, AdminProductsTable } from "@/components/admin";
-import { getAllProductsWithTotalSold } from "@/lib/server";
+import { getAllProductsWithTotalSold } from "@/lib/server/queries";
 
 export default async function Page() {
   // === QUERIES ===

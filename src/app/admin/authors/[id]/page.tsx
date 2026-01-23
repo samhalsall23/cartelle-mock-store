@@ -1,4 +1,4 @@
-import { getAuthorById } from "@/lib/server";
+import { getAuthorById } from "@/lib/server/queries";
 import { AdminAuthorsForm, AdminHeading } from "@/components/admin";
 
 export default async function Page({ params }: { params: { id: string } }) {

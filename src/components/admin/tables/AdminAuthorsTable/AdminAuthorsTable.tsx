@@ -26,7 +26,7 @@ import {
   AdminAlertDialogFooter,
   AdminInput,
 } from "@/components/admin";
-import { deleteAuthorById } from "@/lib/server";
+import { deleteAuthorById } from "@/lib/server/actions";
 import { AuthorWithPostCount } from "@/types";
 import { adminRoutes } from "@/lib";
 import { authorColumns } from "./columns";

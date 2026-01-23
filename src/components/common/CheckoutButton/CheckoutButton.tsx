@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CheckoutButtonUI } from "./CheckoutButtonUI";
 import { useRouter } from "next/navigation";
-import { updateCartStatus } from "@/lib/server";
+import { updateCartStatus } from "@/lib/server/actions";
 import { CART_STATUS_CHECKOUT, routes } from "@/lib";
 
 type CheckoutButtonProps = {

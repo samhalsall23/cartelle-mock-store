@@ -1,5 +1,5 @@
 import { AdminHeading, AdminProductsForm } from "@/components/admin";
-import { getProductById } from "@/lib/server";
+import { getProductById } from "@/lib/server/queries";
 
 export default async function Page({ params }: { params: { id: string } }) {
   // === PARAMS ===

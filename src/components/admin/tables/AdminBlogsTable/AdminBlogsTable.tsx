@@ -36,7 +36,7 @@ import {
 } from "@/lib";
 import { BlogPost } from "@prisma/client";
 import { blogColumns, defaultVisibleBlogColumnIds } from "./columns";
-import { deleteBlogById } from "@/lib/server";
+import { deleteBlogById } from "@/lib/server/actions";
 
 export function AdminBlogsTable({ authors }: { authors: BlogPost[] }) {
   // === STATE ===
