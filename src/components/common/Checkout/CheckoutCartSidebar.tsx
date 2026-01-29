@@ -1,6 +1,6 @@
 import { CartItemWithDetails, CartSummary } from "@/types";
 import { CheckoutCartItem } from "./CheckoutCartItem";
-import { calculateMockArrivalDate } from "./utils";
+import { calculateMockArrivalDate } from "@/lib/utils";
 
 type CheckoutCartSidebarProps = {
   items: CartItemWithDetails[];
