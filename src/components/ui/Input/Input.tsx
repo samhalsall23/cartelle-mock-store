@@ -17,10 +17,12 @@ export function Input(props: InputProps) {
     "px-6 py-3 inline-flex items-center text-start",
     // Appearance
     "rounded-4xl text-body-medium-light",
+    // Always reserve border width to prevent layout shift
+    "border border-1 border-transparent",
     // Focus States
-    "focus:outline-none focus:border focus:border-blue-400 focus:border-1",
+    "focus:outline-none focus:border-blue-400",
     // Error States
-    isError && "border border-red-500 border-1 focus:border-red-400",
+    isError && "border-red-500 focus:border-red-400",
 
     // Variant Classes
     variant === "dark" &&
