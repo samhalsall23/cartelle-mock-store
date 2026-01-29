@@ -2,53 +2,18 @@
 
 import { UseFormReturn } from "react-hook-form";
 import { CheckoutFormData } from "./schema";
-import { Button } from "@/components/ui/Button/Button";
 
 type PaymentStepProps = {
   form: UseFormReturn<CheckoutFormData>;
-  onContinue: () => void;
-  onEditDelivery: () => void;
 };
 
 export function PaymentStep(props: PaymentStepProps) {
-  const { form, onContinue, onEditDelivery } = props;
-
-  const deliveryData = form.getValues();
+  const { form } = props;
 
   return (
     <div className="space-y-6">
-      <h2 className="text-2xl font-medium text-neutral-12 mb-6">Payment</h2>
-
-      {/* Delivery Summary */}
-      <div className="bg-neutral-02 border border-neutral-5 rounded-md p-4">
-        <div className="flex items-start justify-between mb-3">
-          <h3 className="text-base font-medium text-neutral-12">
-            Delivery Details
-          </h3>
-          <button
-            onClick={onEditDelivery}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
-          >
-            Edit
-          </button>
-        </div>
-        <div className="space-y-1 text-sm text-neutral-10">
-          <p>{deliveryData.fullName}</p>
-          <p>{deliveryData.email}</p>
-          <p>{deliveryData.phone}</p>
-          <p>{deliveryData.address}</p>
-          <p>
-            {deliveryData.city}, {deliveryData.state} {deliveryData.zipCode}
-          </p>
-          <p>{deliveryData.country}</p>
-        </div>
-      </div>
-
       {/* Payment Method */}
       <div>
-        <h3 className="text-lg font-medium text-neutral-12 mb-4">
-          Payment Method
-        </h3>
         <div className="space-y-3">
           <label className="flex items-center gap-3 p-4 border border-neutral-5 rounded-md cursor-pointer hover:bg-neutral-02 transition-colors">
             <input
@@ -108,16 +73,6 @@ export function PaymentStep(props: PaymentStepProps) {
           Stripe integration placeholder - will be connected to actual Stripe
           Elements
         </p>
-      </div>
-
-      {/* Continue Button */}
-      <div className="pt-4">
-        <Button
-          onClick={onContinue}
-          variant="dark"
-          text="Continue to Review"
-          className="w-full"
-        />
       </div>
     </div>
   );

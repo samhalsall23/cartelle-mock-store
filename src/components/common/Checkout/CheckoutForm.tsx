@@ -1,37 +1,82 @@
 "use client";
 
-import { useState } from "react";
+import { Activity, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { CheckoutStep } from "@/types/checkout";
-import { CartItemWithDetails, CartSummary } from "@/types";
 import { checkoutFormSchema, CheckoutFormData } from "./schema";
-import { CheckoutStepper } from "./CheckoutStepper";
 import { DeliveryDetailsStep } from "./DeliveryDetailsStep";
 import { PaymentStep } from "./PaymentStep";
 import { OrderSummaryStep } from "./OrderSummaryStep";
 import { createOrder } from "@/lib/server/actions/order-actions";
+import { CircleCheckIcon } from "@/components/icons";
+import { cn } from "@/lib";
+import { Button } from "@/components/ui";
 
-type CheckoutFormProps = {
-  items: CartItemWithDetails[];
-  summary: CartSummary;
+type CheckoutFormComponentProps = {
+  id: string;
+  currentStep: number;
+  children: React.ReactNode;
+  header: string;
+  completed: boolean;
+  btnText: string;
+  onBtnClick: () => void;
+  isSubmitting?: boolean;
 };
 
-export function CheckoutForm(props: CheckoutFormProps) {
-  const { items, summary } = props;
+function CheckoutFormComponent(props: CheckoutFormComponentProps) {
+  // === PROPS ===
+  const {
+    children,
+    header,
+    completed,
+    btnText,
+    onBtnClick,
+    id,
+    currentStep,
+    isSubmitting,
+  } = props;
 
-  // State
+  return (
+    <div
+      className={cn(
+        "flex py-6  flex-col",
+        completed && id === "1" && "border-y border-neutral-5",
+        completed && id === "2" && "border-b border-neutral-5",
+      )}
+    >
+      <div className={"flex items-center justify-between mb-4"}>
+        <h2 className="text-2xl font-medium text-neutral-12 ">{header}</h2>
+        {completed && <CircleCheckIcon />}
+      </div>
+      {children}
+      {currentStep?.toString() === id && (
+        <div className="pt-8">
+          <Button
+            onClick={onBtnClick}
+            variant="dark"
+            text={btnText}
+            className="w-full"
+            isLoading={isSubmitting}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function CheckoutForm() {
+  // === STATE ===
   const [currentStep, setCurrentStep] = useState<CheckoutStep>(1);
-  const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Router
+  // === ROUTER ===
   const router = useRouter();
 
-  // Form setup
+  // === FORM SETUP ===
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutFormSchema),
     defaultValues: {
@@ -63,7 +108,6 @@ export function CheckoutForm(props: CheckoutFormProps) {
     ]);
 
     if (isValid) {
-      setCompletedSteps((prev) => new Set(prev).add(1));
       setCurrentStep(2);
     }
   };
@@ -73,7 +117,6 @@ export function CheckoutForm(props: CheckoutFormProps) {
     const isValid = await form.trigger(["paymentMethod"]);
 
     if (isValid) {
-      setCompletedSteps((prev) => new Set(prev).add(2));
       setCurrentStep(3);
     }
   };
@@ -117,9 +160,7 @@ export function CheckoutForm(props: CheckoutFormProps) {
         return;
       }
 
-      toast.success(
-        `Order #${result.data.orderNumber} placed successfully!`,
-      );
+      toast.success(`Order #${result.data.orderNumber} placed successfully!`);
 
       // Redirect to home page (or order confirmation page in the future)
       router.push("/");
@@ -134,36 +175,50 @@ export function CheckoutForm(props: CheckoutFormProps) {
 
   return (
     <div>
-      {/* Step Indicator */}
-      <CheckoutStepper
+      {/* Delivery Details Step */}
+      <CheckoutFormComponent
+        id="1"
         currentStep={currentStep}
-        completedSteps={completedSteps}
-      />
-
-      {/* Step Content */}
-      {currentStep === 1 && (
-        <DeliveryDetailsStep form={form} onContinue={handleContinueToPayment} />
-      )}
-
-      {currentStep === 2 && (
-        <PaymentStep
+        header="Delivery Details"
+        completed={currentStep !== 1}
+        btnText="Continue to Payment"
+        onBtnClick={handleContinueToPayment}
+      >
+        <DeliveryDetailsStep
           form={form}
-          onContinue={handleContinueToReview}
+          completed={currentStep !== 1}
           onEditDelivery={handleEditDelivery}
         />
-      )}
+      </CheckoutFormComponent>
 
-      {currentStep === 3 && (
-        <OrderSummaryStep
-          form={form}
-          items={items}
-          summary={summary}
-          onSubmit={handlePlaceOrder}
-          onEditDelivery={handleEditDelivery}
-          onEditPayment={handleEditPayment}
-          isSubmitting={isSubmitting}
-        />
-      )}
+      {/* Payment Step */}
+      <CheckoutFormComponent
+        id="2"
+        currentStep={currentStep}
+        header="Payment"
+        completed={currentStep > 2}
+        btnText="Continue to Review"
+        onBtnClick={handleContinueToReview}
+      >
+        <Activity mode={currentStep === 2 ? "visible" : "hidden"}>
+          <PaymentStep form={form} />
+        </Activity>
+      </CheckoutFormComponent>
+
+      {/* Order Summary Step */}
+      <CheckoutFormComponent
+        id="3"
+        currentStep={currentStep}
+        header="Order Summary"
+        completed={currentStep > 3}
+        btnText="Submit Payment"
+        onBtnClick={handlePlaceOrder}
+        isSubmitting={isSubmitting}
+      >
+        <Activity mode={currentStep === 3 ? "visible" : "hidden"}>
+          <OrderSummaryStep />
+        </Activity>
+      </CheckoutFormComponent>
     </div>
   );
 }
