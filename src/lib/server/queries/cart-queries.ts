@@ -54,7 +54,7 @@ export async function getCart(): Promise<ServerActionResponse<FullCart>> {
       productId: item.productId,
       sizeId: item.sizeId,
       quantity: item.quantity,
-      unitPrice: item.unitPrice,
+      unitPrice: Number(item.unitPrice),
       title: item.title,
       image: item.image,
       size: item.size,
@@ -63,7 +63,7 @@ export async function getCart(): Promise<ServerActionResponse<FullCart>> {
 
     // Calculate total
     const subtotalDecimal = items.reduce((sum, item) => {
-      const itemTotal = item.unitPrice.toNumber() * item.quantity;
+      const itemTotal = item.unitPrice * item.quantity;
       return sum + itemTotal;
     }, 0);
 

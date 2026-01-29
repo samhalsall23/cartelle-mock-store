@@ -9,7 +9,7 @@ export type CartItemWithDetails = {
   productId: string;
   sizeId: string;
   quantity: number;
-  unitPrice: Decimal;
+  unitPrice: number;
   title: string;
   image: string;
   size: {

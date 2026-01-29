@@ -7,8 +7,8 @@ export function OrderSummaryStep() {
     <div className="space-y-2 flex flex-col ">
       {/* Order Items */}
       <span className="text-neutral-10 text-sm">
-        By clicking the "Submit payment" button, you confirm that you have read,
-        understand and accept our{" "}
+        By clicking the &quot;Submit payment&quot; button, you confirm that you
+        have read, understand and accept our{" "}
         <Link href="#" className="font-bold underline">
           Terms of Use
         </Link>
