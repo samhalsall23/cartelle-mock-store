@@ -92,23 +92,45 @@ enum CartStatus {
 
 // === ORDER ===
 model Order {
-  id              String        @id @default(cuid())
-  orderNumber     Int           @default(autoincrement())
-  cartId          String        @unique
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
-  customerName    String
-  customerEmail   String
-  customerAddress String
-  customerPhone   String
-  totalPrice      Decimal       @db.Decimal(10, 2)
-  status          OrderStatus   @default(PENDING)
-  paymentMethod   PaymentMethod
-  paymentStatus   PaymentStatus @default(PENDING)
+  id          String @id @default(cuid())
+  orderNumber Int    @default(autoincrement())
 
-  cart Cart @relation(fields: [cartId], references: [id])
+  // === Cart ===
+  cartId String @unique
+  cart   Cart   @relation(fields: [cartId], references: [id])
 
-  @@index([customerEmail])
+  // === Date Details ===
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // === Delivery Details ===
+  delieveryName         String?
+  deliveryEmail         String?
+  deliveryPhone         String?
+  deliveryStreetAddress String?
+  deliveryCity          String?
+  deliveryPostcode      String?
+  deliveryState         String?
+  deliveryCountry       String?
+
+  // === Billing Details ===
+  billingName          String?
+  billingStreetAddress String?
+  billingCity          String?
+  billingPostcode      String?
+  billingState         String?
+  billingCountry       String?
+
+  // === Stripe Details ===
+  stripeSessionId String? @unique
+
+  // === Payment & Status Details ===
+  totalPrice    Decimal       @db.Decimal(10, 2)
+  paymentMethod PaymentMethod @default(STRIPE)
+  paymentStatus PaymentStatus @default(PENDING)
+  status        OrderStatus   @default(PENDING)
+
+  @@index([deliveryEmail])
   @@index([status])
   @@index([paymentStatus])
   @@index([createdAt])
