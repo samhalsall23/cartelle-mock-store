@@ -4,7 +4,9 @@ import { cookies } from "next/headers";
 import { nanoid } from "nanoid";
 
 import { prisma } from "@/lib/prisma";
+import { stripe } from "@/lib/utils/stripe";
 import {
+  AUD_CURRENCY,
   COOKIE_CART_ID,
   MAX_CART_ITEM_QUANTITY,
   MAX_CART_TOTAL_QUANTITY,
@@ -12,7 +14,7 @@ import {
 import { Decimal } from "@prisma/client/runtime/library";
 import { CartQuantityReturn, ServerActionResponse } from "@/types";
 import { wrapServerCall } from "../helpers/helpers";
-import { CartStatus, Prisma } from "@prisma/client";
+import { CartStatus, OrderStatus, PaymentMethod, Prisma } from "@prisma/client";
 
 // === QUERIES ===
 export async function getCartItemCount(): Promise<
@@ -298,21 +300,72 @@ export async function removeCartItem({
     return { quantity: cartQuantity };
   });
 }
-
-export async function updateCartStatus(
+export async function createPaymentIntent(
   status: CartStatus,
 ): Promise<ServerActionResponse<void>> {
   return wrapServerCall(async () => {
     const cookieStore = await cookies();
-    const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
+    const cartId = cookieStore.get(COOKIE_CART_ID)?.value;
 
-    if (!existingCartId) {
-      throw new Error("Cart not found");
+    if (!cartId) throw new Error("Cart not found");
+
+    const cart = await prisma.cart.findUnique({
+      where: { id: cartId },
+      include: { items: { include: { product: true } } },
+    });
+
+    if (!cart || cart.items.length === 0) {
+      throw new Error("Cart empty");
     }
 
+    // Prevent duplicate orders
+    const existingOrder = await prisma.order.findUnique({
+      where: { cartId },
+    });
+
+    if (existingOrder?.stripeSessionId) {
+      return;
+    }
+
+    // Calculate total
+    const totalPrice = cart.items.reduce(
+      (sum, item) => sum + item.unitPrice.toNumber() * item.quantity,
+      0,
+    );
+
+    // Update cart status AFTER validation
     await prisma.cart.update({
-      where: { id: existingCartId },
+      where: { id: cartId },
       data: { status },
+    });
+
+    // Create Order
+    const order = await prisma.order.create({
+      data: {
+        cartId,
+        totalPrice,
+        status: OrderStatus.PENDING,
+        paymentMethod: PaymentMethod.STRIPE,
+      },
+    });
+
+    // Create PaymentIntent
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(totalPrice * 100),
+      currency: AUD_CURRENCY,
+      automatic_payment_methods: { enabled: true },
+      metadata: {
+        orderId: order.id,
+        cartId,
+      },
+    });
+
+    // update with payment intent id
+    await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        stripeSessionId: paymentIntent.client_secret,
+      },
     });
   });
 }

@@ -5,13 +5,20 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import {
+  Elements,
+  PaymentElement,
+  // useElements,
+  // useStripe,
+} from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 
 import { CheckoutStep } from "@/types/checkout";
 import { checkoutFormSchema, CheckoutFormData } from "./schema";
 import { DeliveryDetailsStep } from "./DeliveryDetailsStep";
-import { PaymentStep } from "./PaymentStep";
+// import { PaymentStep } from "./PaymentStep";
 import { OrderSummaryStep } from "./OrderSummaryStep";
-import { createOrder } from "@/lib/server/actions/order-actions";
+// import { createOrder } from "@/lib/server/actions/order-actions";
 import { CircleCheckIcon } from "@/components/icons";
 import { cn } from "@/lib";
 import { Button } from "@/components/ui";
@@ -68,7 +75,15 @@ function CheckoutFormComponent(props: CheckoutFormComponentProps) {
   );
 }
 
-export function CheckoutForm() {
+type CheckoutFormProps = {
+  orderId: string;
+  stripeSessionId: string;
+};
+
+export function CheckoutForm(props: CheckoutFormProps) {
+  // === PROPS ===
+  const { orderId, stripeSessionId } = props;
+
   // === STATE ===
   const [currentStep, setCurrentStep] = useState<CheckoutStep>(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -92,6 +107,11 @@ export function CheckoutForm() {
       stripePaymentIntentId: "",
     },
   });
+
+  // === STRIPE HOOKS ===
+  const stripePromise = loadStripe(
+    process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
+  );
 
   // Navigation handlers
   const handleContinueToPayment = async () => {
@@ -131,7 +151,6 @@ export function CheckoutForm() {
 
   const handlePlaceOrder = async () => {
     const isValid = await form.trigger();
-
     if (!isValid) {
       toast.error("Please check your information and try again");
       return;
@@ -142,33 +161,37 @@ export function CheckoutForm() {
     try {
       const formData = form.getValues();
 
-      const result = await createOrder({
-        fullName: formData.fullName,
-        email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        zipCode: formData.zipCode,
-        country: formData.country,
-        paymentMethod: formData.paymentMethod,
-        stripePaymentIntentId: formData.stripePaymentIntentId,
-      });
+      // 1️⃣ Save customer info to existing order
+      // await updateOrderCustomerDetails({
+      //   orderId,
+      //   fullName: formData.fullName,
+      //   email: formData.email,
+      //   phone: formData.phone,
+      //   address: formData.address,
+      //   city: formData.city,
+      //   state: formData.state,
+      //   zipCode: formData.zipCode,
+      //   country: formData.country,
+      // });
 
-      if (!result.success) {
-        toast.error(result.error || "Failed to place order");
-        return;
-      }
+      // 2️⃣ Confirm Stripe payment (THIS is the payment)
+      // const { error } = await stripe.confirmPayment({
+      //   elements,
+      //   confirmParams: {
+      //     return_url: `${window.location.origin}/success?orderId=${orderId}`,
+      //   },
+      // });
 
-      toast.success(`Order #${result.data.orderNumber} placed successfully!`);
+      // if (error) {
+      //   toast.error(error.message || "Payment failed");
+      //   setIsSubmitting(false);
+      //   return;
+      // }
 
-      // Redirect to home page (or order confirmation page in the future)
-      router.push("/");
-      router.refresh();
-    } catch (error) {
-      toast.error("An unexpected error occurred");
-      console.error("Order placement error:", error);
-    } finally {
+      // Success handled by redirect + webhook
+    } catch (err) {
+      console.error(err);
+      toast.error("Unexpected checkout error");
       setIsSubmitting(false);
     }
   };
@@ -201,7 +224,12 @@ export function CheckoutForm() {
         onBtnClick={handleContinueToReview}
       >
         <Activity mode={currentStep === 2 ? "visible" : "hidden"}>
-          <PaymentStep form={form} />
+          <Elements
+            stripe={stripePromise}
+            options={{ clientSecret: stripeSessionId }}
+          >
+            <PaymentElement />
+          </Elements>
         </Activity>
       </CheckoutFormComponent>
 

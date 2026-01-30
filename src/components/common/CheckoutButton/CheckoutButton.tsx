@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CheckoutButtonUI } from "./CheckoutButtonUI";
 import { useRouter } from "next/navigation";
-import { updateCartStatus } from "@/lib/server/actions";
+import { createPaymentIntent } from "@/lib/server/actions";
 import { CART_STATUS_CHECKOUT, routes } from "@/lib";
 
 type CheckoutButtonProps = {
@@ -25,7 +25,7 @@ export function CheckoutButton(props: CheckoutButtonProps) {
   const onClick = async () => {
     setIsLoading(true);
 
-    const res = await updateCartStatus(CART_STATUS_CHECKOUT);
+    const res = await createPaymentIntent(CART_STATUS_CHECKOUT);
 
     if (!res.success) {
       setIsError(true);

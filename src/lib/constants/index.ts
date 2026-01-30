@@ -9,3 +9,4 @@ export * from "./product-page-data";
 export * from "./product-sizes";
 export * from "./cookie-variables";
 export * from "./cart-constants";
+export * from "./order-constants";

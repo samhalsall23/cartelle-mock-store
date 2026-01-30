@@ -1,5 +1,3 @@
-import { Decimal } from "@prisma/client/runtime/library";
-
 export type CartQuantityReturn = { quantity: number };
 
 // Cart item with additional product details

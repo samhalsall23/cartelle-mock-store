@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
+
 import { BaseSection } from "@/components";
 import { getCart } from "@/lib/server/queries/cart-queries";
+import { getCurrentOrder } from "@/lib/server/queries";
 import {
   CheckoutForm,
   CheckoutCartSidebar,
@@ -9,14 +11,25 @@ import {
 export const dynamic = "force-dynamic";
 
 export default async function CheckoutPage() {
+  // === FETCH DATA ===
   const cartResult = await getCart();
+  const orderResult = await getCurrentOrder();
 
-  // Redirect to cart if empty
-  if (!cartResult.success || cartResult.data.items.length === 0) {
+  // === REDIRECT IF NO CART/ORDER ===
+  // Redirect to cart or order if empty
+  if (
+    !orderResult.success ||
+    !orderResult.data ||
+    !orderResult.data.stripeSessionId ||
+    !cartResult.success ||
+    cartResult.data.items.length === 0
+  ) {
     redirect("/cart");
   }
 
+  // === PREPARE DATA ===
   const { items, summary } = cartResult.data;
+  const { id: orderId, stripeSessionId } = orderResult.data;
 
   return (
     <main>
@@ -35,7 +48,10 @@ export default async function CheckoutPage() {
 
             {/* Form */}
             <div className="w-full md:w-[60%]">
-              <CheckoutForm />
+              <CheckoutForm
+                orderId={orderId}
+                stripeSessionId={stripeSessionId}
+              />
             </div>
 
             {/* Cart sidebar on desktop */}
