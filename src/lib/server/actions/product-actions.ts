@@ -9,8 +9,8 @@ import { prisma } from "@/lib/prisma";
 import { ProductMutationInput, ServerActionResponse } from "@/types";
 import { adminRoutes, routes } from "@/lib/routing";
 import { wrapServerCall } from "../helpers/helpers";
-import { AdminProductsFormNoFileData } from "@/components/admin";
 import { SIZE_TEMPLATES } from "@/lib/constants";
+import { AdminProductsFormNoFileData } from "@/components/admin/forms/AdminProductsForm/schema";
 
 // === MUTATIONS ===
 export async function createProduct(

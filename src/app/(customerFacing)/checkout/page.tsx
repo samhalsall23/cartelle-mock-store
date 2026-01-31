@@ -2,11 +2,11 @@ import { redirect } from "next/navigation";
 
 import { BaseSection } from "@/components";
 import { getCart } from "@/lib/server/queries/cart-queries";
-import { getCurrentOrder } from "@/lib/server/queries";
 import {
   CheckoutForm,
   CheckoutCartSidebar,
 } from "@/components/common/Checkout";
+import { getCurrentOrder } from "@/lib/server/actions";
 
 export const dynamic = "force-dynamic";
 

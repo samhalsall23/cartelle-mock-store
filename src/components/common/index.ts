@@ -17,3 +17,4 @@ export * from "./CartItemCard";
 export * from "./CartSummaryPanel";
 export * from "./EmptyCart";
 export * from "./CheckoutButton";
+export * from "./CheckoutSuccess";

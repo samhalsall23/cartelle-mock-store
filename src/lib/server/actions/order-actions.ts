@@ -1,93 +1,82 @@
 "use server";
 
-// import { cookies } from "next/headers";
-// import { prisma } from "@/lib/prisma";
-// import { COOKIE_CART_ID } from "@/lib/constants";
-// import { ServerActionResponse } from "@/types";
-// import { wrapServerCall } from "../helpers/helpers";
-import { PaymentMethod } from "@prisma/client";
-// import { Decimal } from "@prisma/client/runtime/library";
+import { Order, OrderStatus } from "@prisma/client";
 
-export type CreateOrderInput = {
-  fullName: string;
-  email: string;
-  phone: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  country: string;
-  paymentMethod: PaymentMethod;
-  stripePaymentIntentId?: string;
-};
+import { prisma } from "@/lib/prisma";
+import { ServerActionResponse } from "@/types";
+import { wrapServerCall } from "../helpers";
+import { DeliveryDetailsData } from "@/components/common/Checkout";
+import { cookies } from "next/headers";
+import { COOKIE_CART_ID } from "@/lib/constants";
 
-export type CreateOrderOutput = {
-  orderNumber: number;
-  orderId: string;
-};
+// === QUERIES ===
+export async function getCurrentOrder(): Promise<
+  ServerActionResponse<Order | null>
+> {
+  return wrapServerCall(async () => {
+    const cookieStore = await cookies();
+    const cartId = cookieStore.get(COOKIE_CART_ID)?.value;
 
-// export async function createOrder(
-//   input: CreateOrderInput,
-// ): Promise<ServerActionResponse<CreateOrderOutput>> {
-//   return wrapServerCall(async () => {
-//     const cookieStore = await cookies();
-//     const cartId = cookieStore.get(COOKIE_CART_ID)?.value;
+    const order = await prisma.order.findUnique({
+      where: { cartId },
+    });
 
-//     if (!cartId) {
-//       throw new Error("Cart not found");
-//     }
+    return order;
+  });
+}
 
-//     // Fetch cart with items
-//     const cart = await prisma.cart.findUnique({
-//       where: { id: cartId },
-//       include: {
-//         items: true,
-//       },
-//     });
+// === MUTATIONS ===
+export async function updateOrderDetails(
+  orderId: string,
+  input: DeliveryDetailsData,
+): Promise<ServerActionResponse<string>> {
+  return wrapServerCall(async () => {
+    // Validate order exists
+    const existingOrder = await prisma.order.findUnique({
+      where: { id: orderId },
+    });
 
-//     if (!cart) {
-//       throw new Error("Cart not found");
-//     }
+    if (!existingOrder) {
+      throw new Error("Order not found");
+    }
 
-//     if (cart.items.length === 0) {
-//       throw new Error("Cart is empty");
-//     }
+    if (existingOrder.status !== OrderStatus.PENDING) {
+      throw new Error("Order cannot be modified");
+    }
 
-//     // Calculate total price
-//     const totalPrice = cart.items.reduce((sum, item) => {
-//       return sum.add(item.unitPrice.mul(item.quantity));
-//     }, new Decimal(0));
+    await prisma.order.update({
+      where: { id: orderId },
+      data: {
+        delieveryName: input.fullName,
+        deliveryEmail: input.email,
+        deliveryPhone: input.phone,
+        deliveryStreetAddress: input.address,
+        deliveryCity: input.city,
+        deliveryState: input.state,
+        deliveryPostcode: input.zipCode,
+        deliveryCountry: input.country,
 
-//     // Format customer address
-//     const customerAddress = `${input.address}, ${input.city}, ${input.state} ${input.zipCode}, ${input.country}`;
+        billingName: input.fullName,
+        billingStreetAddress: input.useSameBillingAddress
+          ? input.address
+          : input.billingAddress,
+        billingCity: input.useSameBillingAddress
+          ? input.city
+          : input.billingCity,
+        billingState: input.useSameBillingAddress
+          ? input.state
+          : input.billingState,
+        billingPostcode: input.useSameBillingAddress
+          ? input.zipCode
+          : input.billingZipCode,
+        billingCountry: input.useSameBillingAddress
+          ? input.country
+          : input.billingCountry,
 
-//     // Create order
-//     const order = await prisma.order.create({
-//       data: {
-//         cartId: cart.id,
-//         customerName: input.fullName,
-//         customerEmail: input.email,
-//         customerPhone: input.phone,
-//         customerAddress,
-//         totalPrice,
-//         paymentMethod: input.paymentMethod,
-//         status: "PENDING",
-//         paymentStatus: "PENDING",
-//       },
-//     });
+        updatedAt: new Date(),
+      },
+    });
 
-//     // Update cart status to ORDERED
-//     await prisma.cart.update({
-//       where: { id: cart.id },
-//       data: { status: "ORDERED" },
-//     });
-
-//     // Clear cart cookie
-//     cookieStore.delete(COOKIE_CART_ID);
-
-//     return {
-//       orderNumber: order.orderNumber,
-//       orderId: order.id,
-//     };
-//   });
-// }
+    return orderId;
+  });
+}

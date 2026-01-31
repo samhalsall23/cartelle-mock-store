@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components";
+import { getButtonStyles } from "@/components";
 import { routes } from "@/lib/routing/routes";
 
 export function EmptyCart() {
@@ -12,8 +12,8 @@ export function EmptyCart() {
         Looks like you haven&apos;t added anything to your cart yet. Start
         shopping to find your perfect items!
       </p>
-      <Link href={routes.shop}>
-        <Button text="Continue Shopping" variant="dark" />
+      <Link href={routes.shop} className={getButtonStyles("dark")}>
+        Continue Shopping
       </Link>
     </div>
   );
