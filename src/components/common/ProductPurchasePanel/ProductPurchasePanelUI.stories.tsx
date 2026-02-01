@@ -53,8 +53,20 @@ export const Default: Story = {
       category: "DRESSES",
       sizeType: "Standard",
       sizes: [
-        { id: "size_s", label: "S", productId: "prod_1", stock: 10 },
-        { id: "size_m", label: "M", productId: "prod_1", stock: 5 },
+        {
+          id: "size_s",
+          label: "S",
+          productId: "prod_1",
+          stockTotal: 10,
+          stockReserved: 0,
+        },
+        {
+          id: "size_m",
+          label: "M",
+          productId: "prod_1",
+          stockTotal: 5,
+          stockReserved: 0,
+        },
       ],
     },
     defaultSize: "size_s",

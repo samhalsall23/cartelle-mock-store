@@ -19,7 +19,7 @@ export async function createProduct(
   return wrapServerCall(async () => {
     const sizes = SIZE_TEMPLATES[data.sizeType].map((size) => ({
       label: size,
-      stock: 10, // mock stock value, in real app this would come from form data
+      stockTotal: 10, // mock stock value, in real app this would come from form data
     }));
 
     const created = await prisma.product.create({

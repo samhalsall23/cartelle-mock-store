@@ -37,9 +37,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid signature" }, { status: 400 });
   }
 
-  // Handle the event
   switch (event.type) {
-    // Handle successful payment intent
     case "payment_intent.succeeded": {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
 
@@ -90,9 +88,6 @@ export async function POST(req: NextRequest) {
         });
 
         console.log(`Order ${orderId} marked as PAID`);
-
-        // Optional: Send confirmation email here
-        // await sendOrderConfirmationEmail(existingOrder.deliveryEmail, orderId);
       } catch (error) {
         console.error(`Error updating order ${orderId}:`, error);
       }
