@@ -332,8 +332,9 @@ export async function initiateCheckout(
         throw new Error("Cart empty");
       }
 
-      if (cart.status !== CartStatus.ACTIVE) {
-        throw new Error("Cart is not active");
+      if (cart.status === CartStatus.ORDERED) {
+        cookieStore.delete(COOKIE_CART_ID);
+        throw new Error("Cart has already been ordered");
       }
 
       if (existingOrder?.stripeSessionId) {
@@ -341,27 +342,29 @@ export async function initiateCheckout(
       }
 
       // === STOCK RESERVATION ===
-      for (const item of cart.items) {
-        const { stockTotal, stockReserved } = item.size;
-        const available = stockTotal - stockReserved;
+      if (!cart.reservedAt) {
+        for (const item of cart.items) {
+          const { stockTotal, stockReserved } = item.size;
+          const available = stockTotal - stockReserved;
 
-        if (available < item.quantity) {
-          throw new Error(`Not enough stock for ${item.title}`);
+          if (available < item.quantity) {
+            throw new Error(`Not enough stock for ${item.title}`);
+          }
         }
-      }
 
-      await Promise.all(
-        cart.items.map((item) =>
-          tx.size.update({
-            where: { id: item.sizeId },
-            data: {
-              stockReserved: {
-                increment: item.quantity,
+        await Promise.all(
+          cart.items.map((item) =>
+            tx.size.update({
+              where: { id: item.sizeId },
+              data: {
+                stockReserved: {
+                  increment: item.quantity,
+                },
               },
-            },
-          }),
-        ),
-      );
+            }),
+          ),
+        );
+      }
 
       // === CALCULATE TOTAL ===
       const totalPrice = cart.items.reduce(
@@ -370,6 +373,7 @@ export async function initiateCheckout(
       );
 
       // === UPDATE CART STATUS + CREATE ORDER ===
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [_, order] = await Promise.all([
         tx.cart.update({
           where: { id: cartId },

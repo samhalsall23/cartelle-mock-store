@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
 
 import { prisma } from "@/lib/prisma";
-import { OrderStatus, PaymentStatus, CartStatus } from "@prisma/client";
+import { CartStatus, OrderStatus, PaymentStatus } from "@prisma/client";
 
 // === SETUP ====
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -40,8 +40,6 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case "payment_intent.succeeded": {
       const paymentIntent = event.data.object as Stripe.PaymentIntent;
-
-      // Get orderId from metadata (set when creating PaymentIntent)
       const orderId = paymentIntent.metadata.orderId;
 
       if (!orderId) {
@@ -49,48 +47,47 @@ export async function POST(req: NextRequest) {
         break;
       }
 
-      try {
-        // Fetch the existing order
-        const existingOrder = await prisma.order.findUnique({
+      await prisma.$transaction(async (tx) => {
+        const order = await tx.order.findUnique({
           where: { id: orderId },
-        });
-
-        if (!existingOrder) {
-          console.error(`Order ${orderId} not found`);
-          break;
-        }
-
-        if (
-          existingOrder.status === OrderStatus.PAID &&
-          existingOrder.paymentStatus === PaymentStatus.PAID
-        ) {
-          console.log(`Order ${orderId} already marked as PAID`);
-          break;
-        }
-
-        // Update order status to PAID
-        await prisma.order.update({
-          where: { id: orderId },
-          data: {
-            status: OrderStatus.PAID,
-            paymentStatus: PaymentStatus.PAID,
-            updatedAt: new Date(),
+          include: {
+            cart: {
+              include: { items: true },
+            },
           },
         });
 
-        // Update cart status to ORDERED
-        await prisma.cart.update({
-          where: { id: existingOrder.cartId },
-          data: {
-            status: CartStatus.ORDERED,
-            checkoutAt: new Date(),
-          },
-        });
+        if (!order || order.paymentStatus === OrderStatus.PAID) return;
 
-        console.log(`Order ${orderId} marked as PAID`);
-      } catch (error) {
-        console.error(`Error updating order ${orderId}:`, error);
-      }
+        await Promise.all(
+          order.cart.items.map((item) =>
+            tx.size.update({
+              where: { id: item.sizeId },
+              data: {
+                stockReserved: { decrement: item.quantity },
+                stockTotal: { decrement: item.quantity },
+              },
+            }),
+          ),
+        );
+
+        await Promise.all([
+          tx.order.update({
+            where: { id: orderId },
+            data: {
+              status: OrderStatus.PAID,
+              paymentStatus: PaymentStatus.PAID,
+            },
+          }),
+          tx.cart.update({
+            where: { id: order.cartId },
+            data: {
+              status: CartStatus.ORDERED,
+            },
+          }),
+        ]);
+      });
+
       break;
     }
 
