@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Stripe from "stripe";
+
 import { prisma } from "@/lib/prisma";
 import { OrderStatus, PaymentStatus, CartStatus } from "@prisma/client";
 
@@ -9,7 +10,22 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(req: NextRequest) {
   const body = await req.text();
-  const signature = req.headers.get("stripe-signature")!;
+  const signature = req.headers.get("stripe-signature");
+
+  if (!process.env.STRIPE_SECRET_KEY || !webhookSecret) {
+    console.error("Stripe webhook misconfigured: missing secrets");
+    return NextResponse.json(
+      { error: "Server misconfigured" },
+      { status: 500 },
+    );
+  }
+
+  if (!signature) {
+    return NextResponse.json(
+      { error: "Missing stripe-signature header" },
+      { status: 400 },
+    );
+  }
 
   let event: Stripe.Event;
 
@@ -43,6 +59,14 @@ export async function POST(req: NextRequest) {
 
         if (!existingOrder) {
           console.error(`Order ${orderId} not found`);
+          break;
+        }
+
+        if (
+          existingOrder.status === OrderStatus.PAID &&
+          existingOrder.paymentStatus === PaymentStatus.PAID
+        ) {
+          console.log(`Order ${orderId} already marked as PAID`);
           break;
         }
 
@@ -82,6 +106,20 @@ export async function POST(req: NextRequest) {
 
       if (failedOrderId) {
         try {
+          const existingOrder = await prisma.order.findUnique({
+            where: { id: failedOrderId },
+          });
+
+          if (!existingOrder) {
+            console.error(`Order ${failedOrderId} not found`);
+            break;
+          }
+
+          if (existingOrder.paymentStatus === PaymentStatus.FAILED) {
+            console.log(`Order ${failedOrderId} already marked as FAILED`);
+            break;
+          }
+
           await prisma.order.update({
             where: { id: failedOrderId },
             data: {
@@ -92,6 +130,28 @@ export async function POST(req: NextRequest) {
           console.log(`Order ${failedOrderId} payment failed`);
         } catch (error) {
           console.error(`Error updating failed order ${failedOrderId}:`, error);
+        }
+      }
+      break;
+    }
+
+    case "charge.refunded": {
+      const refundedCharge = event.data.object as Stripe.Charge;
+      const refundedOrderId = refundedCharge.metadata?.orderId;
+
+      if (refundedOrderId) {
+        try {
+          await prisma.order.update({
+            where: { id: refundedOrderId },
+            data: {
+              status: OrderStatus.REFUNDED,
+              paymentStatus: PaymentStatus.REFUNDED,
+              updatedAt: new Date(),
+            },
+          });
+          console.log(`Order ${refundedOrderId} refunded`);
+        } catch (error) {
+          console.error(`Error refunding order ${refundedOrderId}:`, error);
         }
       }
       break;
