@@ -55,6 +55,7 @@ model Cart {
   status      CartStatus @default(ACTIVE)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
+  reservedAt  DateTime?
   checkoutAt  DateTime?
   abandonedAt DateTime?
 

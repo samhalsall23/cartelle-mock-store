@@ -300,7 +300,8 @@ export async function removeCartItem({
     return { quantity: cartQuantity };
   });
 }
-export async function createPaymentIntent(
+
+export async function initiateCheckout(
   status: CartStatus,
 ): Promise<ServerActionResponse<void>> {
   return wrapServerCall(async () => {
@@ -309,63 +310,102 @@ export async function createPaymentIntent(
 
     if (!cartId) throw new Error("Cart not found");
 
-    const cart = await prisma.cart.findUnique({
-      where: { id: cartId },
-      include: { items: { include: { product: true } } },
-    });
+    await prisma.$transaction(async (tx) => {
+      const [cart, existingOrder] = await Promise.all([
+        tx.cart.findUnique({
+          where: { id: cartId },
+          include: {
+            items: {
+              include: {
+                size: true,
+              },
+            },
+          },
+        }),
+        tx.order.findUnique({
+          where: { cartId },
+          select: { stripeSessionId: true },
+        }),
+      ]);
 
-    if (!cart || cart.items.length === 0) {
-      throw new Error("Cart empty");
-    }
+      if (!cart || cart.items.length === 0) {
+        throw new Error("Cart empty");
+      }
 
-    // Prevent duplicate orders
-    const existingOrder = await prisma.order.findUnique({
-      where: { cartId },
-    });
+      if (cart.status !== CartStatus.ACTIVE) {
+        throw new Error("Cart is not active");
+      }
 
-    if (existingOrder?.stripeSessionId) {
-      return;
-    }
+      if (existingOrder?.stripeSessionId) {
+        return;
+      }
 
-    // Calculate total
-    const totalPrice = cart.items.reduce(
-      (sum, item) => sum + item.unitPrice.toNumber() * item.quantity,
-      0,
-    );
+      // === STOCK RESERVATION ===
+      for (const item of cart.items) {
+        const { stockTotal, stockReserved } = item.size;
+        const available = stockTotal - stockReserved;
 
-    // Update cart status AFTER validation
-    await prisma.cart.update({
-      where: { id: cartId },
-      data: { status },
-    });
+        if (available < item.quantity) {
+          throw new Error(`Not enough stock for ${item.title}`);
+        }
+      }
 
-    // Create Order
-    const order = await prisma.order.create({
-      data: {
-        cartId,
-        totalPrice,
-        status: OrderStatus.PENDING,
-        paymentMethod: PaymentMethod.STRIPE,
-      },
-    });
+      await Promise.all(
+        cart.items.map((item) =>
+          tx.size.update({
+            where: { id: item.sizeId },
+            data: {
+              stockReserved: {
+                increment: item.quantity,
+              },
+            },
+          }),
+        ),
+      );
 
-    // Create PaymentIntent
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(totalPrice * 100),
-      currency: AUD_CURRENCY,
-      automatic_payment_methods: { enabled: true },
-      metadata: {
-        orderId: order.id,
-        cartId,
-      },
-    });
+      // === CALCULATE TOTAL ===
+      const totalPrice = cart.items.reduce(
+        (sum, item) => sum + item.unitPrice.toNumber() * item.quantity,
+        0,
+      );
 
-    // update with payment intent id
-    await prisma.order.update({
-      where: { id: order.id },
-      data: {
-        stripeSessionId: paymentIntent.client_secret,
-      },
+      // === UPDATE CART STATUS + CREATE ORDER ===
+      const [_, order] = await Promise.all([
+        tx.cart.update({
+          where: { id: cartId },
+          data: {
+            status,
+            reservedAt: new Date(),
+          },
+        }),
+        tx.order.create({
+          data: {
+            cartId,
+            totalPrice,
+            status: OrderStatus.PENDING,
+            paymentMethod: PaymentMethod.STRIPE,
+          },
+        }),
+      ]);
+
+      // === CREATE PAYMENT INTENT ===
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(totalPrice * 100),
+        currency: AUD_CURRENCY,
+        automatic_payment_methods: { enabled: true },
+        metadata: {
+          orderId: order.id,
+          cartId,
+        },
+      });
+
+      // === SAVE PAYMENT INTENT REFERENCE ===
+      await tx.order.update({
+        where: { id: order.id },
+        data: {
+          stripeSessionId: paymentIntent.client_secret,
+        },
+      });
     });
   });
 }
