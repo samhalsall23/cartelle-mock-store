@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
+import { CartStatus } from "@prisma/client";
 
 import {
   CartItemWithDetails,
@@ -17,6 +18,26 @@ export async function getCart(): Promise<ServerActionResponse<FullCart>> {
     const existingCartId = cookieStore.get(COOKIE_CART_ID)?.value;
 
     if (!existingCartId) {
+      return {
+        items: [],
+        summary: {
+          subtotal: "$0.00",
+          shipping: "Free",
+          total: "$0.00",
+          itemCount: 0,
+        },
+      };
+    }
+
+    // Check cart status before proceeding
+    const cart = await prisma.cart.findUnique({
+      where: { id: existingCartId },
+      select: { status: true },
+    });
+
+    // If cart is ORDERED (paid), delete cookie and return empty cart
+    if (cart?.status === CartStatus.ORDERED) {
+      cookieStore.delete(COOKIE_CART_ID);
       return {
         items: [],
         summary: {
