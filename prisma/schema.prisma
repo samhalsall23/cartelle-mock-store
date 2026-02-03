@@ -83,6 +83,7 @@ model CartItem {
   size    Size    @relation(fields: [sizeId], references: [id], onDelete: Cascade)
 
   @@unique([cartId, productId, sizeId])
+  @@index([cartId])
 }
 
 enum CartStatus {

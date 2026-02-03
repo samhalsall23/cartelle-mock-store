@@ -5,6 +5,9 @@ import Link from "next/link";
 import { getButtonStyles } from "@/components";
 import { routes } from "@/lib/routing/routes";
 import { CircleCheckIcon } from "@/components/icons";
+import { useCartCount } from "@/providers";
+import { useEffect } from "react";
+import { clearCart } from "@/lib/server/actions";
 
 type CheckoutSuccessProps = {
   orderNumber?: string;
@@ -14,6 +17,15 @@ type CheckoutSuccessProps = {
 export function CheckoutSuccess(props: CheckoutSuccessProps) {
   // === PROPS ===
   const { orderNumber, email } = props;
+
+  // === CONTEXT ===
+  const { setItemCount } = useCartCount();
+
+  // EFFECTS
+  useEffect(() => {
+    clearCart();
+    setItemCount(0);
+  }, [setItemCount]);
 
   return (
     <div className="flex flex-col items-center justify-center py-20 px-4 gap-8">

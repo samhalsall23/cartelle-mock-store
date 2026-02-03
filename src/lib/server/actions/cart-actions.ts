@@ -126,33 +126,27 @@ export async function addToCart({
     }
 
     const cartQuantity = await prisma.$transaction(async (tx) => {
-      // Create cart if it doesn't exist
-      if (!existingCartId) {
-        await tx.cart.create({
-          data: {
-            id: cartId,
-          },
-        });
-      }
-
-      const [size, existingItem, otherItemsTotal] = await Promise.all([
+      const [size, cart] = await Promise.all([
         tx.size.findUnique({
           where: { id: sizeId },
           include: { product: true },
         }),
-
-        tx.cartItem.findUnique({
-          where: {
-            cartId_productId_sizeId: {
-              cartId: cartId,
-              productId,
-              sizeId: sizeId,
-            },
-          },
-          select: { quantity: true },
-        }),
-
-        getOtherItemsTotal(tx, cartId, undefined, { productId, sizeId }),
+        // Fetch cart with all items in one query
+        existingCartId
+          ? tx.cart.findUnique({
+              where: { id: existingCartId },
+              include: {
+                items: {
+                  select: {
+                    id: true,
+                    productId: true,
+                    sizeId: true,
+                    quantity: true,
+                  },
+                },
+              },
+            })
+          : null,
       ]);
 
       if (!size) {
@@ -160,9 +154,19 @@ export async function addToCart({
       }
 
       const product = size.product;
+
+      const existingItem = cart?.items.find(
+        (item) => item.productId === productId && item.sizeId === sizeId,
+      );
       const currentQuantity = existingItem?.quantity ?? 0;
 
-      // Validate per-item quantity limit
+      const otherItemsTotal =
+        cart?.items
+          .filter(
+            (item) => !(item.productId === productId && item.sizeId === sizeId),
+          )
+          .reduce((sum, item) => sum + item.quantity, 0) ?? 0;
+
       const newItemQuantity = validateItemQuantityLimit(
         currentQuantity,
         quantity,
@@ -175,28 +179,46 @@ export async function addToCart({
         newItemQuantity,
       );
 
-      // Add or update cart item
-      await tx.cartItem.upsert({
-        where: {
-          cartId_productId_sizeId: {
-            cartId: cartId,
-            productId,
-            sizeId: sizeId,
+      if (!existingCartId) {
+        await tx.cart.create({
+          data: {
+            id: cartId,
+            items: {
+              create: {
+                productId: product.id,
+                sizeId,
+                quantity,
+                unitPrice: new Decimal(product.price),
+                title: product.name,
+                image: product.images[0],
+              },
+            },
           },
-        },
-        update: {
-          quantity: newItemQuantity,
-        },
-        create: {
-          cartId: cartId,
-          productId: product.id,
-          sizeId,
-          quantity,
-          unitPrice: new Decimal(product.price),
-          title: product.name,
-          image: product.images[0],
-        },
-      });
+        });
+      } else {
+        // Update or create cart item
+        await tx.cartItem.upsert({
+          where: {
+            cartId_productId_sizeId: {
+              cartId: cartId,
+              productId,
+              sizeId: sizeId,
+            },
+          },
+          update: {
+            quantity: newItemQuantity,
+          },
+          create: {
+            cartId: cartId,
+            productId: product.id,
+            sizeId,
+            quantity,
+            unitPrice: new Decimal(product.price),
+            title: product.name,
+            image: product.images[0],
+          },
+        });
+      }
 
       return newCartTotal;
     });
@@ -424,4 +446,11 @@ export async function initiateCheckout(
     revalidateTag(CACHE_TAG_CART, "default");
     revalidateTag(CACHE_TAG_PRODUCT, "default");
   });
+}
+
+// === CLEAR CART ===
+export async function clearCart(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.delete(COOKIE_CART_ID);
+  revalidateTag(CACHE_TAG_CART, "default");
 }
