@@ -1,6 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
+import { revalidateTag } from "next/cache";
 import { nanoid } from "nanoid";
 
 import { prisma } from "@/lib/prisma";
@@ -13,8 +14,10 @@ import {
 } from "@/lib/constants";
 import { Decimal } from "@prisma/client/runtime/library";
 import { CartQuantityReturn, ServerActionResponse } from "@/types";
-import { wrapServerCall } from "../helpers/helpers";
+import { wrapServerCall } from "../helpers/generic-helpers";
 import { CartStatus, OrderStatus, PaymentMethod, Prisma } from "@prisma/client";
+import { getCartCountCached } from "../helpers";
+import { CACHE_TAG_CART, CACHE_TAG_PRODUCT } from "@/lib/constants";
 
 // === QUERIES ===
 export async function getCartItemCount(): Promise<
@@ -28,24 +31,14 @@ export async function getCartItemCount(): Promise<
       return { quantity: 0 };
     }
 
-    const cart = await prisma.cart.findUnique({
-      where: { id: existingCartId },
-      select: { status: true },
-    });
+    const { quantity, status } = await getCartCountCached(existingCartId);
 
-    if (cart?.status === CartStatus.ORDERED) {
+    if (status === CartStatus.ORDERED) {
       cookieStore.delete(COOKIE_CART_ID);
       return { quantity: 0 };
     }
 
-    const items = await prisma.cartItem.findMany({
-      where: { cartId: existingCartId },
-      select: { quantity: true },
-    });
-
-    const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
-
-    return { quantity: totalQuantity };
+    return { quantity };
   });
 }
 
@@ -218,6 +211,8 @@ export async function addToCart({
       });
     }
 
+    revalidateTag(CACHE_TAG_CART, "default");
+
     return { quantity: cartQuantity };
   });
 }
@@ -274,6 +269,8 @@ export async function updateCartItemQuantity({
       return newCartTotal;
     });
 
+    revalidateTag(CACHE_TAG_CART, "default");
+
     return { quantity: cartQuantity };
   });
 }
@@ -306,6 +303,8 @@ export async function removeCartItem({
 
       return items.reduce((sum, item) => sum + item.quantity, 0);
     });
+
+    revalidateTag(CACHE_TAG_CART, "default");
 
     return { quantity: cartQuantity };
   });
@@ -421,5 +420,8 @@ export async function initiateCheckout(
         },
       });
     });
+
+    revalidateTag(CACHE_TAG_CART, "default");
+    revalidateTag(CACHE_TAG_PRODUCT, "default");
   });
 }

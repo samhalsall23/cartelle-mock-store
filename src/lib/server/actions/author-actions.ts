@@ -11,7 +11,7 @@ import {
 } from "@/components/admin/forms/AdminAuthorsForm/schema";
 import { BLOB_STORAGE_PREFIXES } from "@/lib/constants";
 import { adminRoutes } from "@/lib/routing";
-import { wrapServerCall } from "../helpers/helpers";
+import { wrapServerCall } from "../helpers/generic-helpers";
 
 // === MUTATIONS ===
 export async function deleteAuthorById(

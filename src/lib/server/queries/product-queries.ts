@@ -1,17 +1,18 @@
+import { unstable_cache } from "next/cache";
+
+import { OrderStatus, Product, ProductCategoryEnum } from "@prisma/client";
 import {
   ProductGetAllCounts,
   ProductWithSizes,
   ServerActionResponse,
 } from "@/types";
-import { OrderStatus, Product, ProductCategoryEnum } from "@prisma/client";
 import { wrapServerCall } from "../helpers";
 import { prisma } from "@/lib/prisma";
+import { CACHE_TAG_PRODUCT } from "@/lib/constants/cache-tags";
 
-// === FETCHES ===
-export async function getThreeLatestProducts(): Promise<
-  ServerActionResponse<Product[]>
-> {
-  return wrapServerCall(async () => {
+// === STATIC PAGE QUERIES ===
+const getThreeLatestProductsCached = unstable_cache(
+  async () => {
     const products = await prisma.product.findMany({
       where: { isActive: true },
       orderBy: { createdAt: "desc" },
@@ -19,27 +20,13 @@ export async function getThreeLatestProducts(): Promise<
     });
 
     return products;
-  });
-}
+  },
+  [CACHE_TAG_PRODUCT, "latest-three"],
+  { tags: [CACHE_TAG_PRODUCT] },
+);
 
-export async function getProductsByCategory(
-  category?: string,
-): Promise<ServerActionResponse<Product[]>> {
-  return wrapServerCall(async () => {
-    const products = await prisma.product.findMany({
-      where: category
-        ? { category: category as ProductCategoryEnum, isActive: true }
-        : { isActive: true },
-    });
-
-    return products;
-  });
-}
-
-export async function getAllProductsWithTotalSold(): Promise<
-  ServerActionResponse<ProductGetAllCounts[]>
-> {
-  return wrapServerCall(async () => {
+const getAllProductsWithTotalSoldCached = unstable_cache(
+  async (): Promise<ProductGetAllCounts[]> => {
     const products = await prisma.product.findMany({
       include: {
         cartItems: {
@@ -78,6 +65,43 @@ export async function getAllProductsWithTotalSold(): Promise<
         totalSold,
       };
     });
+  },
+  [CACHE_TAG_PRODUCT, "total-sold"],
+  { tags: [CACHE_TAG_PRODUCT] },
+);
+
+// === DYNAMIC PAGE QUERIES ===
+export async function getThreeLatestProducts(): Promise<
+  ServerActionResponse<Product[]>
+> {
+  return wrapServerCall(async () => {
+    const products = await getThreeLatestProductsCached();
+
+    return products;
+  });
+}
+
+export async function getProductsByCategory(
+  category?: string,
+): Promise<ServerActionResponse<Product[]>> {
+  return wrapServerCall(async () => {
+    const products = await prisma.product.findMany({
+      where: category
+        ? { category: category as ProductCategoryEnum, isActive: true }
+        : { isActive: true },
+    });
+
+    return products;
+  });
+}
+
+export async function getAllProductsWithTotalSold(): Promise<
+  ServerActionResponse<ProductGetAllCounts[]>
+> {
+  return wrapServerCall(async () => {
+    const products = await getAllProductsWithTotalSoldCached();
+
+    return products;
   });
 }
 

@@ -1,15 +1,15 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 import { ProductCategoryEnum } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 import { prisma } from "@/lib/prisma";
 import { ProductMutationInput, ServerActionResponse } from "@/types";
-import { adminRoutes, routes } from "@/lib/routing";
-import { wrapServerCall } from "../helpers/helpers";
-import { SIZE_TEMPLATES } from "@/lib/constants";
+import { adminRoutes } from "@/lib/routing";
+import { wrapServerCall } from "../helpers/generic-helpers";
+import { CACHE_TAG_PRODUCT, SIZE_TEMPLATES } from "@/lib/constants";
 import { AdminProductsFormNoFileData } from "@/components/admin/forms/AdminProductsForm/schema";
 
 // === MUTATIONS ===
@@ -40,8 +40,7 @@ export async function createProduct(
     });
 
     revalidatePath(adminRoutes.products);
-    revalidatePath(routes.home);
-    revalidatePath(routes.shop);
+    revalidateTag(CACHE_TAG_PRODUCT, "default");
 
     return { id: created.id };
   });
@@ -66,8 +65,7 @@ export async function updateProductById(
     });
 
     revalidatePath(adminRoutes.products);
-    revalidatePath(routes.home);
-    revalidatePath(routes.shop);
+    revalidateTag(CACHE_TAG_PRODUCT, "default");
 
     return { id: created.id };
   });
@@ -80,8 +78,7 @@ export async function deleteProductById(
     const deleted = await prisma.product.delete({ where: { id } });
 
     revalidatePath(adminRoutes.products);
-    revalidatePath(routes.home);
-    revalidatePath(routes.shop);
+    revalidateTag(CACHE_TAG_PRODUCT, "default");
 
     return { id: deleted.id };
   });

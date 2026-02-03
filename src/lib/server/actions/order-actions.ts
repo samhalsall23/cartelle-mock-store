@@ -8,6 +8,8 @@ import { wrapServerCall } from "../helpers";
 import { DeliveryDetailsData } from "@/components/common/Checkout";
 import { cookies } from "next/headers";
 import { COOKIE_CART_ID } from "@/lib/constants";
+import { revalidatePath } from "next/cache";
+import { adminRoutes } from "@/lib/routing";
 
 // === QUERIES ===
 export async function getCurrentOrder(): Promise<
@@ -76,6 +78,8 @@ export async function updateOrderDetails(
         updatedAt: new Date(),
       },
     });
+
+    revalidatePath(adminRoutes.orders);
 
     return orderId;
   });

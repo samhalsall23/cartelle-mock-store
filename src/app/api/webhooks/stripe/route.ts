@@ -1,8 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath, revalidateTag } from "next/cache";
 import Stripe from "stripe";
 
 import { prisma } from "@/lib/prisma";
 import { CartStatus, OrderStatus, PaymentStatus } from "@prisma/client";
+import { adminRoutes } from "@/lib";
+import { CACHE_TAG_CART, CACHE_TAG_PRODUCT } from "@/lib/constants/cache-tags";
 
 // === SETUP ====
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -47,7 +50,7 @@ export async function POST(req: NextRequest) {
         break;
       }
 
-      await prisma.$transaction(async (tx) => {
+      const cartId = await prisma.$transaction(async (tx) => {
         const order = await tx.order.findUnique({
           where: { id: orderId },
           include: {
@@ -57,7 +60,7 @@ export async function POST(req: NextRequest) {
           },
         });
 
-        if (!order || order.paymentStatus === OrderStatus.PAID) return;
+        if (!order || order.paymentStatus === OrderStatus.PAID) return null;
 
         await Promise.all(
           order.cart.items.map((item) =>
@@ -86,7 +89,15 @@ export async function POST(req: NextRequest) {
             },
           }),
         ]);
+
+        return order.cartId;
       });
+
+      if (cartId) {
+        revalidateTag(CACHE_TAG_CART, "default");
+        revalidateTag(CACHE_TAG_PRODUCT, "default");
+        revalidatePath(adminRoutes.orders);
+      }
 
       break;
     }
