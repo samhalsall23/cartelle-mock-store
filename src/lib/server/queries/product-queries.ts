@@ -9,6 +9,7 @@ import {
 import { wrapServerCall } from "../helpers";
 import { prisma } from "@/lib/prisma";
 import { CACHE_TAG_PRODUCT } from "@/lib/constants/cache-tags";
+import { SIZE_TEMPLATES, SIZE_TYPES } from "@/lib/constants";
 
 // === STATIC PAGE QUERIES ===
 const getThreeLatestProductsCached = unstable_cache(
@@ -126,6 +127,24 @@ export async function getProductBySlug(
       include: {
         sizes: true,
       },
+    });
+
+    if (!product) return null;
+
+    // Get the appropriate size order for this product's size type
+    const sizeOrder = product.sizeType
+      ? SIZE_TEMPLATES[product.sizeType as keyof typeof SIZE_TEMPLATES]
+      : SIZE_TEMPLATES[SIZE_TYPES.STANDARD];
+
+    // Sort sizes based on the template order
+    product.sizes.sort((a, b) => {
+      const aIndex = sizeOrder.indexOf(a.label);
+      const bIndex = sizeOrder.indexOf(b.label);
+
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+
+      return aIndex - bIndex;
     });
 
     return product;
