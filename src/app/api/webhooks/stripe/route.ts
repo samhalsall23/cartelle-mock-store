@@ -86,6 +86,7 @@ export async function POST(req: NextRequest) {
             where: { id: order.cartId },
             data: {
               status: CartStatus.ORDERED,
+              checkoutAt: new Date(),
             },
           }),
         ]);
