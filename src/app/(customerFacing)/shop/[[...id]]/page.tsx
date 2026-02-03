@@ -115,7 +115,7 @@ export default async function ShopPage({
                     id={product.id}
                     slug={product.slug}
                     name={product.name}
-                    price={product.price.toNumber()}
+                    price={Number(product.price)}
                     primaryImageUrl={product.images[0]}
                     hoverImageUrl={product.images[1]}
                   />

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui";
 import { DeliveryDetailsData } from "./schema";
 import { updateOrderDetails } from "@/lib/server/actions";
 import { routes } from "@/lib";
+import { motion } from "framer-motion";
 
 type OrderSummaryStepProps = {
   stripeSessionId: string;
@@ -80,8 +81,12 @@ export function OrderSummaryStep(props: OrderSummaryStepProps) {
   };
 
   return (
-    <div className="space-y-2 flex flex-col ">
-      {/* Order Items */}
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="space-y-2 flex flex-col"
+    >
       <span className="text-neutral-10 text-sm">
         By clicking the &quot;Submit payment&quot; button, you confirm that you
         have read, understand and accept our{" "}
@@ -102,6 +107,7 @@ export function OrderSummaryStep(props: OrderSummaryStepProps) {
         </Link>
         .
       </span>
+
       <Button
         onClick={handleConfirmPayment}
         variant="dark"
@@ -109,6 +115,6 @@ export function OrderSummaryStep(props: OrderSummaryStepProps) {
         className="mt-8 w-full"
         isLoading={isSubmitting}
       />
-    </div>
+    </motion.div>
   );
 }

@@ -30,6 +30,7 @@ export function CheckoutButton(props: CheckoutButtonProps) {
 
     if (!res.success) {
       setIsError(true);
+      setIsLoading(false);
       return;
     }
     router.push(routes.checkout);

@@ -62,7 +62,7 @@ const getAllProductsWithTotalSoldCached = unstable_cache(
 
       return {
         ...product,
-        price: product.price.toNumber(),
+        price: Number(product.price),
         totalSold,
       };
     });

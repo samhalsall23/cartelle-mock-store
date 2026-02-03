@@ -58,11 +58,7 @@ export default async function HomePage() {
                 id={product.id}
                 slug={product.slug}
                 name={product.name}
-                price={
-                  typeof product.price === "number"
-                    ? product.price
-                    : product.price.toNumber()
-                }
+                price={Number(product.price)}
                 primaryImageUrl={product.images[0]}
                 hoverImageUrl={product.images[1]}
               />

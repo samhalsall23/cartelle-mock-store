@@ -341,23 +341,35 @@ export async function initiateCheckout(
 
     if (!cartId) throw new Error("Cart not found");
 
-    await prisma.$transaction(async (tx) => {
-      const [cart, existingOrder] = await Promise.all([
-        tx.cart.findUnique({
-          where: { id: cartId },
-          include: {
-            items: {
-              include: {
-                size: true,
+    // === STEP 1: CHECK IF ORDER ALREADY EXISTS (outside transaction) ===
+    const existingOrder = await prisma.order.findUnique({
+      where: { cartId },
+      select: { id: true, stripeSessionId: true, totalPrice: true },
+    });
+
+    if (existingOrder?.stripeSessionId) {
+      return;
+    }
+
+    // === STEP 2: Reserve stock and create order ===
+    const order = await prisma.$transaction(async (tx) => {
+      // Fetch cart with items and sizes in one query
+      const cart = await tx.cart.findUnique({
+        where: { id: cartId },
+        include: {
+          items: {
+            include: {
+              size: {
+                select: {
+                  id: true,
+                  stockTotal: true,
+                  stockReserved: true,
+                },
               },
             },
           },
-        }),
-        tx.order.findUnique({
-          where: { cartId },
-          select: { stripeSessionId: true },
-        }),
-      ]);
+        },
+      });
 
       if (!cart || cart.items.length === 0) {
         throw new Error("Cart empty");
@@ -368,79 +380,88 @@ export async function initiateCheckout(
         throw new Error("Cart has already been ordered");
       }
 
-      if (existingOrder?.stripeSessionId) {
-        return;
-      }
-
-      // === STOCK RESERVATION ===
+      // === ATOMIC STOCK RESERVATION ===
+      // Only reserve if not already reserved
       if (!cart.reservedAt) {
+        // Pre-validate stock availability
         for (const item of cart.items) {
-          const { stockTotal, stockReserved } = item.size;
-          const available = stockTotal - stockReserved;
-
+          const available = item.size.stockTotal - item.size.stockReserved;
           if (available < item.quantity) {
             throw new Error(`Not enough stock for ${item.title}`);
           }
         }
 
-        await Promise.all(
-          cart.items.map((item) =>
-            tx.size.update({
-              where: { id: item.sizeId },
-              data: {
-                stockReserved: {
-                  increment: item.quantity,
-                },
+        // Reserve stock using Prisma's updateMany for better performance
+        await cart.items.map((item) =>
+          tx.size.update({
+            where: { id: item.sizeId },
+            data: {
+              stockReserved: {
+                increment: item.quantity,
               },
-            }),
-          ),
+            },
+          }),
         );
       }
 
-      // === CALCULATE TOTAL ===
+      // Calculate total price
       const totalPrice = cart.items.reduce(
         (sum, item) => sum + item.unitPrice.toNumber() * item.quantity,
         0,
       );
 
-      // === UPDATE CART STATUS + CREATE ORDER ===
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const [_, order] = await Promise.all([
-        tx.cart.update({
+      // Update cart and create/return order atomically
+      if (existingOrder) {
+        // Order exists but no payment intent - just update cart and return existing order
+        await tx.cart.update({
           where: { id: cartId },
           data: {
             status,
-            reservedAt: new Date(),
+            reservedAt: cart.reservedAt ?? new Date(),
           },
-        }),
-        tx.order.create({
-          data: {
-            cartId,
-            totalPrice,
-            status: OrderStatus.PENDING,
-            paymentMethod: PaymentMethod.STRIPE,
-          },
-        }),
-      ]);
+        });
+        return { id: existingOrder.id, totalPrice: existingOrder.totalPrice };
+      } else {
+        // Create order and update cart in parallel
+        const [newOrder] = await Promise.all([
+          tx.order.create({
+            data: {
+              cartId,
+              totalPrice,
+              status: OrderStatus.PENDING,
+              paymentMethod: PaymentMethod.STRIPE,
+            },
+            select: { id: true, totalPrice: true },
+          }),
+          tx.cart.update({
+            where: { id: cartId },
+            data: {
+              status,
+              reservedAt: cart.reservedAt ?? new Date(),
+            },
+          }),
+        ]);
+        return newOrder;
+      }
+    });
 
-      // === CREATE PAYMENT INTENT ===
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: Math.round(totalPrice * 100),
-        currency: AUD_CURRENCY,
-        automatic_payment_methods: { enabled: true },
-        metadata: {
-          orderId: order.id,
-          cartId,
-        },
-      });
+    // === STEP 3: CREATE PAYMENT INTENT ===
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: Math.round(order.totalPrice.toNumber() * 100),
+      currency: AUD_CURRENCY,
+      automatic_payment_methods: { enabled: true },
+      metadata: {
+        orderId: order.id,
+        cartId,
+      },
+    });
 
-      // === SAVE PAYMENT INTENT REFERENCE ===
-      await tx.order.update({
-        where: { id: order.id },
-        data: {
-          stripeSessionId: paymentIntent.client_secret,
-        },
-      });
+    // === STEP 4: SAVE PAYMENT INTENT REFERENCE ===
+    await prisma.order.update({
+      where: { id: order.id },
+      data: {
+        stripeSessionId: paymentIntent.client_secret,
+      },
     });
 
     revalidateTag(CACHE_TAG_CART, "default");

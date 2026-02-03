@@ -25,8 +25,9 @@ function CheckoutFormComponent(props: CheckoutFormComponentProps) {
 
   return (
     <div
+      id={id}
       className={cn(
-        "flex py-6  flex-col",
+        "flex py-6 flex-col",
         completed && id === "1" && "border-y border-neutral-5",
         completed && id === "2" && "border-b border-neutral-5",
       )}
@@ -65,6 +66,32 @@ export function CheckoutForm(props: CheckoutFormProps) {
   const handleConfirmDelivery = (deliveryData: DeliveryDetailsData) => {
     setDeliveryData(deliveryData);
     setCurrentStep(2);
+
+    // Wait for DOM to update, then scroll
+    setTimeout(() => {
+      const el = document.getElementById("2");
+      if (!el) return;
+
+      window.scrollTo({
+        top: el.offsetTop - 500,
+        behavior: "smooth",
+      });
+    }, 100);
+  };
+
+  const handleConfirmPayment = () => {
+    setCurrentStep(3);
+
+    // Wait for DOM to update, then scroll
+    setTimeout(() => {
+      const el = document.getElementById("3");
+      if (!el) return;
+
+      window.scrollTo({
+        top: el.offsetTop - 500,
+        behavior: "smooth",
+      });
+    }, 100);
   };
 
   const handleEditDelivery = () => {
@@ -99,7 +126,7 @@ export function CheckoutForm(props: CheckoutFormProps) {
           <div className={currentStep > 1 ? "block" : "hidden"}>
             <PaymentStep
               completed={currentStep > 2}
-              onContinue={() => setCurrentStep(3)}
+              onContinue={handleConfirmPayment}
               onEditPaymentRequest={() => setCurrentStep(2)}
             />
           </div>
