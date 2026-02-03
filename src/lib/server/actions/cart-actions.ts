@@ -28,6 +28,16 @@ export async function getCartItemCount(): Promise<
       return { quantity: 0 };
     }
 
+    const cart = await prisma.cart.findUnique({
+      where: { id: existingCartId },
+      select: { status: true },
+    });
+
+    if (cart?.status === CartStatus.ORDERED) {
+      cookieStore.delete(COOKIE_CART_ID);
+      return { quantity: 0 };
+    }
+
     const items = await prisma.cartItem.findMany({
       where: { cartId: existingCartId },
       select: { quantity: true },
