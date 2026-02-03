@@ -3,11 +3,15 @@ import { redirect } from "next/navigation";
 import { CheckoutSuccess } from "@/components/common/CheckoutSuccess/CheckoutSuccess";
 import { getCurrentOrderById } from "@/lib/server/queries";
 
-type Props = {
+export const dynamic = "force-dynamic";
+
+type CheckoutSuccessPageProps = {
   searchParams: Promise<{ orderId?: string }>;
 };
 
-export default async function CheckoutSuccessPage(props: Props) {
+export default async function CheckoutSuccessPage(
+  props: CheckoutSuccessPageProps,
+) {
   // === PROPS ===
   const searchParams = await props.searchParams;
   const { orderId } = searchParams;

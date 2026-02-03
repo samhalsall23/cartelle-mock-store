@@ -14,7 +14,7 @@ export function HeroSection() {
 
   // === EFFECT ===
   useEffect(() => {
-    setTimeout(() => setImageReady(true), 800);
+    setTimeout(() => setImageReady(true), 1500);
   }, []);
 
   return (
