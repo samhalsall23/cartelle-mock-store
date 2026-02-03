@@ -87,7 +87,7 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
               View Cart{quantity ? ` (${quantity})` : ""}
             </Link>
 
-            <CheckoutButton />
+            <CheckoutButton onOpenChange={() => onOpenChange(false)} />
           </div>
         </div>
       </DialogContent>

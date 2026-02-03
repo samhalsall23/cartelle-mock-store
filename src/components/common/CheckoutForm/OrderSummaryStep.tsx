@@ -65,7 +65,7 @@ export function OrderSummaryStep(props: OrderSummaryStepProps) {
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/${routes.checkoutSuccess}?orderId=${orderId}`,
+          return_url: `${window.location.origin}${routes.checkoutSuccess}?orderId=${orderId}`,
         },
       });
 

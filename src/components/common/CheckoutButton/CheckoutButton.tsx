@@ -8,11 +8,12 @@ import { CART_STATUS_CHECKOUT, routes } from "@/lib";
 
 type CheckoutButtonProps = {
   className?: string;
+  onOpenChange?: (open: boolean) => void;
 };
 
 export function CheckoutButton(props: CheckoutButtonProps) {
   // === PROPS ===
-  const { className = "" } = props;
+  const { className = "", onOpenChange = () => {} } = props;
 
   // === STATE ===
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +33,7 @@ export function CheckoutButton(props: CheckoutButtonProps) {
       return;
     }
     router.push(routes.checkout);
+    onOpenChange(false);
   };
 
   return (
