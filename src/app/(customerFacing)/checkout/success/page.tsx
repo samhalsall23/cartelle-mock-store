@@ -1,17 +1,16 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
 
 import { CheckoutSuccess } from "@/components/common/CheckoutSuccess/CheckoutSuccess";
 import { getCurrentOrderById } from "@/lib/server/queries";
-import { COOKIE_CART_ID } from "@/lib";
 
 type Props = {
-  searchParams: { orderId?: string };
+  searchParams: Promise<{ orderId?: string }>;
 };
 
 export default async function CheckoutSuccessPage(props: Props) {
   // === PROPS ===
-  const { orderId } = props.searchParams;
+  const searchParams = await props.searchParams;
+  const { orderId } = searchParams;
 
   // === FETCH DATA & REDIRECT ===
   if (!orderId) {
@@ -23,10 +22,6 @@ export default async function CheckoutSuccessPage(props: Props) {
   if (!order || !order.success || !order.data) {
     redirect("/");
   }
-
-  // === COOKIE CLEANUP ===
-  const cookieStore = await cookies();
-  cookieStore.delete(COOKIE_CART_ID);
 
   return (
     <div className="container mx-auto">
