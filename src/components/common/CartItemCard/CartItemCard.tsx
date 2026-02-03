@@ -23,7 +23,7 @@ export function CartItemCard(props: CartItemCardProps) {
   const [error, setError] = useState<string | null>(null);
 
   // === CONTEXT ===
-  const { refreshCartCount } = useCartCount();
+  const { setItemCount } = useCartCount();
 
   // === HOOKS ===
   const router = useRouter();
@@ -51,7 +51,7 @@ export function CartItemCard(props: CartItemCardProps) {
         return;
       }
 
-      refreshCartCount();
+      setItemCount(result.data.quantity);
       router.refresh();
     } catch {
       setOptimisticQuantity(previousQuantity);
@@ -83,7 +83,7 @@ export function CartItemCard(props: CartItemCardProps) {
         return;
       }
 
-      refreshCartCount();
+      setItemCount(result.data.quantity);
       router.refresh();
     } catch {
       setError("An unexpected error occurred");
