@@ -1,6 +1,6 @@
-import { Order } from "@prisma/client";
+import { Order, OrderStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { ServerActionResponse } from "@/types";
+import { OrderWithCart, ServerActionResponse } from "@/types";
 import { wrapServerCall } from "../helpers";
 
 export async function getCurrentOrderById(
@@ -12,5 +12,35 @@ export async function getCurrentOrderById(
     });
 
     return order;
+  });
+}
+
+export async function getOrderedOrders(): Promise<
+  ServerActionResponse<OrderWithCart[]>
+> {
+  return wrapServerCall(async () => {
+    const orders = await prisma.order.findMany({
+      where: { status: OrderStatus.PAID },
+      include: {
+        cart: {
+          include: {
+            items: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    });
+
+    return orders.map((order) => ({
+      ...order,
+      totalPrice: Number(order.totalPrice),
+      cart: {
+        ...order.cart,
+        items: order.cart.items.map((item) => ({
+          ...item,
+          unitPrice: Number(item.unitPrice),
+        })),
+      },
+    }));
   });
 }

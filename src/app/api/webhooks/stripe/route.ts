@@ -154,6 +154,7 @@ export async function POST(req: NextRequest) {
             },
           });
           console.log(`Order ${refundedOrderId} refunded`);
+          revalidatePath(adminRoutes.orders);
         } catch (error) {
           console.error(`Error refunding order ${refundedOrderId}:`, error);
         }
