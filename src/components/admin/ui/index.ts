@@ -10,3 +10,4 @@ export * from "./AdminSeparator";
 export * from "./AdminTextarea";
 export * from "./AdminSelect";
 export * from "./AdminCheckbox";
+export * from "./AdminOrderView";

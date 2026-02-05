@@ -122,7 +122,10 @@ export function AdminOrdersTable(props: AdminOrdersTableProps) {
                     </AdminButton>
                   </AdminDropdownMenuTrigger>
 
-                  <AdminDropdownMenuContent align="end">
+                  <AdminDropdownMenuContent
+                    className="cursor-pointer"
+                    align="end"
+                  >
                     <Link href={`${adminRoutes.orders}/${order.id}`}>
                       <AdminDropdownMenuItem>
                         View Details

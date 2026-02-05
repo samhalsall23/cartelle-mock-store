@@ -1,6 +1,6 @@
 import { Order, OrderStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { OrderWithCart, ServerActionResponse } from "@/types";
+import { GetAdminOrder, OrderWithCart, ServerActionResponse } from "@/types";
 import { wrapServerCall } from "../helpers";
 
 export async function getCurrentOrderById(
@@ -12,6 +12,52 @@ export async function getCurrentOrderById(
     });
 
     return order;
+  });
+}
+
+export async function getAdminOrderById(
+  orderId: string,
+): Promise<ServerActionResponse<GetAdminOrder | null>> {
+  return wrapServerCall(async () => {
+    const order = await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        cart: {
+          include: {
+            items: {
+              select: {
+                id: true,
+                quantity: true,
+                unitPrice: true,
+                title: true,
+                image: true,
+                size: {
+                  select: {
+                    label: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!order) {
+      return null;
+    }
+
+    return {
+      ...order,
+      totalPrice: Number(order.totalPrice),
+      cart: {
+        ...order.cart,
+        items: order.cart.items.map((item) => ({
+          ...item,
+          unitPrice: Number(item.unitPrice),
+        })),
+      },
+    };
   });
 }
 
