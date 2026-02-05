@@ -10,7 +10,7 @@ import {
   SHOP_NAVBAR_TEXT,
 } from "@/components/layout/Navbar/lib";
 import { cn, routes } from "@/lib";
-import { getProductBySlug } from "@/lib/server/queries";
+import { getProductBySlug, getThreeRandomProducts } from "@/lib/server/queries";
 import { SizeTypeEnum } from "@prisma/client";
 import Image from "next/image";
 
@@ -29,6 +29,7 @@ export default async function ProductPage(props: ProductPageProps) {
 
   // === FETCHES ===
   const productData = await getProductBySlug(id);
+  const threeRandomProductsData = await getThreeRandomProducts(id);
 
   if (!productData.success || !productData.data) {
     return (
@@ -47,6 +48,10 @@ export default async function ProductPage(props: ProductPageProps) {
     ...productData.data,
     price: productData.data.price.toFixed(2),
   };
+
+  const threeRandomProducts = threeRandomProductsData.success
+    ? threeRandomProductsData.data
+    : [];
 
   return (
     <main>
@@ -121,30 +126,21 @@ export default async function ProductPage(props: ProductPageProps) {
       >
         <AnimatedHeadingText text="Browse more" variant="product-page-title" />
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full relative">
-          <ProductTile
-            id={"1"}
-            slug="organic-cotton-oversized-tee"
-            name={"Organic Cotton Oversized Tee"}
-            price={89.99}
-            primaryImageUrl={"/assets/clothes-model.jpg"}
-            hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-          />
-          <ProductTile
-            id={"2"}
-            slug="ss"
-            name={"Premium Wool Blend Sweater"}
-            price={159.99}
-            primaryImageUrl={"/assets/clothes-model.jpg"}
-            hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-          />
-          <ProductTile
-            id={"2"}
-            slug="2"
-            name={"Premium Wool Blend Sweater"}
-            price={159.99}
-            primaryImageUrl={"/assets/clothes-model.jpg"}
-            hoverImageUrl={"/assets/clothes-model-hover.jpg"}
-          />
+          {threeRandomProducts.length === 0 && (
+            <p>No other products available</p>
+          )}
+          {threeRandomProducts.length > 0 &&
+            threeRandomProducts.map((product) => (
+              <ProductTile
+                key={product.id}
+                id={id}
+                slug={product.slug}
+                name={product.name}
+                price={Number(product.price)}
+                primaryImageUrl={product.images[0] ?? ""}
+                hoverImageUrl={product.images[1] ?? ""}
+              />
+            ))}
         </div>
       </BaseSection>
     </main>

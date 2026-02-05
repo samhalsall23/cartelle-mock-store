@@ -26,6 +26,39 @@ const getThreeLatestProductsCached = unstable_cache(
   { tags: [CACHE_TAG_PRODUCT] },
 );
 
+export async function getThreeLatestProducts(): Promise<
+  ServerActionResponse<Product[]>
+> {
+  return wrapServerCall(async () => {
+    const products = await getThreeLatestProductsCached();
+
+    return products;
+  });
+}
+
+const getThreeRandomProductsCache = unstable_cache(
+  async (currentSlug: string) => {
+    const products = await prisma.product.findMany({
+      where: { isActive: true, slug: { not: currentSlug } },
+      orderBy: { createdAt: "desc" },
+      take: 3,
+    });
+
+    return products;
+  },
+  [CACHE_TAG_PRODUCT, "random-three"],
+  { tags: [CACHE_TAG_PRODUCT] },
+);
+
+export async function getThreeRandomProducts(
+  id: string,
+): Promise<ServerActionResponse<Product[]>> {
+  return wrapServerCall(async () => {
+    const products = await getThreeRandomProductsCache(id);
+
+    return products;
+  });
+}
 const getAllProductsWithTotalSoldCached = unstable_cache(
   async (): Promise<ProductGetAllCounts[]> => {
     const products = await prisma.product.findMany({
@@ -71,12 +104,11 @@ const getAllProductsWithTotalSoldCached = unstable_cache(
   { tags: [CACHE_TAG_PRODUCT] },
 );
 
-// === DYNAMIC PAGE QUERIES ===
-export async function getThreeLatestProducts(): Promise<
-  ServerActionResponse<Product[]>
+export async function getAllProductsWithTotalSold(): Promise<
+  ServerActionResponse<ProductGetAllCounts[]>
 > {
   return wrapServerCall(async () => {
-    const products = await getThreeLatestProductsCached();
+    const products = await getAllProductsWithTotalSoldCached();
 
     return products;
   });
@@ -96,16 +128,7 @@ export async function getProductsByCategory(
   });
 }
 
-export async function getAllProductsWithTotalSold(): Promise<
-  ServerActionResponse<ProductGetAllCounts[]>
-> {
-  return wrapServerCall(async () => {
-    const products = await getAllProductsWithTotalSoldCached();
-
-    return products;
-  });
-}
-
+// === DYNAMIC PAGE QUERIES ===
 export async function getProductById(
   id: string,
 ): Promise<ServerActionResponse<Product | null>> {

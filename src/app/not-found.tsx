@@ -22,7 +22,7 @@ export default function NotFound() {
             Page Not Found
           </h2>
           <p className="text-lg text-neutral-09 mb-8 max-w-md mx-auto">
-            The page you're looking for doesn't exist or has been moved.
+            {"The page you're looking for doesn't exist or has been moved."}
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <Link href={routes.home}>

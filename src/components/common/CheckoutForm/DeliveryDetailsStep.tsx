@@ -316,7 +316,7 @@ export function DeliveryDetailsStep(props: DeliveryDetailsStepProps) {
               : "pointer-events-auto",
           )}
         >
-          <h3 className="text-lg font-medium text-neutral-12">
+          <h3 className="text-lg mt-8 font-medium text-neutral-12">
             Billing Address
           </h3>
           {/* Billing Address */}
