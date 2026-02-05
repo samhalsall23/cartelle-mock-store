@@ -16,7 +16,7 @@ import { Decimal } from "@prisma/client/runtime/library";
 import { CartQuantityReturn, ServerActionResponse } from "@/types";
 import { wrapServerCall } from "../helpers/generic-helpers";
 import { CartStatus, OrderStatus, PaymentMethod, Prisma } from "@prisma/client";
-import { getCartCountCached } from "../helpers";
+import { getCartCountCached, refreshCartCookie } from "../helpers";
 import { CACHE_TAG_CART, CACHE_TAG_PRODUCT } from "@/lib/constants";
 
 // === QUERIES ===
@@ -211,15 +211,7 @@ export async function addToCart({
       return newCartTotal;
     });
 
-    if (!existingCartId) {
-      cookieStore.set(COOKIE_CART_ID, cartId, {
-        httpOnly: true,
-        sameSite: "lax",
-        path: "/",
-        maxAge: 60 * 60 * 24 * 30, // 30 days
-        secure: process.env.NODE_ENV === "production",
-      });
-    }
+    refreshCartCookie(cookieStore, cartId);
 
     revalidateTag(CACHE_TAG_CART, "default");
 
@@ -281,6 +273,8 @@ export async function updateCartItemQuantity({
 
     revalidateTag(CACHE_TAG_CART, "default");
 
+    refreshCartCookie(cookieStore, existingCartId);
+
     return { quantity: cartQuantity };
   });
 }
@@ -315,6 +309,8 @@ export async function removeCartItem({
     });
 
     revalidateTag(CACHE_TAG_CART, "default");
+
+    refreshCartCookie(cookieStore, existingCartId);
 
     return { quantity: cartQuantity };
   });

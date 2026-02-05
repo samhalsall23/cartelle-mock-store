@@ -2,6 +2,8 @@ import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { CartStatus } from "@prisma/client";
 import { CACHE_TAG_CART } from "@/lib/constants/cache-tags";
+import { cookies } from "next/headers";
+import { COOKIE_CART_ID } from "@/lib/constants";
 
 export const getCartCountCached = unstable_cache(
   async (cartId: string) => {
@@ -28,3 +30,16 @@ export const getCartCountCached = unstable_cache(
     tags: [CACHE_TAG_CART],
   },
 );
+
+export function refreshCartCookie(
+  cookieStore: Awaited<ReturnType<typeof cookies>>,
+  cartId: string,
+) {
+  cookieStore.set(COOKIE_CART_ID, cartId, {
+    httpOnly: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 30, // 30 days
+    secure: process.env.NODE_ENV === "production",
+  });
+}
