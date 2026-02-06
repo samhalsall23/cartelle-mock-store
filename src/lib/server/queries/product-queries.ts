@@ -2,6 +2,7 @@ import { unstable_cache } from "next/cache";
 
 import { OrderStatus, Product, ProductCategoryEnum } from "@prisma/client";
 import {
+  ProductDashboardStats,
   ProductGetAllCounts,
   ProductWithSizes,
   ServerActionResponse,
@@ -171,5 +172,29 @@ export async function getProductBySlug(
     });
 
     return product;
+  });
+}
+
+export async function getDashboardProductStats(): Promise<
+  ServerActionResponse<ProductDashboardStats>
+> {
+  return wrapServerCall(async () => {
+    const [totalProducts, activeProducts, lowStockCount] = await Promise.all([
+      prisma.product.count(),
+      prisma.product.count({ where: { isActive: true } }),
+      prisma.size.count({
+        where: {
+          stockTotal: {
+            lte: 5,
+          },
+        },
+      }),
+    ]);
+
+    return {
+      totalProducts,
+      activeProducts,
+      lowStockProducts: lowStockCount,
+    };
   });
 }

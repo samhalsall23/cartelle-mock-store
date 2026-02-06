@@ -28,9 +28,16 @@ export type ProductGetAllCounts = Omit<
   price: number;
 };
 
-// PRODUCT WITH SIZES
+// === PRODUCT WITH SIZES ===
 export type ProductWithSizes = Prisma.ProductGetPayload<{
   include: {
     sizes: true;
   };
 }>;
+
+// === DASHBOARD STATS ===
+export type ProductDashboardStats = {
+  totalProducts: number;
+  activeProducts: number;
+  lowStockProducts: number;
+};

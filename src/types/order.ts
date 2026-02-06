@@ -60,3 +60,10 @@ export type GetAdminOrder = {
     items: AdminOrderCartItem[];
   };
 };
+
+export type OrderDashboardStats = {
+  totalRevenue: number;
+  totalOrders: number;
+  pendingOrders: number;
+  averageOrderValue: number;
+};

@@ -1,6 +1,11 @@
 import { Order, OrderStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { GetAdminOrder, OrderWithCart, ServerActionResponse } from "@/types";
+import {
+  GetAdminOrder,
+  OrderDashboardStats,
+  OrderWithCart,
+  ServerActionResponse,
+} from "@/types";
 import { wrapServerCall } from "../helpers";
 
 export async function getCurrentOrderById(
@@ -88,5 +93,38 @@ export async function getOrderedOrders(): Promise<
         })),
       },
     }));
+  });
+}
+
+export async function getDashboardStats(): Promise<
+  ServerActionResponse<OrderDashboardStats>
+> {
+  return wrapServerCall(async () => {
+    const [totalOrdersCount, pendingOrdersCount, revenueData] =
+      await Promise.all([
+        prisma.order.count({
+          where: { status: OrderStatus.PAID },
+        }),
+        prisma.order.count({
+          where: { status: OrderStatus.PENDING },
+        }),
+        prisma.order.aggregate({
+          where: { status: OrderStatus.PAID },
+          _sum: {
+            totalPrice: true,
+          },
+        }),
+      ]);
+
+    const totalRevenue = Number(revenueData._sum.totalPrice ?? 0);
+    const averageOrderValue =
+      totalOrdersCount > 0 ? totalRevenue / totalOrdersCount : 0;
+
+    return {
+      totalRevenue,
+      totalOrders: totalOrdersCount,
+      pendingOrders: pendingOrdersCount,
+      averageOrderValue,
+    };
   });
 }
