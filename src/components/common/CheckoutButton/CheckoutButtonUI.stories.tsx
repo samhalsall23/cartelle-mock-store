@@ -3,7 +3,7 @@ import { useState } from "react";
 import { CheckoutButtonUI } from "./CheckoutButtonUI";
 
 const meta = {
-  title: "Common/CheckoutButton",
+  title: "Checkout/CheckoutButton",
   component: CheckoutButtonUI,
   parameters: {
     layout: "centered",
@@ -49,9 +49,9 @@ export const Interactive: Story = {
           {...args}
           onClick={() => {
             setClicked(true);
-              if (args.onClick) {
-                args.onClick();
-              }
+            if (args.onClick) {
+              args.onClick();
+            }
           }}
         />
         <p className="text-sm text-neutral-08">

@@ -173,21 +173,3 @@ export const LongProductName: Story = {
     onDelete: () => {},
   },
 };
-
-export const AffordableItem: Story = {
-  args: {
-    slug: "basic-socks",
-    title: "Cotton Blend Crew Socks (3-Pack)",
-    image: "/assets/clothes-model.jpg",
-    size: {
-      label: "One Size",
-    },
-    quantity: 5,
-    unitPrice: 12.99,
-    isLoading: false,
-    error: null,
-    onIncrement: () => {},
-    onDecrement: () => {},
-    onDelete: () => {},
-  },
-};

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
-import { AuthorWithPostCount, ServerActionResponse } from "@/types";
+import { ServerActionResponse } from "@/types/server";
+import { AuthorWithPostCount } from "@/types/client";
 import { Author } from "@prisma/client";
 import { wrapServerCall } from "@/lib/server/helpers";
 

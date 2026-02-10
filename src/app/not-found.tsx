@@ -2,12 +2,13 @@ import Link from "next/link";
 import { Button, Navbar } from "@/components";
 import { routes } from "@/lib";
 import { CartCountProvider, CartDialogProvider } from "@/providers";
+import { getCartItemCount } from "@/lib/server/actions";
 
 export default function NotFound() {
   return (
     <>
       <header>
-        <CartCountProvider>
+        <CartCountProvider fetchCartItemCount={getCartItemCount}>
           <CartDialogProvider>
             <Navbar />
           </CartDialogProvider>

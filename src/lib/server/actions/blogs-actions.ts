@@ -5,7 +5,7 @@ import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
-import { BlogMutationInput, ServerActionResponse } from "@/types";
+import { BlogMutationInput, ServerActionResponse } from "@/types/server";
 import { getReadingMinutes, wrapServerCall } from "@/lib/server/helpers";
 import { BLOB_STORAGE_PREFIXES } from "@/lib/constants";
 import { adminRoutes, routes } from "@/lib/routing";

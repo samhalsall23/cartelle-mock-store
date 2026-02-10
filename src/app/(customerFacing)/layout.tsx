@@ -1,7 +1,9 @@
 import React from "react";
 
-import { AddToCartDialog, Footer, Navbar } from "@/components";
+import { Footer, Navbar } from "@/components";
 import { CartCountProvider, CartDialogProvider } from "@/providers";
+import { getCartItemCount } from "@/lib/server/actions";
+import { AddToCartDialog } from "@/components/common/AddToCartDialog/AddToCartDialog";
 
 export default async function CustomerLayout({
   children,
@@ -9,7 +11,7 @@ export default async function CustomerLayout({
   children: React.ReactNode;
 }) {
   return (
-    <CartCountProvider>
+    <CartCountProvider fetchCartItemCount={getCartItemCount}>
       <CartDialogProvider>
         <Navbar />
         {children}

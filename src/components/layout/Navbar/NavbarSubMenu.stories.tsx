@@ -5,7 +5,7 @@ import { NavbarSubMenu } from "./NavbarSubMenu";
 import { navbarMockSubItems } from "./data";
 
 const meta = {
-  title: "Layout/Navbar/NavbarSubMenu",
+  title: "Layout/NavbarUI/NavbarSubMenu",
   component: NavbarSubMenu,
   parameters: {
     layout: "fullscreen",

@@ -1,12 +1,12 @@
 import { unstable_cache } from "next/cache";
 
 import { OrderStatus, Product, ProductCategoryEnum } from "@prisma/client";
+import { ServerActionResponse } from "@/types/server";
 import {
   ProductDashboardStats,
   ProductGetAllCounts,
   ProductWithSizes,
-  ServerActionResponse,
-} from "@/types";
+} from "@/types/client";
 import { wrapServerCall } from "../helpers";
 import { prisma } from "@/lib/prisma";
 import { CACHE_TAG_PRODUCT } from "@/lib/constants/cache-tags";
@@ -171,7 +171,10 @@ export async function getProductBySlug(
       return aIndex - bIndex;
     });
 
-    return product;
+    return {
+      ...product,
+      price: Number(product.price),
+    };
   });
 }
 

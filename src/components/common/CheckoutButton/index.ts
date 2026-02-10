@@ -1,1 +1,1 @@
-export * from "./CheckoutButton";
+export * from "./CheckoutButtonUI";

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CheckoutButtonUI } from "./CheckoutButtonUI";
 import { useRouter } from "next/navigation";
+
+import { CheckoutButtonUI } from "./CheckoutButtonUI";
 import { initiateCheckout } from "@/lib/server/actions";
 import { CART_STATUS_CHECKOUT, routes } from "@/lib";
 

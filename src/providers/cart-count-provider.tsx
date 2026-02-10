@@ -1,6 +1,5 @@
 "use client";
 
-import { getCartItemCount } from "@/lib/server/actions";
 import {
   createContext,
   useContext,
@@ -8,6 +7,12 @@ import {
   ReactNode,
   useCallback,
 } from "react";
+
+import { ServerActionResponse } from "@/types/server";
+
+type CartItemCountResult = ServerActionResponse<{
+  quantity: number;
+}>;
 
 type CartCountContextType = {
   itemCount: number;
@@ -19,15 +24,22 @@ const CartCountContext = createContext<CartCountContextType | undefined>(
   undefined,
 );
 
-export function CartCountProvider({ children }: { children: ReactNode }) {
+export function CartCountProvider({
+  children,
+  fetchCartItemCount,
+}: {
+  children: ReactNode;
+  fetchCartItemCount?: () => Promise<CartItemCountResult>;
+}) {
   const [itemCount, setItemCount] = useState(0);
 
   const refreshCartCount = useCallback(async () => {
-    const result = await getCartItemCount();
+    if (!fetchCartItemCount) return;
+    const result = await fetchCartItemCount();
     if (result.success) {
       setItemCount(result.data.quantity);
     }
-  }, []);
+  }, [fetchCartItemCount]);
 
   return (
     <CartCountContext.Provider

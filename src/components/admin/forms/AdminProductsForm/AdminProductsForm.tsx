@@ -1,7 +1,6 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { Product, ProductCategoryEnum, SizeTypeEnum } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -43,6 +42,8 @@ import {
 } from "@/lib/server/actions";
 import { usePreviewUrls } from "@/hooks";
 import { CloseIcon } from "@/components/icons";
+import type { Product } from "@prisma/client";
+import { ProductCategoryEnum, SizeTypeEnum } from "@/types/client";
 
 type AdminProductsFormProps = {
   isEditMode?: boolean;

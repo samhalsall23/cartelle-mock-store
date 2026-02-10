@@ -27,7 +27,7 @@ import {
   AdminInput,
 } from "@/components/admin";
 import { deleteAuthorById } from "@/lib/server/actions";
-import { AuthorWithPostCount } from "@/types";
+import { AuthorWithPostCount } from "@/types/client";
 import { adminRoutes } from "@/lib";
 import { authorColumns } from "./columns";
 

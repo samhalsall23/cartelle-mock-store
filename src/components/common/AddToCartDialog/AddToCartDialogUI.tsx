@@ -1,7 +1,9 @@
 "use client";
 
+import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+
 import {
   Dialog,
   DialogContent,
@@ -12,7 +14,6 @@ import {
 import { CircleCheckIcon } from "@/components/icons";
 import { getButtonStyles } from "@/components/ui/Button";
 import { SIZE_TYPES } from "@/lib";
-import { CheckoutButton } from "@/components/common/CheckoutButton/CheckoutButton";
 
 type AddToCartDialogUIProps = {
   open: boolean;
@@ -23,6 +24,7 @@ type AddToCartDialogUIProps = {
   size?: string;
   category?: string;
   quantity?: number;
+  checkoutButton: ReactNode;
 };
 
 export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
@@ -36,6 +38,7 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
     size,
     category,
     quantity,
+    checkoutButton,
   } = props;
 
   return (
@@ -87,7 +90,7 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
               View Cart{quantity ? ` (${quantity})` : ""}
             </Link>
 
-            <CheckoutButton onOpenChange={() => onOpenChange(false)} />
+            {checkoutButton}
           </div>
         </div>
       </DialogContent>

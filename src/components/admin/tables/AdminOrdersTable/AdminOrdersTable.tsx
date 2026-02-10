@@ -17,7 +17,7 @@ import {
 } from "@/components/admin";
 import { adminRoutes, formatDateToYYYYMMDD } from "@/lib";
 import { orderColumns, defaultVisibleOrderColumnIds } from "./columns";
-import { OrderWithCart } from "@/types";
+import { OrderWithCart } from "@/types/client";
 
 type AdminOrdersTableProps = {
   orders: OrderWithCart[];

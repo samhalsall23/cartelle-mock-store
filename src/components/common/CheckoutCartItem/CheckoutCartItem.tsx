@@ -1,5 +1,6 @@
 import Image from "next/image";
-import { CartItemWithDetails } from "@/types";
+
+import { CartItemWithDetails } from "@/types/client";
 
 type CheckoutCartItemProps = {
   item: CartItemWithDetails;

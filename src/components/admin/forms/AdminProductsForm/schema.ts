@@ -1,4 +1,4 @@
-import { ProductCategoryEnum, SizeTypeEnum } from "@prisma/client";
+import { ProductCategoryEnum, SizeTypeEnum } from "@/types/client";
 import { z } from "zod";
 
 export const AdminProductsFormSchema = (isEditMode: boolean) =>
@@ -12,12 +12,11 @@ export const AdminProductsFormSchema = (isEditMode: boolean) =>
         .positive("Price must be a positive number")
         .multipleOf(0.01, "Price must be valid"),
 
-      category: z.enum(
-        Object.values(ProductCategoryEnum) as [
-          ProductCategoryEnum,
-          ...ProductCategoryEnum[],
-        ],
-        "Category is required",
+      category: ProductCategoryEnum.optional().refine(
+        (val) => val !== undefined,
+        {
+          message: "Category is required",
+        },
       ),
 
       slug: z
@@ -30,7 +29,9 @@ export const AdminProductsFormSchema = (isEditMode: boolean) =>
 
       isActive: z.boolean(),
 
-      sizeType: z.enum(SizeTypeEnum, "Choose a size template"),
+      sizeType: SizeTypeEnum.optional().refine((val) => val !== undefined, {
+        message: "Size is required",
+      }),
 
       images: isEditMode
         ? z.array(z.instanceof(File)).optional()

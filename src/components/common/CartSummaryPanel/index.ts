@@ -1,1 +1,1 @@
-export * from "./CartSummaryPanel";
+export * from "./CartSummaryPanelUI";

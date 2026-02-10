@@ -1,14 +1,12 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 import { useElements, useStripe } from "@stripe/react-stripe-js";
 
-import { Button } from "@/components/ui";
 import { DeliveryDetailsData } from "./schema";
 import { updateOrderDetails } from "@/lib/server/actions";
 import { routes } from "@/lib";
-import { motion } from "framer-motion";
+import { OrderSummaryStepUI } from "./OrderSummaryStepUI";
 
 type OrderSummaryStepProps = {
   stripeSessionId: string;
@@ -81,40 +79,9 @@ export function OrderSummaryStep(props: OrderSummaryStepProps) {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
-      className="space-y-2 flex flex-col"
-    >
-      <span className="text-neutral-10 text-sm">
-        By clicking the &quot;Submit payment&quot; button, you confirm that you
-        have read, understand and accept our{" "}
-        <Link href="#" className="font-bold underline">
-          Terms of Use
-        </Link>
-        ,{" "}
-        <Link href="#" className="font-bold underline">
-          Terms of Sale
-        </Link>
-        ,{" "}
-        <Link href="#" className="font-bold underline">
-          Privacy Policy
-        </Link>{" "}
-        and{" "}
-        <Link href="#" className="font-bold underline">
-          Returns Policy
-        </Link>
-        .
-      </span>
-
-      <Button
-        onClick={handleConfirmPayment}
-        variant="dark"
-        text="Submit payment"
-        className="mt-8 w-full"
-        isLoading={isSubmitting}
-      />
-    </motion.div>
+    <OrderSummaryStepUI
+      isSubmitting={isSubmitting}
+      onConfirmPayment={handleConfirmPayment}
+    />
   );
 }

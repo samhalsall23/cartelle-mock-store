@@ -34,7 +34,7 @@ import {
   screamingSnakeToTitle,
   formatDateToYYYYMMDD,
 } from "@/lib";
-import { BlogPost } from "@prisma/client";
+import { BlogPost } from "@/types/client";
 import { blogColumns, defaultVisibleBlogColumnIds } from "./columns";
 import { deleteBlogById } from "@/lib/server/actions";
 

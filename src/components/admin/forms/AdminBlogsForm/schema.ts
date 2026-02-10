@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { BlogCategory } from "@prisma/client";
+import { BlogCategory } from "@/types/client";
 
 // === SCHEMA ===
 export const AdminBlogsFormSchema = (isEditMode: boolean) =>

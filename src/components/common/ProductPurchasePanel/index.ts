@@ -1,1 +1,1 @@
-export * from "./ProductPurchasePanel";
+export * from "./ProductPurchasePanelUI";

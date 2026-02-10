@@ -13,7 +13,8 @@ import {
   MAX_CART_TOTAL_QUANTITY,
 } from "@/lib/constants";
 import { Decimal } from "@prisma/client/runtime/library";
-import { CartQuantityReturn, ServerActionResponse } from "@/types";
+import { CartQuantityReturn } from "@/types/client";
+import { ServerActionResponse } from "@/types/server";
 import { wrapServerCall } from "../helpers/generic-helpers";
 import { CartStatus, OrderStatus, PaymentMethod, Prisma } from "@prisma/client";
 import { getCartCountCached, refreshCartCookie } from "../helpers";

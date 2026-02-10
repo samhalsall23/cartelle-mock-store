@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { useState } from "react";
 import { AddToCartDialogUI } from "./AddToCartDialogUI";
 import { Button } from "@/components/ui/Button";
+import { CheckoutButtonUI } from "../CheckoutButton";
 
 const meta = {
   title: "Common/AddToCartDialog",
@@ -65,6 +66,13 @@ export const Interactive: Story = {
     quantity: 3,
     open: false,
     onOpenChange: () => {},
+    checkoutButton: (
+      <CheckoutButtonUI
+        className=""
+        onClick={() => alert("Checkout clicked")}
+        isLoading={false}
+      />
+    ),
   },
   render: (args) => {
     const [open, setOpen] = useState(false);

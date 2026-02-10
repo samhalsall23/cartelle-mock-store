@@ -1,4 +1,4 @@
-import { OrderDashboardStats, ProductDashboardStats } from "@/types";
+import { OrderDashboardStats, ProductDashboardStats } from "@/types/client";
 
 type AdminDashboardStatsProps = {
   orderStats: OrderDashboardStats;

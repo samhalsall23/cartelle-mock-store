@@ -1,11 +1,11 @@
 import { Order, OrderStatus } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
+import { ServerActionResponse } from "@/types/server";
 import {
-  GetAdminOrder,
   OrderDashboardStats,
+  GetAdminOrder,
   OrderWithCart,
-  ServerActionResponse,
-} from "@/types";
+} from "@/types/client";
 import { wrapServerCall } from "../helpers";
 
 export async function getCurrentOrderById(

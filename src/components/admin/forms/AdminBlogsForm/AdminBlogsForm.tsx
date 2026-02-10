@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Author, BlogPost } from "@prisma/client";
+import type { BlogPost, Author } from "@prisma/client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";

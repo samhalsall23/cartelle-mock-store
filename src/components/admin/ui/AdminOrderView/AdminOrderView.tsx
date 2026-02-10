@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 
-import { GetAdminOrder } from "@/types";
+import { GetAdminOrder } from "@/types/client";
 import { AdminButton } from "../AdminButton";
 
 type AdminOrderViewProps = {

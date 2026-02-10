@@ -1,4 +1,5 @@
 import type { Preview } from "@storybook/nextjs-vite";
+import "../.storybook/storybook.css";
 import "../src/app/globals.css";
 
 const preview: Preview = {
@@ -18,8 +19,8 @@ const preview: Preview = {
         gray: {
           name: "gray",
           value: "#f5f5f5",
-        }
-      }
+        },
+      },
     },
     controls: {
       matchers: {
@@ -38,9 +39,9 @@ const preview: Preview = {
 
   initialGlobals: {
     backgrounds: {
-      value: "light"
-    }
-  }
+      value: "light",
+    },
+  },
 };
 
 export default preview;

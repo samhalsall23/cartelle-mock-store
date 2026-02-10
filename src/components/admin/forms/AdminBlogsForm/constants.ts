@@ -1,5 +1,5 @@
 import { screamingSnakeToTitle } from "@/lib";
-import { BlogCategory } from "@prisma/client";
+import { BlogCategory } from "@/types/client";
 
 export const BLOG_CATEGORY_OPTIONS = Object.values(BlogCategory).map(
   (category) => ({

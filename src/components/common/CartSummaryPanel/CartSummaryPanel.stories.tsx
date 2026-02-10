@@ -1,9 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { CartSummaryPanel } from "./CartSummaryPanel";
+import { CartSummaryPanelUI } from "./CartSummaryPanelUI";
+import { CheckoutButtonUI } from "../CheckoutButton";
 
 const meta = {
   title: "Cart/CartSummaryPanel",
-  component: CartSummaryPanel,
+  component: CartSummaryPanelUI,
   parameters: {
     layout: "padded",
     docs: {
@@ -20,10 +21,16 @@ const meta = {
       description: "Cart summary with subtotal, shipping, and total amounts",
     },
   },
-} satisfies Meta<typeof CartSummaryPanel>;
+} satisfies Meta<typeof CartSummaryPanelUI>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const checkoutBtnProps = {
+  className: "w-full",
+  onClick: () => alert("Checkout clicked"),
+  isLoading: false,
+};
 
 export const Default: Story = {
   args: {
@@ -33,6 +40,7 @@ export const Default: Story = {
       total: "$1,249.56",
       itemCount: 5,
     },
+    checkoutButton: <CheckoutButtonUI {...checkoutBtnProps} />,
   },
 };
 
@@ -44,6 +52,7 @@ export const SmallOrder: Story = {
       total: "$37.99",
       itemCount: 1,
     },
+    checkoutButton: <CheckoutButtonUI {...checkoutBtnProps} />,
   },
 };
 
@@ -55,6 +64,7 @@ export const FreeShipping: Story = {
       total: "$495.00",
       itemCount: 2,
     },
+    checkoutButton: <CheckoutButtonUI {...checkoutBtnProps} />,
   },
 };
 
@@ -66,80 +76,18 @@ export const LargeOrder: Story = {
       total: "$12,484.99",
       itemCount: 25,
     },
+    checkoutButton: <CheckoutButtonUI {...checkoutBtnProps} />,
   },
 };
 
-export const CalculatedShipping: Story = {
+export const Loading: Story = {
   args: {
     summary: {
-      subtotal: "$156.50",
-      shipping: "Calculated at checkout",
-      total: "$156.50",
-      itemCount: 3,
+      subtotal: "$12,459.99",
+      shipping: "$25.00",
+      total: "$12,484.99",
+      itemCount: 25,
     },
-  },
-};
-
-export const WithDiscount: Story = {
-  args: {
-    summary: {
-      subtotal: "$199.99",
-      shipping: "$10.00",
-      total: "$209.99",
-      itemCount: 4,
-    },
-  },
-};
-
-export const InSidebar: Story = {
-  args: {
-    summary: {
-      subtotal: "$598.00",
-      shipping: "$12.00",
-      total: "$610.00",
-      itemCount: 3,
-    },
-  },
-  decorators: [
-    (Story) => (
-      <div className="flex gap-8">
-        <div className="flex-1 min-h-150 bg-neutral-02 rounded-lg p-6">
-          <p className="text-neutral-10">Cart items would go here...</p>
-        </div>
-        <Story />
-      </div>
-    ),
-  ],
-};
-
-export const MobileView: Story = {
-  args: {
-    summary: {
-      subtotal: "$345.00",
-      shipping: "$10.00",
-      total: "$355.00",
-      itemCount: 6,
-    },
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: "mobile1",
-    },
-  },
-};
-
-export const TabletView: Story = {
-  args: {
-    summary: {
-      subtotal: "$789.99",
-      shipping: "$15.00",
-      total: "$804.99",
-      itemCount: 8,
-    },
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: "tablet",
-    },
+    checkoutButton: <CheckoutButtonUI {...checkoutBtnProps} isLoading={true} />,
   },
 };

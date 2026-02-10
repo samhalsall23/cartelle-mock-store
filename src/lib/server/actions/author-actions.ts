@@ -4,7 +4,7 @@ import { put } from "@vercel/blob";
 import { revalidatePath } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
-import { AuthorMutationInput, ServerActionResponse } from "@/types";
+import { AuthorMutationInput, ServerActionResponse } from "@/types/server";
 import {
   AdminFormAddAuthorsData,
   AdminFormEditAuthorsData,

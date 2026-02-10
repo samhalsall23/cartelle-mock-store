@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 
-import { CheckoutStep } from "@/types/checkout";
+import { CheckoutStep } from "@/types/client";
 import { DeliveryDetailsData } from "./schema";
 import { CircleCheckIcon } from "@/components/icons";
 import { cn } from "@/lib";

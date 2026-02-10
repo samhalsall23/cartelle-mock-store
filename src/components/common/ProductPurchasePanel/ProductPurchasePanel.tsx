@@ -3,13 +3,13 @@
 import { useState } from "react";
 
 import { useCartCount, useCartDialog } from "@/providers";
-import { ProductWithSizes } from "@/types";
+import { ProductWithSizes } from "@/types/client";
 import { ProductPurchasePanelUI } from "./ProductPurchasePanelUI";
 import { screamingSnakeToTitle } from "@/lib";
 import { addToCart } from "@/lib/server/actions";
 
 type ProductPurchasePanelProps = {
-  product: Omit<ProductWithSizes, "price"> & { price: string };
+  product: ProductWithSizes;
   defaultSize?: string;
 };
 
@@ -43,7 +43,7 @@ export function ProductPurchasePanel(props: ProductPurchasePanelProps) {
 
       showDialog({
         productName: product.name,
-        price: product.price,
+        price: product.price.toString(),
         imageUrl: product.images[0],
         size: sizeLabel,
         category: screamingSnakeToTitle(product.category),

@@ -1,14 +1,14 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { Order, OrderStatus } from "@prisma/client";
 
 import { prisma } from "@/lib/prisma";
-import { ServerActionResponse } from "@/types";
+import { ServerActionResponse } from "@/types/server";
 import { wrapServerCall } from "../helpers";
-import { DeliveryDetailsData } from "@/components/common/Checkout";
+import { DeliveryDetailsData } from "@/components";
 import { cookies } from "next/headers";
 import { COOKIE_CART_ID } from "@/lib/constants";
-import { revalidatePath } from "next/cache";
 import { adminRoutes } from "@/lib/routing";
 
 // === QUERIES ===

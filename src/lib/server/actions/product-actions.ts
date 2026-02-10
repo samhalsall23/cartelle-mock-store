@@ -6,7 +6,7 @@ import { ProductCategoryEnum } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 
 import { prisma } from "@/lib/prisma";
-import { ProductMutationInput, ServerActionResponse } from "@/types";
+import { ProductMutationInput, ServerActionResponse } from "@/types/server";
 import { adminRoutes } from "@/lib/routing";
 import { wrapServerCall } from "../helpers/generic-helpers";
 import { CACHE_TAG_PRODUCT, SIZE_TEMPLATES } from "@/lib/constants";
@@ -17,6 +17,10 @@ export async function createProduct(
   data: AdminProductsFormNoFileData,
 ): Promise<ServerActionResponse<ProductMutationInput>> {
   return wrapServerCall(async () => {
+    if (!data.sizeType) {
+      throw new Error("sizeType is required");
+    }
+
     const sizes = SIZE_TEMPLATES[data.sizeType].map((size) => ({
       label: size,
       stockTotal: 10, // mock stock value, in real app this would come from form data

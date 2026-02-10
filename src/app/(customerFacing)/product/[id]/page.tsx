@@ -3,8 +3,8 @@ import {
   BaseSection,
   BreadCrumb,
   ProductTile,
-  ProductPurchasePanel,
 } from "@/components";
+import { ProductPurchasePanel } from "@/components/common/ProductPurchasePanel/ProductPurchasePanel";
 import {
   BLOG_NAVBAR_TEXT,
   SHOP_NAVBAR_TEXT,
@@ -44,11 +44,7 @@ export default async function ProductPage(props: ProductPageProps) {
   }
 
   // === PREPARE DATA ===
-  const product = {
-    ...productData.data,
-    price: productData.data.price.toFixed(2),
-  };
-
+  const product = productData.data;
   const threeRandomProducts = threeRandomProductsData.success
     ? threeRandomProductsData.data
     : [];

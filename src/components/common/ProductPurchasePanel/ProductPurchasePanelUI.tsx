@@ -12,12 +12,12 @@ import {
 } from "@/components/ui";
 import { PRODUCT_ACCORDION_ITEMS } from "@/lib";
 import { useState } from "react";
-import { ProductWithSizes } from "@/types";
+import { ProductWithSizes } from "@/types/client";
 
 type ProductPurchasePanelUIProps = {
   isLoading: boolean;
   isError: boolean;
-  product: Omit<ProductWithSizes, "price"> & { price: string };
+  product: ProductWithSizes;
   defaultSize?: string;
   onAddToCart: (sizeId: string, sizeLabel: string) => Promise<void>;
 };

@@ -1,4 +1,4 @@
-import { ServerActionResponse } from "@/types";
+import { ServerActionResponse } from "@/types/server";
 
 export async function wrapServerCall<T>(
   fn: () => Promise<T>,

@@ -2,12 +2,8 @@ import { cookies } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { CartStatus } from "@prisma/client";
 
-import {
-  CartItemWithDetails,
-  CartSummary,
-  FullCart,
-  ServerActionResponse,
-} from "@/types";
+import { ServerActionResponse } from "@/types/server";
+import { CartItemWithDetails, CartSummary, FullCart } from "@/types/client";
 import { wrapServerCall } from "../helpers";
 import { COOKIE_CART_ID } from "@/lib/constants";
 

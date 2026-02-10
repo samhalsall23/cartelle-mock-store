@@ -1,5 +1,5 @@
-import { CartItemWithDetails, CartSummary } from "@/types";
-import { CheckoutCartItem } from "./CheckoutCartItem";
+import { CartItemWithDetails, CartSummary } from "@/types/client";
+import { CheckoutCartItem } from "@/components/common/CheckoutCartItem/CheckoutCartItem";
 import { calculateMockArrivalDate } from "@/lib/utils";
 
 type CheckoutCartSidebarProps = {

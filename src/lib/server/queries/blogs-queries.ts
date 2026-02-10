@@ -1,6 +1,6 @@
 import { BlogPost } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
-import { BlogPostWithAuthor, ServerActionResponse } from "@/types";
+import { BlogPostWithAuthor, ServerActionResponse } from "@/types/server";
 import { wrapServerCall } from "@/lib/server/helpers";
 
 // === FETCHES ===
