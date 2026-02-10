@@ -6,7 +6,7 @@
     },
     {
       "path": "/api/payment/cleanup-expired-carts",
-      "schedule": "*/15 * * * *"
+      "schedule": "0 1 * * *"
     }
   ]
 }

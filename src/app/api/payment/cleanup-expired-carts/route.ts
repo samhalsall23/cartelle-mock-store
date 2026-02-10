@@ -11,6 +11,10 @@ This API route is intended to be called by a scheduled job (e.g. via cron) to pe
 1) Finds carts that are in CHECKOUT status and whose reservedAt is over 15 minutes ago, marks them as ABANDONED, and releases any reserved stock.
 2) Deletes carts that are in ABANDONED or ACTIVE status and haven't been updated for over 2 months.
 3) Deletes orders that are in PENDING status and whose associated carts were reserved over 15 minutes ago.
+
+Note: In a production environment, this CRON job should run every 15 minutes to ensure timely cleanup of stale carts and orders.
+Since this is a mock store running on a Vercel Hobby plan, the job is configured to run once daily instead.
+
 */
 
 const FIFTEEN_MINUTES_MS = 15 * 60 * 1000;
