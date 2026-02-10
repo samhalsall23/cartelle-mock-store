@@ -62,6 +62,7 @@ export function AddToCartDialogUI(props: AddToCartDialogUIProps) {
                 src={imageUrl}
                 alt={productName}
                 fill
+                quality={60}
                 className="object-cover"
                 sizes="112px"
               />

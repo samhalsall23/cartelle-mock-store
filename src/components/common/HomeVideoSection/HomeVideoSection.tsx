@@ -10,7 +10,7 @@ export function HomeVideoSection() {
         loop
         playsInline
         preload="none"
-        poster="/assets/video-02-poster.jpg"
+        poster="/assets/video-02-poster.png"
       >
         <source src="/assets/video02.webm" type="video/webm" />
         <source src="/assets/video02.mp4" type="video/mp4" />

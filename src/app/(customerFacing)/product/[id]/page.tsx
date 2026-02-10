@@ -68,7 +68,7 @@ export default async function ProductPage(props: ProductPageProps) {
                 <div
                   key={index}
                   className={cn(
-                    "relative w-full h-0 pb-[100%]",
+                    "relative w-full h-full aspect-square",
                     index !== 0 && "hidden lg:block",
                   )}
                 >
@@ -98,7 +98,7 @@ export default async function ProductPage(props: ProductPageProps) {
                 <div
                   key={index}
                   className={cn(
-                    "relative w-full h-0 pb-[100%]",
+                    "relative w-full h-full aspect-square",
                     index === 0 && "hidden lg:block",
                   )}
                 >

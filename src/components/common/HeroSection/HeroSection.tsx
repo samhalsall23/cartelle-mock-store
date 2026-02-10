@@ -8,13 +8,15 @@ import { AnimateFadeIn } from "@/components/ui";
 import { cn } from "@/lib";
 import { HeroSectionButton } from "./HeroSectionButton";
 
+const WAIT_FOR_IMAGE_TIMEOUT = 1800; // ms
+
 export function HeroSection() {
   // === STATE ===
   const [imageReady, setImageReady] = useState(false);
 
   // === EFFECT ===
   useEffect(() => {
-    setTimeout(() => setImageReady(true), 1500);
+    setTimeout(() => setImageReady(true), WAIT_FOR_IMAGE_TIMEOUT);
   }, []);
 
   return (
@@ -24,7 +26,7 @@ export function HeroSection() {
     >
       <div className="h-[75dvh] w-full relative mt-auto">
         <Image
-          src="/assets/hero-3.jpg"
+          src="/assets/hero-beach.jpg"
           alt="Hero Image"
           fill
           sizes="100vw"
@@ -44,7 +46,7 @@ export function HeroSection() {
               "absolute inset-0 rounded-sm",
               "bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0)_15%,rgba(0,0,0,0.6)_100%)]",
               "sm:bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0)_30%,rgba(0,0,0,0.6)_100%)]",
-              "xl:bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0)_50%,rgba(0,0,0,0.6)_100%)]",
+              "xl:bg-[linear-gradient(180deg,rgba(0,0,0,0)_0%,rgba(0,0,0,0)_70%,rgba(0,0,0,0.6)_100%)]",
             )}
           />
         </AnimateFadeIn>
@@ -58,7 +60,7 @@ export function HeroSection() {
             <HeroSectionButton className="order-2 xl:order-1 mt-6 xl:mt-0" />
             <div className="flex flex-col xl:text-end gap-4 xl:ms-auto order-1 xl:order-2">
               <h1 className={cn("text-[clamp(2.5rem,8vw,5rem)]!")}>
-                Effortlessly Selling
+                Curated Luxury
               </h1>
               <h5 className="text-white md:text-neutral-04 font-medium">
                 Discover quality products with fast shipping and secure
