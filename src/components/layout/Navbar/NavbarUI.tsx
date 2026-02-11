@@ -93,16 +93,8 @@ export function NavbarUI({ itemCount }: NavbarUIProps) {
         </div>
 
         <div className="flex items-center text-neutral-12">
-          <button
-            aria-label="Search"
-            className={cn(
-              "p-3 cursor-pointer transition-opacity duration-300 ease-in-out",
-              showMobileMenu ? "opacity-0 pointer-events-none" : "opacity-100",
-              showMobileMenu ? "will-change-opacity" : "will-change-auto",
-            )}
-          >
-            <SearchIcon />
-          </button>
+          {/* === TOD DO: ADD SEARCH ICON === */}
+
           <Link
             href={routes.cart}
             aria-label="Cart"
