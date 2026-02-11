@@ -15,6 +15,9 @@ export async function getBlogs(): Promise<ServerActionResponse<BlogPost[]>> {
           },
         },
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     });
 
     return blogs;
@@ -70,7 +73,7 @@ export async function getHomePageBlogs(): Promise<
     const blogs = await prisma.blogPost.findMany({
       take: 4,
       orderBy: {
-        updatedAt: "desc",
+        createdAt: "desc",
       },
       include: {
         author: {
