@@ -10,10 +10,10 @@ export function HomeVideoSection() {
         loop
         playsInline
         preload="none"
-        poster="/assets/video-02-poster.png"
+        poster="/assets/video-home-poster.png"
       >
-        <source src="/assets/video02.webm" type="video/webm" />
-        <source src="/assets/video02.mp4" type="video/mp4" />
+        <source src="/assets/video-home.webm" type="video/webm" />
+        <source src="/assets/video-home.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <div
