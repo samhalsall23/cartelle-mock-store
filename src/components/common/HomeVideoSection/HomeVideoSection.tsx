@@ -13,7 +13,7 @@ export function HomeVideoSection() {
         poster="/assets/video-home-poster.png"
       >
         <source src="/assets/video-home.webm" type="video/webm" />
-        <source src="/assets/video-home.mp4" type="video/mp4" />
+        <source src="/assets/video-home-com.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       <div
