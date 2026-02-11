@@ -26,7 +26,7 @@ export function HeroSection() {
     >
       <div className="h-[75dvh] w-full relative mt-auto">
         <Image
-          src="/assets/hero-beach.jpg"
+          src="/assets/hero-landing.jpg"
           alt="Hero Image"
           fill
           sizes="100vw"
