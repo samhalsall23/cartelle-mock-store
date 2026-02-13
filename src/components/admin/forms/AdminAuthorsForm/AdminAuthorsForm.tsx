@@ -49,6 +49,7 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
   // === STATE ===
   const [file, setFile] = useState<File | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isActionLocked, setIsActionLocked] = useState(false);
 
   // === HOOKS ===
   const preview = usePreviewUrl(file);
@@ -56,7 +57,7 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
     register,
     handleSubmit,
     setValue,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<AdminAuthorsFormData>({
     resolver: zodResolver(AdminAuthorsFormSchema(isEditMode)),
     defaultValues: {
@@ -108,6 +109,8 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
       return;
     }
 
+    setIsActionLocked(true);
+
     const payload = {
       ...data,
       image: data.image,
@@ -116,6 +119,7 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
     const addRes = await createAuthor(payload);
 
     if (!addRes.success) {
+      setIsActionLocked(false);
       toast.error("Error creating author");
       return;
     }
@@ -125,9 +129,12 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
   };
 
   const onEditSubmit = async (data: AdminFormEditAuthorsData) => {
+    setIsActionLocked(true);
+
     const editRes = await updateAuthorById(authorData?.id || "", data);
 
     if (!editRes.success) {
+      setIsActionLocked(false);
       toast.error("Error updating author");
       return;
     }
@@ -140,11 +147,13 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
     if (!authorData?.id) return;
 
     setIsDeleting(true);
+    setIsActionLocked(true);
 
     const res = await deleteAuthorById(authorData?.id);
 
     if (!res.success) {
       setIsDeleting(false);
+      setIsActionLocked(false);
       toast.error("Error deleting author");
       return;
     }
@@ -152,6 +161,8 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
     toast.success("Author deleted successfully!");
     router.back();
   };
+
+  const isBusy = isActionLocked || isDeleting;
 
   return (
     <div className="w-full max-w-md">
@@ -219,9 +230,9 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
               <AdminButton
                 className="flex-1"
                 type="submit"
-                disabled={isSubmitting || isDeleting}
+                disabled={isBusy}
               >
-                {isSubmitting
+                {isActionLocked && !isDeleting
                   ? "Saving..."
                   : isEditMode
                     ? "Save Changes"
@@ -233,7 +244,7 @@ export function AdminAuthorsForm(props: AdminAuthorsFormProps) {
                 <AdminButton
                   type="button" // Prevents form submission
                   onClick={onDelete}
-                  disabled={isSubmitting || isDeleting}
+                  disabled={isBusy}
                   variant="outline"
                   className="flex-1"
                 >

@@ -15,7 +15,6 @@ import {
   MenuBarIcon,
   CloseIcon,
   CustomLink,
-  SearchIcon,
 } from "@/components";
 
 export type NavbarUIProps = {

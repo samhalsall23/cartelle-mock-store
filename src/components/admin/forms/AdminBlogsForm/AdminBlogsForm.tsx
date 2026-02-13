@@ -56,6 +56,7 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
   // === STATE ===
   const [file, setFile] = useState<File | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isActionLocked, setIsActionLocked] = useState(false);
 
   // === HOOKS ===
   const preview = usePreviewUrl(file);
@@ -64,7 +65,7 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<AdminBlogsFormData>({
     resolver: zodResolver(AdminBlogsFormSchema(isEditMode)),
     defaultValues: {
@@ -125,6 +126,8 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
       return;
     }
 
+    setIsActionLocked(true);
+
     const payload = {
       ...data,
       image: data.image,
@@ -133,6 +136,7 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
     const addRes = await createBlog(payload);
 
     if (!addRes.success) {
+      setIsActionLocked(false);
       toast.error("Error creating blog");
       return;
     }
@@ -142,9 +146,12 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
   };
 
   const onEditSubmit = async (data: AdminBlogsFormData) => {
+    setIsActionLocked(true);
+
     const editRes = await updateBlogById(blogData?.id || "", data);
 
     if (!editRes.success) {
+      setIsActionLocked(false);
       toast.error("Error updating blog");
       return;
     }
@@ -157,11 +164,13 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
     if (!blogData?.id) return;
 
     setIsDeleting(true);
+    setIsActionLocked(true);
 
     const res = await deleteBlogById(blogData?.id);
 
     if (!res.success) {
       setIsDeleting(false);
+      setIsActionLocked(false);
       toast.error("Error deleting blog");
       return;
     }
@@ -169,6 +178,8 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
     toast.success("Blog deleted successfully!");
     router.back();
   };
+
+  const isBusy = isActionLocked || isDeleting;
 
   return (
     <div className="w-full">
@@ -332,9 +343,9 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
               <AdminButton
                 className="flex-1"
                 type="submit"
-                disabled={isSubmitting || isDeleting}
+                disabled={isBusy}
               >
-                {isSubmitting
+                {isActionLocked && !isDeleting
                   ? "Saving..."
                   : isEditMode
                     ? "Save Changes"
@@ -346,7 +357,7 @@ export function AdminBlogsForm(props: AdminBlogsFormProps) {
                 <AdminButton
                   type="button"
                   onClick={onDelete}
-                  disabled={isSubmitting || isDeleting}
+                  disabled={isBusy}
                   variant="outline"
                   className="flex-1"
                 >

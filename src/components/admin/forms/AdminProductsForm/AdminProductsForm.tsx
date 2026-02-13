@@ -63,6 +63,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
   // === STATE ===
   const [files, setFiles] = useState<File[]>([]);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isActionLocked, setIsActionLocked] = useState(false);
 
   // === HOOKS ===
   const newImagePreviews = usePreviewUrls(files);
@@ -72,7 +73,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: zodResolver(AdminProductsFormSchema(isEditMode)),
     defaultValues: {
@@ -248,30 +249,37 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
       router.back();
     } catch (err) {
       console.error(err);
+      setIsActionLocked(false);
       toast.error("An unexpected error occurred");
     }
   };
 
-  const onAddSubmit = (data: AdminProductsFormData) =>
-    handleProductSubmit({ data });
+  const onAddSubmit = (data: AdminProductsFormData) => {
+    setIsActionLocked(true);
+    void handleProductSubmit({ data });
+  };
 
-  const onEditSubmit = (data: AdminProductsFormData) =>
-    handleProductSubmit({
+  const onEditSubmit = (data: AdminProductsFormData) => {
+    setIsActionLocked(true);
+    void handleProductSubmit({
       data,
       isEdit: true,
       productId: productData?.id,
       existingImageUrls: savedImageUrls,
     });
+  };
 
   const onDelete = async () => {
     if (!productData?.id) return;
 
     setIsDeleting(true);
+    setIsActionLocked(true);
 
     const res = await deleteProductById(productData?.id);
 
     if (!res.success) {
       setIsDeleting(false);
+      setIsActionLocked(false);
       toast.error("Error deleting product");
       return;
     }
@@ -279,6 +287,8 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
     toast.success("Product deleted successfully!");
     router.back();
   };
+
+  const isBusy = isActionLocked || isDeleting;
 
   return (
     <div className="w-full max-w-2xl">
@@ -496,9 +506,9 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
               <AdminButton
                 className="flex-1"
                 type="submit"
-                disabled={isSubmitting || isDeleting}
+                disabled={isBusy}
               >
-                {isSubmitting
+                {isActionLocked && !isDeleting
                   ? "Saving..."
                   : isEditMode
                     ? "Save Changes"
@@ -510,7 +520,7 @@ export function AdminProductsForm(props: AdminProductsFormProps) {
                 <AdminButton
                   type="button"
                   onClick={onDelete}
-                  disabled={isSubmitting || isDeleting}
+                  disabled={isBusy}
                   variant="outline"
                   className="flex-1"
                 >
