@@ -11,12 +11,17 @@ import { adminRoutes } from "@/lib/routing";
 import { wrapServerCall } from "../helpers/generic-helpers";
 import { CACHE_TAG_PRODUCT, SIZE_TEMPLATES } from "@/lib/constants";
 import { AdminProductsFormNoFileData } from "@/components/admin/forms/AdminProductsForm/schema";
+import { isDemoMode } from "@/lib/server/helpers/demo-mode";
 
 // === MUTATIONS ===
 export async function createProduct(
   data: AdminProductsFormNoFileData,
 ): Promise<ServerActionResponse<ProductMutationInput>> {
   return wrapServerCall(async () => {
+    if (isDemoMode()) {
+      return { id: `demo-${data.slug}` };
+    }
+
     if (!data.sizeType) {
       throw new Error("sizeType is required");
     }
@@ -55,6 +60,10 @@ export async function updateProductById(
   data: AdminProductsFormNoFileData,
 ): Promise<ServerActionResponse<ProductMutationInput>> {
   return wrapServerCall(async () => {
+    if (isDemoMode()) {
+      return { id };
+    }
+
     const created = await prisma.product.update({
       where: { id },
       data: {
@@ -79,6 +88,10 @@ export async function deleteProductById(
   id: string,
 ): Promise<ServerActionResponse<ProductMutationInput>> {
   return wrapServerCall(async () => {
+    if (isDemoMode()) {
+      return { id };
+    }
+
     const deleted = await prisma.product.delete({ where: { id } });
 
     revalidatePath(adminRoutes.products);

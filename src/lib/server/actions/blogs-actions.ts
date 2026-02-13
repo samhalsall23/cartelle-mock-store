@@ -13,12 +13,17 @@ import {
   AdminFormAddBlogsData,
   AdminFormEditBlogsData,
 } from "@/components/admin/forms/AdminBlogsForm/schema";
+import { isDemoMode } from "@/lib/server/helpers/demo-mode";
 
 // === MUTATIONS ===
 export async function createBlog(
   data: AdminFormAddBlogsData,
 ): Promise<ServerActionResponse<BlogMutationInput>> {
   return wrapServerCall(async () => {
+    if (isDemoMode()) {
+      return { id: `demo-${data.slug}` };
+    }
+
     const imageFile = data.image;
     const imageFileName = BLOB_STORAGE_PREFIXES.BLOGS + data.slug;
 
@@ -55,6 +60,10 @@ export async function updateBlogById(
   data: AdminFormEditBlogsData,
 ): Promise<ServerActionResponse<BlogMutationInput>> {
   return wrapServerCall(async () => {
+    if (isDemoMode()) {
+      return { id };
+    }
+
     revalidatePath(adminRoutes.blogs);
     revalidatePath(routes.blog);
     revalidatePath(routes.home);
@@ -110,6 +119,10 @@ export async function deleteBlogById(
   id: string,
 ): Promise<ServerActionResponse<BlogMutationInput>> {
   return wrapServerCall(async () => {
+    if (isDemoMode()) {
+      return { id };
+    }
+
     const deleted = await prisma.blogPost.delete({ where: { id } });
     revalidatePath(adminRoutes.blogs);
     revalidatePath(routes.blog);

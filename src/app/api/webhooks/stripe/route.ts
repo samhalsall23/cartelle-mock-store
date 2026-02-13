@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { CartStatus, OrderStatus, PaymentStatus } from "@prisma/client";
 import { adminRoutes } from "@/lib";
 import { CACHE_TAG_CART, CACHE_TAG_PRODUCT } from "@/lib/constants/cache-tags";
+import { isDemoMode } from "@/lib/server/helpers";
 
 // === SETUP ====
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -62,17 +63,19 @@ export async function POST(req: NextRequest) {
 
         if (!order || order.paymentStatus === OrderStatus.PAID) return null;
 
-        await Promise.all(
-          order.cart.items.map((item) =>
-            tx.size.update({
-              where: { id: item.sizeId },
-              data: {
-                stockReserved: { decrement: item.quantity },
-                stockTotal: { decrement: item.quantity },
-              },
-            }),
-          ),
-        );
+        if (!isDemoMode()) {
+          await Promise.all(
+            order.cart.items.map((item) =>
+              tx.size.update({
+                where: { id: item.sizeId },
+                data: {
+                  stockReserved: { decrement: item.quantity },
+                  stockTotal: { decrement: item.quantity },
+                },
+              }),
+            ),
+          );
+        }
 
         await Promise.all([
           tx.order.update({

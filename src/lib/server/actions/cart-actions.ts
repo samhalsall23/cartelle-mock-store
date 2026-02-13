@@ -19,6 +19,7 @@ import { wrapServerCall } from "../helpers/generic-helpers";
 import { CartStatus, OrderStatus, PaymentMethod, Prisma } from "@prisma/client";
 import { getCartCountCached, refreshCartCookie } from "../helpers";
 import { CACHE_TAG_CART, CACHE_TAG_PRODUCT } from "@/lib/constants";
+import { isDemoMode } from "@/lib/server/helpers/demo-mode";
 
 // === QUERIES ===
 export async function getCartItemCount(): Promise<
@@ -368,9 +369,7 @@ export async function initiateCheckout(
 
         // === ATOMIC STOCK RESERVATION ===
         // Only reserve if not already reserved
-
-        // FIX ME: NOT ACTUALLY RESERVING STOCK
-        if (!cart.reservedAt) {
+        if (!cart.reservedAt && !isDemoMode()) {
           // Pre-validate stock availability
           for (const item of cart.items) {
             const available = item.size.stockTotal - item.size.stockReserved;
@@ -406,7 +405,7 @@ export async function initiateCheckout(
             where: { id: cartId },
             data: {
               status,
-              reservedAt: cart.reservedAt ?? new Date(),
+              reservedAt: isDemoMode() ? null : (cart.reservedAt ?? new Date()),
             },
           });
           return { id: existingOrder.id, totalPrice: existingOrder.totalPrice };
@@ -426,7 +425,9 @@ export async function initiateCheckout(
               where: { id: cartId },
               data: {
                 status,
-                reservedAt: cart.reservedAt ?? new Date(),
+                reservedAt: isDemoMode()
+                  ? null
+                  : (cart.reservedAt ?? new Date()),
               },
             }),
           ]);
