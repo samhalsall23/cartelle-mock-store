@@ -65,6 +65,7 @@ export async function GET() {
           where: { id: cart.id },
           data: {
             status: CartStatus.ABANDONED,
+            abandonedAt: new Date(),
             reservedAt: null,
           },
         });
@@ -77,7 +78,7 @@ export async function GET() {
     const staleCartsResult = await prisma.cart.deleteMany({
       where: {
         status: { in: [CartStatus.ABANDONED, CartStatus.ACTIVE] },
-        updatedAt: { lt: twoMonthsAgo },
+        abandonedAt: { lt: twoMonthsAgo },
       },
     });
 
