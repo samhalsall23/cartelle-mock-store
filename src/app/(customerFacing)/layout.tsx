@@ -13,9 +13,11 @@ export default async function CustomerLayout({
   return (
     <CartCountProvider fetchCartItemCount={getCartItemCount}>
       <CartDialogProvider>
-        <Navbar />
-        {children}
-        <Footer />
+        <div className="min-h-screen flex flex-col">
+          <Navbar />
+          <div className="flex-1">{children}</div>
+          <Footer />
+        </div>
         <AddToCartDialog />
       </CartDialogProvider>
     </CartCountProvider>
