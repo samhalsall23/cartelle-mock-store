@@ -3,7 +3,7 @@
 A production-style fashion e-commerce application built with **Next.js App Router**.
 It includes a customer-facing storefront and an admin back office for managing products, blog content, and media.
 
-## Links
+## 🔗 Links
 
 - **Storefront** — https://cartelle-mock-store.vercel.app
 - **Admin** — https://cartelle-mock-store.vercel.app/admin
@@ -12,21 +12,21 @@ It includes a customer-facing storefront and an admin back office for managing p
 
 ---
 
-## Features
+## ✨ Features
 
-- **Customer storefront** — home, shop, product details, cart, checkout, blog, about, and support pages
-- **Cart system with persistence** — cookie-backed cart ID, quantity guardrails, and server-side cart mutations
-- **Stripe checkout flow** — payment intent creation, multi-step checkout UI, and webhook-driven order/payment updates
-- **Inventory reservation logic** — stock is reserved during checkout and finalized on successful payment
-- **Admin content management** — product, blog, and author management pages with create/edit routes
-- **Component library documentation** — Storybook for isolated component development and UI review
-- **Media pipeline** — product image uploads to Vercel Blob via API route
-- **Automated maintenance jobs** — scheduled cleanup for unused Blob assets and expired checkout carts
-- **Responsive, animated UI** — Tailwind + Framer Motion across key storefront sections
+- 🏪 **Customer storefront** — home, shop, product details, cart, checkout, blog, about, and support pages
+- 🛒 **Cart system with persistence** — cookie-backed cart ID, quantity guardrails, and server-side cart mutations
+- 💳 **Stripe checkout flow** — payment intent creation, multi-step checkout UI, and webhook-driven order/payment updates
+- 📦 **Inventory reservation logic** — stock is reserved during checkout and finalized on successful payment
+- ⚙️ **Admin content management** — product, blog, and author management pages with create/edit routes
+- 📚 **Component library documentation** — Storybook for isolated component development and UI review
+- 🖼️ **Media pipeline** — product image uploads to Vercel Blob via API route
+- 🔧 **Automated maintenance jobs** — scheduled cleanup for unused Blob assets and expired checkout carts
+- ✨ **Responsive, animated UI** — Tailwind + Framer Motion across key storefront sections
 
 ---
 
-## Tech Stack
+## 🛠️ Tech Stack
 
 | Area      | Choice                             | Notes                                                            |
 | --------- | ---------------------------------- | ---------------------------------------------------------------- |
@@ -44,7 +44,7 @@ It includes a customer-facing storefront and an admin back office for managing p
 
 ---
 
-## Key Implementations
+## 🧩 Key Implementations
 
 For a deeper architecture walkthrough (including a demo video), see the case study:
 https://samhalsall.dev/cartelle-case-study
@@ -108,7 +108,7 @@ BLOB_READ_WRITE_TOKEN=
 
 ---
 
-## Development
+## 💻 Development
 
 Install and run locally:
 
@@ -143,7 +143,7 @@ DEMO_MODE=
 
 ---
 
-## Deployment
+## 🚀 Deployment
 
 The app is configured for **Vercel** deployment.
 
@@ -155,7 +155,7 @@ The app is configured for **Vercel** deployment.
 
 ---
 
-## Future Improvements
+## 🔮 Future Improvements
 
 - Add authentication for admin dashboard rather then using demo flag
 - Add automated tests for server actions, webhook flows, and checkout steps
