@@ -10,7 +10,7 @@ import { CACHE_TAG_CART } from "@/lib/constants";
 This API route is intended to be called by a scheduled job (e.g. via cron) to perform cleanup of stale carts and orders. It does the following:
 1) Finds carts that are in CHECKOUT status and whose reservedAt is over 15 minutes ago, marks them as ABANDONED, and releases any reserved stock.
 2) Deletes carts that are in ABANDONED or ACTIVE status and haven't been updated for over 2 months.
-3) Deletes orders that are in PENDING status and whose associated carts were reserved over 15 minutes ago.
+3) Deletes orders that are in PENDING status and whose associated carts are ABANDONED.
 
 Note: In a production environment, this CRON job should run every 15 minutes to ensure timely cleanup of stale carts and orders.
 Since this is a mock store running on a Vercel Hobby plan, the job is configured to run once daily instead.
@@ -78,15 +78,15 @@ export async function GET() {
     const staleCartsResult = await prisma.cart.deleteMany({
       where: {
         status: { in: [CartStatus.ABANDONED, CartStatus.ACTIVE] },
-        abandonedAt: { lt: twoMonthsAgo },
+        updatedAt: { lt: twoMonthsAgo },
       },
     });
 
-    // 3) Delete pending orders whose carts were reserved over 15 mins ago
+    // 3) Delete pending orders whose carts are abandoned
     const staleOrdersResult = await prisma.order.deleteMany({
       where: {
         status: OrderStatus.PENDING,
-        cart: { reservedAt: { lt: checkoutStaleThreshold } },
+        cart: { status: CartStatus.ABANDONED },
       },
     });
 
