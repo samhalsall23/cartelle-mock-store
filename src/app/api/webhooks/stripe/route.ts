@@ -101,6 +101,7 @@ export async function POST(req: NextRequest) {
         revalidateTag(CACHE_TAG_CART, "default");
         revalidateTag(CACHE_TAG_PRODUCT, "default");
         revalidatePath(adminRoutes.orders);
+        revalidatePath(adminRoutes.products);
       }
 
       break;
