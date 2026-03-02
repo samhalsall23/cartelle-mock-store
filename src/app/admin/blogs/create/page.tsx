@@ -1,5 +1,10 @@
 import { AdminBlogsForm, AdminHeading } from "@/components/admin";
+import type { Metadata } from "next";
 import { getAuthors } from "@/lib/server/queries";
+
+export const metadata: Metadata = {
+  title: "Add Blog",
+};
 
 export default async function Page() {
   // === QUERIES ===

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 
 import {
   SectionHeading,
@@ -20,6 +21,12 @@ import { HomeVideoSectionWrapper } from "@/components/common/HomeVideoSection/Ho
 import { mockReviews } from "@/components/common/ReviewCardsSection/data";
 import { routes, screamingSnakeToTitle, STORE_COLLECTIONS } from "@/lib";
 import { getHomePageBlogs, getThreeLatestProducts } from "@/lib/server/queries";
+
+export const metadata: Metadata = {
+  title: {
+    absolute: "Cartelle",
+  },
+};
 
 export default async function HomePage() {
   // === QUERIES ===

@@ -1,10 +1,15 @@
 import { BaseSection, BreadCrumb } from "@/components";
+import type { Metadata } from "next";
 import { getCart } from "@/lib/server/queries";
 import { EmptyCart } from "@/components";
 import { CartItemCard } from "@/components/common/CartItemCard/CartItemCard";
 import { CartSummaryPanel } from "@/components/common/CartSummaryPanel/CartSummaryPanel";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Cart",
+};
 
 export default async function CartPage() {
   // === FETCHES ===

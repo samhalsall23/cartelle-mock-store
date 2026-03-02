@@ -1,8 +1,13 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { Button, Navbar } from "@/components";
 import { routes } from "@/lib";
 import { CartCountProvider, CartDialogProvider } from "@/providers";
 import { getCartItemCount } from "@/lib/server/actions";
+
+export const metadata: Metadata = {
+  title: "Page Not Found",
+};
 
 export default function NotFound() {
   return (

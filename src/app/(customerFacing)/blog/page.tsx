@@ -4,8 +4,13 @@ import {
   BaseSection,
   BlogTile,
 } from "@/components";
+import type { Metadata } from "next";
 import { routes, screamingSnakeToTitle } from "@/lib";
 import { getBlogs } from "@/lib/server/queries";
+
+export const metadata: Metadata = {
+  title: "Blog",
+};
 
 export default async function BlogPage() {
   // === QUERIES ===

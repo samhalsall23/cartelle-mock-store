@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 
 import {
   Accordion,
@@ -14,6 +15,10 @@ import {
 } from "@/components";
 
 import { supportFaqQuestions, supportContactInfo } from "@/lib";
+
+export const metadata: Metadata = {
+  title: "Support",
+};
 
 export default function SupportPage() {
   return (

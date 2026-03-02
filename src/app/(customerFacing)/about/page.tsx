@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 
 import {
   AnimatedHeadingText,
@@ -15,6 +16,10 @@ import {
   aboutImageSrcArray,
   aboutTeamMembersData,
 } from "@/lib";
+
+export const metadata: Metadata = {
+  title: "About",
+};
 
 export default function AboutPage() {
   return (

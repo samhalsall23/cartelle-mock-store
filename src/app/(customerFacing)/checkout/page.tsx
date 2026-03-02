@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 
 import { BaseSection } from "@/components";
 import { getCart } from "@/lib/server/queries/cart-queries";
@@ -7,6 +8,10 @@ import { getCurrentOrder } from "@/lib/server/actions";
 import { CheckoutForm } from "@/components/common/CheckoutForm/CheckoutForm";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Checkout",
+};
 
 export default async function CheckoutPage() {
   // === FETCH DATA ===

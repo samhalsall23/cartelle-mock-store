@@ -1,9 +1,14 @@
 import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 
 import { CheckoutSuccess } from "@/components/common/CheckoutSuccess/CheckoutSuccess";
 import { getCurrentOrderById } from "@/lib/server/queries";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = {
+  title: "Order Confirmed",
+};
 
 type CheckoutSuccessPageProps = {
   searchParams: Promise<{ orderId?: string }>;

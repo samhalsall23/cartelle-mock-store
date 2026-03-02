@@ -1,7 +1,27 @@
 import { AdminHeading, AdminProductsForm } from "@/components/admin";
+import type { Metadata } from "next";
 import { getProductById } from "@/lib/server/queries";
 
-export default async function Page({ params }: { params: { id: string } }) {
+type AdminProductPageProps = { params: { id: string } };
+
+export async function generateMetadata(
+  props: AdminProductPageProps,
+): Promise<Metadata> {
+  const { id } = await props.params;
+  const product = await getProductById(id);
+
+  if (!product.success || !product.data) {
+    return {
+      title: "Edit Product",
+    };
+  }
+
+  return {
+    title: `Edit ${product.data.name}`,
+  };
+}
+
+export default async function Page({ params }: AdminProductPageProps) {
   // === PARAMS ===
   const { id } = await params;
 

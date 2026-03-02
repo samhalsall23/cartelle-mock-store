@@ -1,7 +1,27 @@
 import { AdminHeading, AdminOrderView } from "@/components/admin";
+import type { Metadata } from "next";
 import { getAdminOrderById } from "@/lib/server/queries";
 
-export default async function Page({ params }: { params: { id: string } }) {
+type AdminOrderPageProps = { params: { id: string } };
+
+export async function generateMetadata(
+  props: AdminOrderPageProps,
+): Promise<Metadata> {
+  const { id } = await props.params;
+  const order = await getAdminOrderById(id);
+
+  if (!order.success || !order.data) {
+    return {
+      title: "Order",
+    };
+  }
+
+  return {
+    title: `Order #${order.data.orderNumber}`,
+  };
+}
+
+export default async function Page({ params }: AdminOrderPageProps) {
   // === PARAMS ===
   const { id } = await params;
 

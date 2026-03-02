@@ -1,9 +1,17 @@
 import React from "react";
+import type { Metadata } from "next";
 
 import { Footer, Navbar } from "@/components";
 import { CartCountProvider, CartDialogProvider } from "@/providers";
 import { getCartItemCount } from "@/lib/server/actions";
 import { AddToCartDialog } from "@/components/common/AddToCartDialog/AddToCartDialog";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Store",
+    template: "%s | Cartelle",
+  },
+};
 
 export default async function CustomerLayout({
   children,

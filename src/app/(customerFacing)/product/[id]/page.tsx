@@ -4,6 +4,7 @@ import {
   BreadCrumb,
   ProductTile,
 } from "@/components";
+import type { Metadata } from "next";
 import { ProductPurchasePanel } from "@/components/common/ProductPurchasePanel/ProductPurchasePanel";
 import {
   BLOG_NAVBAR_TEXT,
@@ -19,6 +20,23 @@ type ProductPageProps = {
     id: string;
   };
 };
+
+export async function generateMetadata(
+  props: ProductPageProps,
+): Promise<Metadata> {
+  const { id } = await props.params;
+  const product = await getProductBySlug(id);
+
+  if (!product.success || !product.data) {
+    return {
+      title: "Product",
+    };
+  }
+
+  return {
+    title: product.data.name,
+  };
+}
 
 export default async function ProductPage(props: ProductPageProps) {
   // === PROPS ===

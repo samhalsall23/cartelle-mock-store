@@ -1,5 +1,10 @@
 import { AdminHeading, AdminOrdersTable } from "@/components/admin";
+import type { Metadata } from "next";
 import { getOrderedOrders } from "@/lib/server/queries";
+
+export const metadata: Metadata = {
+  title: "Orders",
+};
 
 export default async function Page() {
   // === QUERIES ===

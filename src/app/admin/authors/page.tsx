@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 
 import { adminRoutes, cn } from "@/lib";
 import {
@@ -7,6 +8,10 @@ import {
   AdminAuthorsTable,
 } from "@/components/admin";
 import { getAuthors } from "@/lib/server/queries";
+
+export const metadata: Metadata = {
+  title: "Authors",
+};
 
 export default async function Page() {
   // === QUERIES ===

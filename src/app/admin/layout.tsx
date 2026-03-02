@@ -1,6 +1,14 @@
 import React from "react";
+import type { Metadata } from "next";
 
 import { AdminNavbar, AdminToaster } from "@/components/admin";
+
+export const metadata: Metadata = {
+  title: {
+    default: "Admin",
+    template: "%s | Admin | Cartelle",
+  },
+};
 
 export default function AdminLayout({
   children,

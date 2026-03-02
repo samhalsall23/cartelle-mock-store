@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { Metadata } from "next";
 
 import { AnimatedHeadingText, BreadCrumb, ProfileDetails } from "@/components";
 import { BLOG_NAVBAR_TEXT } from "@/components/layout/Navbar/lib";
@@ -7,11 +8,28 @@ import { getBlogBySlug } from "@/lib/server/queries";
 import { formatBlogDate } from "@/lib/utils";
 import { convertStringToBlog } from "@/lib/parsers";
 
-export default async function BlogIdPage({
-  params,
-}: {
+type BlogIdPageProps = {
   params: { id: string };
-}) {
+};
+
+export async function generateMetadata(
+  props: BlogIdPageProps,
+): Promise<Metadata> {
+  const { id } = await props.params;
+  const blog = await getBlogBySlug(id);
+
+  if (!blog.success || !blog.data) {
+    return {
+      title: "Blog Post",
+    };
+  }
+
+  return {
+    title: blog.data.title,
+  };
+}
+
+export default async function BlogIdPage({ params }: BlogIdPageProps) {
   // === PARAMS ===
   const { id } = await params;
 

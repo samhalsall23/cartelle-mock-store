@@ -1,5 +1,10 @@
 import { AdminHeading, AdminBlogsTable } from "@/components/admin";
+import type { Metadata } from "next";
 import { getBlogs } from "@/lib/server/queries";
+
+export const metadata: Metadata = {
+  title: "Blogs",
+};
 
 export default async function Page() {
   // === QUERIES ===

@@ -1,8 +1,13 @@
 import { AdminHeading, AdminDashboardStats } from "@/components/admin";
+import type { Metadata } from "next";
 import {
   getDashboardStats,
   getDashboardProductStats,
 } from "@/lib/server/queries";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+};
 
 export default async function Page() {
   // === QUERIES ===
