@@ -8,7 +8,6 @@ import {
   AnimateStagger,
   HeroSection,
   ProductTile,
-  Button,
   FeatureCard,
   CollectionTile,
   ReviewCardsSection,
@@ -72,11 +71,12 @@ export default async function HomePage() {
             ))}
           </AnimateFadeIn>
 
-          <Button
-            className="w-full md:hidden"
-            variant="light"
-            text={"View all products"}
-          />
+          <Link
+            className={getButtonStyles("light", "w-full md:hidden")}
+            href={routes.shop}
+          >
+            {"View all products"}
+          </Link>
         </div>
       </BaseSection>
 
