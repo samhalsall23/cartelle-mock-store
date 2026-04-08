@@ -2,7 +2,7 @@ import { AdminHeading, AdminProductsForm } from "@/components/admin";
 import type { Metadata } from "next";
 import { getProductById } from "@/lib/server/queries";
 
-type AdminProductPageProps = { params: { id: string } };
+type AdminProductPageProps = { params: Promise<{ id: string }> };
 
 export async function generateMetadata(
   props: AdminProductPageProps,

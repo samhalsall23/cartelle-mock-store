@@ -9,7 +9,7 @@ import { formatBlogDate } from "@/lib/utils";
 import { convertStringToBlog } from "@/lib/parsers";
 
 type BlogIdPageProps = {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata(

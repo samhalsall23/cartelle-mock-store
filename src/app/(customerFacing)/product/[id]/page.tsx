@@ -1,10 +1,12 @@
+import Image from "next/image";
+import type { Metadata } from "next";
+
 import {
   AnimatedHeadingText,
   BaseSection,
   BreadCrumb,
   ProductTile,
 } from "@/components";
-import type { Metadata } from "next";
 import { ProductPurchasePanel } from "@/components/common/ProductPurchasePanel/ProductPurchasePanel";
 import {
   BLOG_NAVBAR_TEXT,
@@ -13,12 +15,11 @@ import {
 import { cn, routes } from "@/lib";
 import { getProductBySlug, getThreeRandomProducts } from "@/lib/server/queries";
 import { SizeTypeEnum } from "@prisma/client";
-import Image from "next/image";
 
 type ProductPageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 };
 
 export async function generateMetadata(

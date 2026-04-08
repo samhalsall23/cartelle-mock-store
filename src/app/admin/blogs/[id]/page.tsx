@@ -2,7 +2,7 @@ import { AdminBlogsForm, AdminHeading } from "@/components/admin";
 import type { Metadata } from "next";
 import { getAuthors, getBlogById } from "@/lib/server/queries";
 
-type AdminBlogPageProps = { params: { id: string } };
+type AdminBlogPageProps = { params: Promise<{ id: string }> };
 
 export async function generateMetadata(
   props: AdminBlogPageProps,

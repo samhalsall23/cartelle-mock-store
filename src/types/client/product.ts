@@ -1,18 +1,16 @@
-import z from "zod";
-
 // === ENUMS ===
-export const ProductCategoryEnum = z.enum([
+export const PRODUCT_CATEGORY_VALUES = [
   "DRESSES",
   "OUTERWEAR",
   "TOPS_BOTTOMS",
   "BAGS_ACCESSORIES",
   "SHOES",
-]);
+] as const;
 
-export type ProductCategoryEnum = z.infer<typeof ProductCategoryEnum>;
+export type ProductCategoryEnum = (typeof PRODUCT_CATEGORY_VALUES)[number];
 
-export const SizeTypeEnum = z.enum(["Standard", "ShoeSize", "OneSize"]);
-export type SizeTypeEnum = z.infer<typeof SizeTypeEnum>;
+export const SIZE_TYPE_VALUES = ["Standard", "ShoeSize", "OneSize"] as const;
+export type SizeTypeEnum = (typeof SIZE_TYPE_VALUES)[number];
 
 // === PRODUCT WITH ORDER ITEM COUNTS ===
 export type ProductGetAllCounts = {

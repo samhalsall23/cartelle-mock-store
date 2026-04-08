@@ -1,7 +1,9 @@
 import React from "react";
 import type { Metadata } from "next";
 
-import { Footer, Navbar } from "@/components";
+import { Footer } from "@/components/layout/Footer/Footer";
+import { Navbar } from "@/components/layout/Navbar/Navbar";
+
 import { CartCountProvider, CartDialogProvider } from "@/providers";
 import { getCartItemCount } from "@/lib/server/actions";
 import { AddToCartDialog } from "@/components/common/AddToCartDialog/AddToCartDialog";

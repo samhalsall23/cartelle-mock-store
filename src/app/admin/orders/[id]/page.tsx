@@ -2,7 +2,7 @@ import { AdminHeading, AdminOrderView } from "@/components/admin";
 import type { Metadata } from "next";
 import { getAdminOrderById } from "@/lib/server/queries";
 
-type AdminOrderPageProps = { params: { id: string } };
+type AdminOrderPageProps = { params: Promise<{ id: string }> };
 
 export async function generateMetadata(
   props: AdminOrderPageProps,

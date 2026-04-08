@@ -1,5 +1,8 @@
-import { ProductCategoryEnum, SizeTypeEnum } from "@/types/client";
+import { PRODUCT_CATEGORY_VALUES, SIZE_TYPE_VALUES } from "@/types/client";
 import { z } from "zod";
+
+const ProductCategoryEnum = z.enum(PRODUCT_CATEGORY_VALUES);
+const SizeTypeEnum = z.enum(SIZE_TYPE_VALUES);
 
 export const AdminProductsFormSchema = (isEditMode: boolean) =>
   z
