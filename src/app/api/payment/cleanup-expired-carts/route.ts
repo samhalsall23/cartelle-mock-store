@@ -1,9 +1,10 @@
 import { NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 
 import { prisma } from "@/lib/prisma";
 import { CartStatus, OrderStatus } from "@prisma/client";
 import { CACHE_TAG_CART } from "@/lib/constants";
+import { adminRoutes } from "@/lib";
 
 /*
 
@@ -92,6 +93,9 @@ export async function GET() {
 
     if (abandonedCount > 0 || staleCartsResult.count > 0) {
       revalidateTag(CACHE_TAG_CART, "default");
+      revalidatePath(adminRoutes.home);
+      revalidatePath(adminRoutes.orders);
+      revalidatePath(adminRoutes.products);
     }
 
     return NextResponse.json(

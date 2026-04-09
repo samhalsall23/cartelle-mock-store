@@ -100,6 +100,7 @@ export async function POST(req: NextRequest) {
       if (cartId) {
         revalidateTag(CACHE_TAG_CART, "default");
         revalidateTag(CACHE_TAG_PRODUCT, "default");
+        revalidatePath(adminRoutes.home);
         revalidatePath(adminRoutes.orders);
         revalidatePath(adminRoutes.products);
       }

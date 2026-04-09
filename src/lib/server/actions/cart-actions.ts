@@ -404,7 +404,7 @@ export async function initiateCheckout(
           await tx.cart.update({
             where: { id: cartId },
             data: {
-              status,
+              status: isDemoMode() ? CartStatus.ABANDONED : status, // In demo mode, mark cart as abandoned
               reservedAt: isDemoMode() ? null : (cart.reservedAt ?? new Date()),
             },
           });
@@ -424,7 +424,7 @@ export async function initiateCheckout(
             tx.cart.update({
               where: { id: cartId },
               data: {
-                status,
+                status: isDemoMode() ? CartStatus.ABANDONED : status, // In demo mode, mark cart as abandoned
                 reservedAt: isDemoMode()
                   ? null
                   : (cart.reservedAt ?? new Date()),
