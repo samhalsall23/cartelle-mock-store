@@ -1,5 +1,10 @@
-import { AdminHeading, AdminOrdersTable } from "@/components/admin";
 import type { Metadata } from "next";
+
+import {
+  AdminHeading,
+  AdminOrdersTable,
+  AdminOrdersToast,
+} from "@/components/admin";
 import { getOrderedOrders } from "@/lib/server/queries";
 
 export const metadata: Metadata = {
@@ -17,7 +22,7 @@ export default async function Page() {
   return (
     <div>
       <AdminHeading heading="View Orders" />
-
+      <AdminOrdersToast />
       <AdminOrdersTable orders={orders.data} />
     </div>
   );

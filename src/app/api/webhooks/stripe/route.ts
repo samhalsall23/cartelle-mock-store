@@ -4,9 +4,10 @@ import Stripe from "stripe";
 
 import { prisma } from "@/lib/prisma";
 import { CartStatus, OrderStatus, PaymentStatus } from "@prisma/client";
-import { adminRoutes } from "@/lib";
+import { adminRoutes, REDIS_STRING_ORDER_CREATED } from "@/lib";
 import { CACHE_TAG_CART, CACHE_TAG_PRODUCT } from "@/lib/constants/cache-tags";
 import { isDemoMode } from "@/lib/server/helpers";
+import { broadcastOrderUpdate } from "@/lib/server/helpers/broadcast-update";
 
 // === SETUP ====
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
@@ -98,6 +99,7 @@ export async function POST(req: NextRequest) {
       });
 
       if (cartId) {
+        await broadcastOrderUpdate(REDIS_STRING_ORDER_CREATED);
         revalidateTag(CACHE_TAG_CART, "default");
         revalidateTag(CACHE_TAG_PRODUCT, "default");
         revalidatePath(adminRoutes.home);

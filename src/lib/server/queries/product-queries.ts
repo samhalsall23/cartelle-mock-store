@@ -95,8 +95,17 @@ const getAllProductsWithTotalSoldCached = unstable_cache(
       }, 0);
 
       return {
-        ...product,
+        id: product.id,
+        name: product.name,
+        description: product.description,
         price: Number(product.price),
+        isActive: product.isActive,
+        createdAt: product.createdAt,
+        updatedAt: product.updatedAt,
+        images: product.images,
+        slug: product.slug,
+        category: product.category,
+        sizeType: product.sizeType,
         totalSold,
       };
     });
