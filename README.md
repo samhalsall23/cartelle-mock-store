@@ -17,6 +17,7 @@ It includes a customer-facing storefront and an admin back office for managing p
 - 🏪 **Customer storefront** — home, shop, product details, cart, checkout, blog, about, and support pages
 - 🛒 **Cart system with persistence** — cookie-backed cart ID, quantity guardrails, and server-side cart mutations
 - 💳 **Stripe checkout flow** — payment intent creation, multi-step checkout UI, and webhook-driven order/payment updates
+- 📡 **Realtime admin order updates** — SSE stream pushes payment/order events to the admin dashboard after successful webhook processing
 - 📦 **Inventory reservation logic** — stock is reserved during checkout and finalized on successful payment
 - ⚙️ **Admin content management** — product, blog, and author management pages with create/edit routes
 - 📚 **Component library documentation** — Storybook for isolated component development and UI review
@@ -38,6 +39,7 @@ It includes a customer-facing storefront and an admin back office for managing p
 | Forms     | react-hook-form + zod              | Checkout and admin form validation                               |
 | Data      | Prisma ORM + PostgreSQL            | Products, sizes, carts, orders, blog posts, authors              |
 | Payments  | Stripe                             | Payment intents + webhook event processing                       |
+| Realtime  | Server-Sent Events + Upstash Redis | Redis-backed pub/sub pushes admin order updates over SSE         |
 | Storage   | Vercel Blob                        | Product/blog/author asset storage                                |
 | Tables    | TanStack React Table               | Admin listing tables                                             |
 | Tooling   | ESLint, Prettier, Storybook, Husky | Linting/formatting/component development and pre-commit workflow |
@@ -59,6 +61,7 @@ Checkout is handled through server actions and Stripe integration:
 4. A Stripe Payment Intent is created and stored on the order (`stripeSessionId`)
 5. Frontend checkout runs a three-step flow (delivery, payment, summary)
 6. Stripe webhook finalizes order/payment status and decrements reserved stock
+7. Successful webhook events are broadcast through Upstash Redis and streamed into the admin UI via SSE
 
 Core files:
 
@@ -69,6 +72,16 @@ src/components/common/CheckoutForm/CheckoutForm.tsx
 src/app/api/webhooks/stripe/route.ts
 ```
 
+Related realtime files:
+
+```
+src/app/api/orders/stream/route.ts
+src/lib/server/helpers/broadcast-update.ts
+src/hooks/useStream.ts
+src/hooks/useOrderStream.ts
+src/components/admin/common/AdminOrdersToast.tsx
+```
+
 Environment variables required:
 
 ```
@@ -76,7 +89,15 @@ DATABASE_URL=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
 ```
+
+Notes:
+
+- The admin realtime updates feature uses SSE, with Redis pub/sub as the cross-instance event transport.
+- Stripe webhook success events publish order updates, and the admin orders UI subscribes through `/api/orders/stream`.
+- For local development, Stripe webhooks need to be forwarded to your local app for the realtime flow to trigger.
 
 ---
 
@@ -137,6 +158,8 @@ DATABASE_URL=
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=
 STRIPE_SECRET_KEY=
 STRIPE_WEBHOOK_SECRET=
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
 BLOB_READ_WRITE_TOKEN=
 DEMO_MODE=
 ```

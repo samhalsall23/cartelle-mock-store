@@ -11,17 +11,20 @@ type CheckoutSuccessProps = {
 };
 
 export function CheckoutSuccess(props: CheckoutSuccessProps) {
-  // === PROPS ===
   const { orderNumber, email } = props;
 
   // === CONTEXT ===
-  const { refreshCartCount } = useCartCount();
+  const { setItemCount } = useCartCount();
 
   // EFFECTS
   useEffect(() => {
-    clearCart();
-    refreshCartCount();
-  }, [refreshCartCount]);
+    async function syncCartAfterSuccess() {
+      await clearCart();
+      setItemCount(0);
+    }
+
+    void syncCartAfterSuccess();
+  }, [setItemCount]);
 
   return <CheckoutSuccessUI orderNumber={orderNumber} email={email} />;
 }

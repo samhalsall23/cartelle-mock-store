@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { revalidateTag } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { nanoid } from "nanoid";
 
 import { prisma } from "@/lib/prisma";
@@ -20,6 +20,7 @@ import { CartStatus, OrderStatus, PaymentMethod, Prisma } from "@prisma/client";
 import { getCartCountCached, refreshCartCookie } from "../helpers";
 import { CACHE_TAG_CART, CACHE_TAG_PRODUCT } from "@/lib/constants";
 import { isDemoMode } from "@/lib/server/helpers/demo-mode";
+import { adminRoutes } from "@/lib/routing";
 
 // === QUERIES ===
 export async function getCartItemCount(): Promise<
@@ -458,6 +459,7 @@ export async function initiateCheckout(
 
     revalidateTag(CACHE_TAG_CART, "default");
     revalidateTag(CACHE_TAG_PRODUCT, "default");
+    revalidatePath(adminRoutes.home);
   });
 }
 
